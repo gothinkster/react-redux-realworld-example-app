@@ -9,9 +9,9 @@ The example application is a social blogging site (i.e. a Medium.com clone) call
 **General functionality:**
 
 - Authenticate users via JWT (login/signup pages + logout button on settings page)
-- CRU users (sign up & settings page - no deleting required)
+- CRU* users (sign up & settings page - no deleting required)
 - CRUD Articles
-- CRD Comments on articles (no updating required)
+- CR*D Comments on articles (no updating required)
 - GET and display paginated lists of articles
 - Favorite articles
 - Follow other users
