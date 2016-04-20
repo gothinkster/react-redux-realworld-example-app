@@ -1,5 +1,5 @@
 # Redux codebase containing real world examples (CRUD, auth, advanced patterns, etc)
-Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1353). The codebase is now feature complete and the RFC is open. **Your input is greatly appreciated; please submit bug fixes via pull requests & feedback via issues**. Target for syndicating to the official redux repo is end of April.
+Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1353). The codebase is now feature complete and the RFC is open. **Your input is greatly appreciated; please submit bug fixes via pull requests & feedback via issues**. Target for syndicating to the official redux repo is early May.
 
 ## Getting started
 
