@@ -3,11 +3,13 @@ Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1
 
 ## Getting started
 
+You can view a live demo over at https://redux.productionready.io/
+
 To get the frontend running locally:
 
 - Clone this repo
 - `npm install` to install all req'd dependencies
-- `npm run watch` to have webpack bundle the JS files into /bin/main.js, then run `npm start` to start the server on http://localhost:4000
+- `npm run watch` to have webpack bundle the JS files into /bin/main.js, then run `npm start`
 
 For convenience, we have a live API server running at https://conduit.productionready.io/api for the application to make requests against. You can view [the API spec here](https://github.com/GoThinkster/productionready/blob/master/API.md) which contains all routes & responses for the server. We'll release the backend code in a few weeks should anyone be interested in it.
 
