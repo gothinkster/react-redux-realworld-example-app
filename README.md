@@ -1,13 +1,15 @@
 # Redux codebase containing real world examples (CRUD, auth, advanced patterns, etc)
-Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1353). The codebase is now feature complete and the RFC is open. **Your input is greatly appreciated; please submit bug fixes via pull requests & feedback via issues**. Target for syndicating to the official redux repo is end of April.
+Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1353). The codebase is now feature complete and the RFC is open. **Your input is greatly appreciated; please submit bug fixes via pull requests & feedback via issues**. Target for syndicating to the official redux repo is early May.
 
 ## Getting started
 
+You can view a live demo over at https://redux.productionready.io/
+
 To get the frontend running locally:
 
-1. Clone this repo
-2. `npm install` to install all req'd dependencies
-3. `npm start` to start webpack
+- Clone this repo
+- `npm install` to install all req'd dependencies
+- `npm run watch` to have webpack bundle the JS files into /bin/main.js, then run `npm start`
 
 For convenience, we have a live API server running at https://conduit.productionready.io/api for the application to make requests against. You can view [the API spec here](https://github.com/GoThinkster/productionready/blob/master/API.md) which contains all routes & responses for the server. We'll release the backend code in a few weeks should anyone be interested in it.
 
