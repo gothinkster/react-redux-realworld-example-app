@@ -11,7 +11,9 @@ module.exports = (state = defaultState, action) => {
       });
       break;
     case 'PROFILE_PAGE_UNLOADED':
-      state = Object.assign({}, state);
+      state = Object.assign({}, state, {
+        viewChangeCounter: state.viewChangeCounter + 1
+      });
       delete state.profile;
       delete state.articles;
       delete state.articlesCount;

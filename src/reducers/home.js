@@ -12,7 +12,9 @@ module.exports = (state, action) => {
       });
       break;
     case 'HOME_PAGE_UNLOADED':
-      state = Object.assign({}, state);
+      state = Object.assign({}, state, {
+        viewChangeCounter: state.viewChangeCounter + 1
+      });
       delete state.articles;
       delete state.tags;
       delete state.tab;

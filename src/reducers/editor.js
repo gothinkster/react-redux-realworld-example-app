@@ -23,7 +23,9 @@ module.exports = (state, action) => {
       }
       break;
     case 'EDITOR_PAGE_UNLOADED':
-      state = Object.assign({}, state);
+      state = Object.assign({}, state, {
+        viewChangeCounter: state.viewChangeCounter + 1
+      });
       const keys = [
         'title',
         'description',
