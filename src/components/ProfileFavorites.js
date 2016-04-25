@@ -9,12 +9,16 @@ const store = require('../store');
 class ProfileFavorites extends Profile {
   componentWillMount() {
     store.dispatch({
-      type: 'PROFILE_PAGE_LOADED',
+      type: 'PROFILE_FAVORITES_PAGE_LOADED',
       payload: Promise.all([
         agent.Profile.get(this.props.params.username),
         agent.Articles.favoritedBy(this.props.params.username)
       ])
     });
+  }
+
+  componentWillUnmount() {
+    store.dispatch({ type: 'PROFILE_FAVORITES_PAGE_UNLOADED' });
   }
 
   renderTabs() {

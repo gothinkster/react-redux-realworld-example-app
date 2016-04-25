@@ -16,7 +16,9 @@ module.exports = (state, action) => {
       break;
     case 'LOGIN_PAGE_UNLOADED':
     case 'REGISTER_PAGE_UNLOADED':
-      state = Object.assign({}, state);
+      state = Object.assign({}, state, {
+        viewChangeCounter: state.viewChangeCounter + 1
+      });
       const props = ['errors', 'username', 'email', 'password', 'inProgress']
       for (const key of props) {
         delete state[key];

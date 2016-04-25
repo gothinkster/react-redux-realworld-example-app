@@ -61,15 +61,15 @@
 	var history = __webpack_require__(231);
 	var store = __webpack_require__(235);
 
-	var Article = __webpack_require__(255);
-	var Editor = __webpack_require__(257);
-	var Header = __webpack_require__(259);
-	var Home = __webpack_require__(260);
-	var Login = __webpack_require__(263);
-	var Profile = __webpack_require__(264);
-	var ProfileFavorites = __webpack_require__(265);
-	var Register = __webpack_require__(266);
-	var Settings = __webpack_require__(267);
+	var Article = __webpack_require__(256);
+	var Editor = __webpack_require__(258);
+	var Header = __webpack_require__(260);
+	var Home = __webpack_require__(261);
+	var Login = __webpack_require__(264);
+	var Profile = __webpack_require__(265);
+	var ProfileFavorites = __webpack_require__(266);
+	var Register = __webpack_require__(267);
+	var Settings = __webpack_require__(268);
 
 	var App = function (_React$Component) {
 	  _inherits(App, _React$Component);
@@ -21866,7 +21866,7 @@
 
 	function isNestedObject(object) {
 	  for (var p in object) {
-	    if (object.hasOwnProperty(p) && _typeof(object[p]) === 'object' && !Array.isArray(object[p]) && object[p] !== null) return true;
+	    if (Object.prototype.hasOwnProperty.call(object, p) && _typeof(object[p]) === 'object' && !Array.isArray(object[p]) && object[p] !== null) return true;
 	  }return false;
 	}
 
@@ -24796,7 +24796,7 @@
 /* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	exports.__esModule = true;
 
@@ -24813,6 +24813,10 @@
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { 'default': obj };
 	}
+
+	var _warning = __webpack_require__(169);
+
+	var _warning2 = _interopRequireDefault(_warning);
 
 	var _ExecutionEnvironment = __webpack_require__(173);
 
@@ -24839,7 +24843,11 @@
 	    if (basename == null && _ExecutionEnvironment.canUseDOM) {
 	      var base = document.getElementsByTagName('base')[0];
 
-	      if (base) basename = _PathUtils.extractPath(base.href);
+	      if (base) {
+	        process.env.NODE_ENV !== 'production' ? _warning2['default'](false, 'Automatically setting basename using <base href> is deprecated and will ' + 'be removed in the next major release. The semantics of <base href> are ' + 'subtly different from basename. Please pass the basename explicitly in ' + 'the options to createHistory') : undefined;
+
+	        basename = base.getAttribute('href');
+	      }
 	    }
 
 	    function addBasename(location) {
@@ -24941,6 +24949,7 @@
 
 	exports['default'] = useBasename;
 	module.exports = exports['default'];
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
 /* 217 */
@@ -25241,7 +25250,7 @@
 	      state = null;
 	      key = history.createKey();
 
-	      if (isSupported) window.history.replaceState(_extends({}, historyState, { key: key }), null, path);
+	      if (isSupported) window.history.replaceState(_extends({}, historyState, { key: key }), null);
 	    }
 
 	    var location = _PathUtils.parsePath(path);
@@ -26764,7 +26773,7 @@
 
 /***/ },
 /* 226 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -26772,7 +26781,9 @@
 	 * Expose `Emitter`.
 	 */
 
-	module.exports = Emitter;
+	if (true) {
+	  module.exports = Emitter;
+	}
 
 	/**
 	 * Initialize a new `Emitter`.
@@ -28225,27 +28236,44 @@
 
 	'use strict';
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 	var agent = __webpack_require__(223);
 
 	exports.promiseMiddleware = function (store) {
 	  return function (next) {
 	    return function (action) {
 	      if (isPromise(action.payload)) {
-	        store.dispatch({ type: 'ASYNC_START', subtype: action.type });
-	        action.payload.then(function (res) {
-	          console.log('RESULT', res);
-	          action.payload = res;
-	          store.dispatch(action);
-	        }, function (error) {
-	          console.log('ERROR', error);
-	          action.error = true;
-	          action.payload = error.response.body;
-	          store.dispatch(action);
-	        });
+	        var _ret = function () {
+	          store.dispatch({ type: 'ASYNC_START', subtype: action.type });
+	          var initialView = store.getState().viewChangeCounter;
+	          action.payload.then(function (res) {
+	            // The view might have changed mid-promise, so if the view unloaded,
+	            // don't dispatch the action.
+	            var finalView = store.getState().viewChangeCounter;
+	            if (finalView !== initialView) {
+	              return;
+	            }
+	            console.log('RESULT', res);
+	            action.payload = res;
+	            store.dispatch(action);
+	          }, function (error) {
+	            var finalView = store.getState().viewChangeCounter;
+	            if (finalView !== initialView) {
+	              return;
+	            }
+	            console.log('ERROR', error);
+	            action.error = true;
+	            action.payload = error.response.body;
+	            store.dispatch(action);
+	          });
 
-	        store.dispatch({ type: 'LOADING' });
+	          return {
+	            v: void 0
+	          };
+	        }();
 
-	        return;
+	        if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 	      }
 
 	      next(action);
@@ -28288,11 +28316,13 @@
 	var editor = __webpack_require__(251);
 	var home = __webpack_require__(252);
 	var profile = __webpack_require__(253);
-	var settings = __webpack_require__(254);
+	var profileFavorites = __webpack_require__(254);
+	var settings = __webpack_require__(255);
 
 	var defaultState = {
 	  appName: 'Conduit',
-	  token: null
+	  token: null,
+	  viewChangeCounter: 0
 	};
 
 	module.exports = function () {
@@ -28304,6 +28334,7 @@
 	  state = editor(state, action);
 	  state = home(state, action);
 	  state = profile(state, action);
+	  state = profileFavorites(state, action);
 	  state = settings(state, action);
 	  switch (action.type) {
 	    case 'APP_LOAD':
@@ -28332,7 +28363,9 @@
 	      state = Object.assign({}, state, { redirectTo: '/' });
 	      break;
 	    case 'ARTICLE_PAGE_UNLOADED':
-	      state = Object.assign({}, state);
+	      state = Object.assign({}, state, {
+	        viewChangeCounter: state.viewChangeCounter + 1
+	      });
 	      delete state.article;
 	      delete state.comments;
 	      delete state.commentErrors;
@@ -28367,6 +28400,7 @@
 	      break;
 	  }
 
+	  console.log(state);
 	  return state;
 	};
 
@@ -28422,7 +28456,9 @@
 	      break;
 	    case 'LOGIN_PAGE_UNLOADED':
 	    case 'REGISTER_PAGE_UNLOADED':
-	      state = Object.assign({}, state);
+	      state = Object.assign({}, state, {
+	        viewChangeCounter: state.viewChangeCounter + 1
+	      });
 	      var props = ['errors', 'username', 'email', 'password', 'inProgress'];
 	      var _iteratorNormalCompletion = true;
 	      var _didIteratorError = false;
@@ -28497,7 +28533,9 @@
 	      }
 	      break;
 	    case 'EDITOR_PAGE_UNLOADED':
-	      state = Object.assign({}, state);
+	      state = Object.assign({}, state, {
+	        viewChangeCounter: state.viewChangeCounter + 1
+	      });
 	      var keys = ['title', 'description', 'body', 'tagInput', 'tagList', 'errors', 'articleSlug', 'inProgress'];
 	      var _iteratorNormalCompletion = true;
 	      var _didIteratorError = false;
@@ -28562,7 +28600,9 @@
 	      });
 	      break;
 	    case 'HOME_PAGE_UNLOADED':
-	      state = Object.assign({}, state);
+	      state = Object.assign({}, state, {
+	        viewChangeCounter: state.viewChangeCounter + 1
+	      });
 	      delete state.articles;
 	      delete state.tags;
 	      delete state.tab;
@@ -28612,7 +28652,9 @@
 	      });
 	      break;
 	    case 'PROFILE_PAGE_UNLOADED':
-	      state = Object.assign({}, state);
+	      state = Object.assign({}, state, {
+	        viewChangeCounter: state.viewChangeCounter + 1
+	      });
 	      delete state.profile;
 	      delete state.articles;
 	      delete state.articlesCount;
@@ -28635,6 +28677,26 @@
 
 	'use strict';
 
+	module.exports = function () {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? defaultState : arguments[0];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case 'PROFILE_FAVORITES_PAGE_UNLOADED':
+	      return Object.assign({}, state, {
+	        viewChangeCounter: state.viewChangeCounter + 1
+	      });
+	  }
+
+	  return state;
+	};
+
+/***/ },
+/* 255 */
+/***/ function(module, exports) {
+
+	'use strict';
+
 	module.exports = function (state, action) {
 	  switch (action.type) {
 	    case 'SETTINGS_SAVED':
@@ -28648,7 +28710,9 @@
 	      }
 	      break;
 	    case 'SETTINGS_PAGE_UNLOADED':
-	      state = Object.assign({}, state);
+	      state = Object.assign({}, state, {
+	        viewChangeCounter: state.viewChangeCounter + 1
+	      });
 	      var _arr = ['errors', 'inProgress'];
 	      for (var _i = 0; _i < _arr.length; _i++) {
 	        var key = _arr[_i];
@@ -28666,7 +28730,7 @@
 	};
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28682,7 +28746,7 @@
 	var React = __webpack_require__(160);
 	var Router = __webpack_require__(166);
 	var agent = __webpack_require__(223);
-	var marked = __webpack_require__(256);
+	var marked = __webpack_require__(257);
 	var store = __webpack_require__(235);
 
 	var DeleteButton = function DeleteButton(props) {
@@ -28701,7 +28765,7 @@
 	      React.createElement('i', { className: 'ion-trash-a', onClick: del })
 	    );
 	  }
-	  return;
+	  return null;
 	};
 
 	var Comment = function Comment(props) {
@@ -29035,7 +29099,7 @@
 	module.exports = Article;
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -30224,7 +30288,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30237,7 +30301,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ListErrors = __webpack_require__(258);
+	var ListErrors = __webpack_require__(259);
 	var React = __webpack_require__(160);
 	var agent = __webpack_require__(223);
 	var store = __webpack_require__(235);
@@ -30425,7 +30489,7 @@
 	module.exports = Editor;
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30479,7 +30543,7 @@
 	module.exports = ListErrors;
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30621,7 +30685,7 @@
 	module.exports = Header;
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -30634,7 +30698,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ArticleList = __webpack_require__(261);
+	var ArticleList = __webpack_require__(262);
 	var React = __webpack_require__(160);
 	var Router = __webpack_require__(166);
 	var agent = __webpack_require__(223);
@@ -30896,12 +30960,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var ArticlePreview = __webpack_require__(262);
+	var ArticlePreview = __webpack_require__(263);
 	var React = __webpack_require__(160);
 	var agent = __webpack_require__(223);
 	var store = __webpack_require__(235);
@@ -30981,7 +31045,7 @@
 	module.exports = ArticleList;
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31086,7 +31150,7 @@
 	module.exports = ArticlePreview;
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31099,7 +31163,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ListErrors = __webpack_require__(258);
+	var ListErrors = __webpack_require__(259);
 	var React = __webpack_require__(160);
 	var Router = __webpack_require__(166);
 	var agent = __webpack_require__(223);
@@ -31232,7 +31296,7 @@
 	module.exports = Login;
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31245,7 +31309,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ArticleList = __webpack_require__(261);
+	var ArticleList = __webpack_require__(262);
 	var React = __webpack_require__(160);
 	var Router = __webpack_require__(166);
 	var agent = __webpack_require__(223);
@@ -31443,7 +31507,7 @@
 	module.exports = Profile;
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31456,7 +31520,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Profile = __webpack_require__(264);
+	var Profile = __webpack_require__(265);
 	var React = __webpack_require__(160);
 	var Router = __webpack_require__(166);
 	var agent = __webpack_require__(223);
@@ -31475,9 +31539,14 @@
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      store.dispatch({
-	        type: 'PROFILE_PAGE_LOADED',
+	        type: 'PROFILE_FAVORITES_PAGE_LOADED',
 	        payload: Promise.all([agent.Profile.get(this.props.params.username), agent.Articles.favoritedBy(this.props.params.username)])
 	      });
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      store.dispatch({ type: 'PROFILE_FAVORITES_PAGE_UNLOADED' });
 	    }
 	  }, {
 	    key: 'renderTabs',
@@ -31517,7 +31586,7 @@
 	module.exports = ProfileFavorites;
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31530,7 +31599,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ListErrors = __webpack_require__(258);
+	var ListErrors = __webpack_require__(259);
 	var React = __webpack_require__(160);
 	var Router = __webpack_require__(166);
 	var agent = __webpack_require__(223);
@@ -31680,7 +31749,7 @@
 	module.exports = Register;
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31695,7 +31764,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ListErrors = __webpack_require__(258);
+	var ListErrors = __webpack_require__(259);
 	var React = __webpack_require__(160);
 	var Router = __webpack_require__(166);
 	var agent = __webpack_require__(223);

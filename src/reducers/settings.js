@@ -13,7 +13,9 @@ module.exports = (state, action) => {
       }
       break;
     case 'SETTINGS_PAGE_UNLOADED':
-      state = Object.assign({}, state);
+      state = Object.assign({}, state, {
+        viewChangeCounter: state.viewChangeCounter + 1
+      });
       for (const key of ['errors', 'inProgress']) {
         delete state[key];
       }

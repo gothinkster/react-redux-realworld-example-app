@@ -5,11 +5,13 @@ const auth = require('./reducers/auth');
 const editor = require('./reducers/editor');
 const home = require('./reducers/home');
 const profile = require('./reducers/profile');
+const profileFavorites = require('./reducers/profileFavorites');
 const settings = require('./reducers/settings');
 
 const defaultState = {
   appName: 'Conduit',
-  token: null
+  token: null,
+  viewChangeCounter: 0
 };
 
 module.exports = (state = defaultState, action) => {
@@ -18,6 +20,7 @@ module.exports = (state = defaultState, action) => {
   state = editor(state, action);
   state = home(state, action);
   state = profile(state, action);
+  state = profileFavorites(state, action);
   state = settings(state, action);
   switch (action.type) {
     case 'APP_LOAD':
@@ -46,7 +49,9 @@ module.exports = (state = defaultState, action) => {
       state = Object.assign({}, state, { redirectTo: '/' });
       break;
     case 'ARTICLE_PAGE_UNLOADED':
-      state = Object.assign({}, state);
+      state = Object.assign({}, state, {
+        viewChangeCounter: state.viewChangeCounter + 1
+      });
       delete state.article;
       delete state.comments;
       delete state.commentErrors;
@@ -79,5 +84,6 @@ module.exports = (state = defaultState, action) => {
       break;
   }
 
+  console.log(state);
   return state;
 };
