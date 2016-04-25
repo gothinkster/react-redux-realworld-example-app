@@ -28400,7 +28400,6 @@
 	      break;
 	  }
 
-	  console.log(state);
 	  return state;
 	};
 

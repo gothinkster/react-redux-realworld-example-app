@@ -84,6 +84,5 @@ module.exports = (state = defaultState, action) => {
       break;
   }
 
-  console.log(state);
   return state;
 };
