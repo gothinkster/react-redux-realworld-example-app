@@ -105,7 +105,8 @@
 	      store.dispatch({
 	        type: 'APP_LOAD',
 	        token: token,
-	        payload: token ? agent.Auth.current() : null
+	        payload: token ? agent.Auth.current() : null,
+	        skipTracking: true
 	      });
 	    }
 	  }, {
@@ -28245,26 +28246,37 @@
 	    return function (action) {
 	      if (isPromise(action.payload)) {
 	        var _ret = function () {
-	          store.dispatch({ type: 'ASYNC_START', subtype: action.type });
-	          var initialView = store.getState().viewChangeCounter;
+	          var cancelled = false;
+	          if (!action.skipTracking) {
+	            store.dispatch({
+	              type: 'ASYNC_START',
+	              subtype: action.type,
+	              promise: action.payload,
+	              cancel: function cancel() {
+	                cancelled = true;
+	              }
+	            });
+	          }
 	          action.payload.then(function (res) {
-	            // The view might have changed mid-promise, so if the view unloaded,
-	            // don't dispatch the action.
-	            var finalView = store.getState().viewChangeCounter;
-	            if (finalView !== initialView) {
+	            if (cancelled) {
 	              return;
 	            }
 	            console.log('RESULT', res);
 	            action.payload = res;
+	            if (!action.skipTracking) {
+	              store.dispatch({ type: 'ASYNC_END', promise: action.payload });
+	            }
 	            store.dispatch(action);
 	          }, function (error) {
-	            var finalView = store.getState().viewChangeCounter;
-	            if (finalView !== initialView) {
+	            if (cancelled) {
 	              return;
 	            }
 	            console.log('ERROR', error);
 	            action.error = true;
 	            action.payload = error.response.body;
+	            if (!action.skipTracking) {
+	              store.dispatch({ type: 'ASYNC_END', promise: action.payload });
+	            }
 	            store.dispatch(action);
 	          });
 
@@ -28363,13 +28375,17 @@
 	      state = Object.assign({}, state, { redirectTo: '/' });
 	      break;
 	    case 'ARTICLE_PAGE_UNLOADED':
-	      state = Object.assign({}, state, {
-	        viewChangeCounter: state.viewChangeCounter + 1
+	      if (state.outstandingActions) {
+	        state.outstandingActions.forEach(function (promise) {
+	          return promise.cancel();
+	        });
+	      }
+	      return Object.assign({}, state, {
+	        article: null,
+	        comments: null,
+	        commentErrors: null,
+	        outstandingActions: null
 	      });
-	      delete state.article;
-	      delete state.comments;
-	      delete state.commentErrors;
-	      break;
 	    case 'ADD_TAG':
 	      state = Object.assign({}, state);
 	      state.tagList.push(state.tagInput);
@@ -28398,6 +28414,20 @@
 	      };
 	      state.comments = _.filter(state.comments, filter);
 	      break;
+	    case 'ASYNC_START':
+	      var promise = Object.assign(action.promise, { cancel: action.cancel });
+	      return Object.assign({}, state, {
+	        outstandingActions: (state.outstandingActions || []).concat([promise])
+	      });
+	    case 'ASYNC_END':
+	      if (state.outstandingActions) {
+	        var _filter = function _filter(p) {
+	          return p !== action.promise;
+	        };
+	        return Object.assign({}, state, {
+	          outstandingActions: state.outstandingActions.filter(_filter)
+	        });
+	      }
 	  }
 
 	  return state;
@@ -28455,36 +28485,19 @@
 	      break;
 	    case 'LOGIN_PAGE_UNLOADED':
 	    case 'REGISTER_PAGE_UNLOADED':
-	      state = Object.assign({}, state, {
-	        viewChangeCounter: state.viewChangeCounter + 1
-	      });
-	      var props = ['errors', 'username', 'email', 'password', 'inProgress'];
-	      var _iteratorNormalCompletion = true;
-	      var _didIteratorError = false;
-	      var _iteratorError = undefined;
-
-	      try {
-	        for (var _iterator = props[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	          var key = _step.value;
-
-	          delete state[key];
-	        }
-	      } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	      } finally {
-	        try {
-	          if (!_iteratorNormalCompletion && _iterator.return) {
-	            _iterator.return();
-	          }
-	        } finally {
-	          if (_didIteratorError) {
-	            throw _iteratorError;
-	          }
-	        }
+	      if (state.outstandingActions) {
+	        state.outstandingActions.forEach(function (promise) {
+	          return promise.cancel();
+	        });
 	      }
-
-	      break;
+	      return Object.assign({}, state, {
+	        errors: null,
+	        username: null,
+	        email: null,
+	        password: null,
+	        inProgress: null,
+	        outstandingActions: null
+	      });
 	    case 'ASYNC_START':
 	      if (action.subtype === 'LOGIN' || action.subtype === 'REGISTER') {
 	        state = Object.assign({}, state);
@@ -28532,36 +28545,22 @@
 	      }
 	      break;
 	    case 'EDITOR_PAGE_UNLOADED':
-	      state = Object.assign({}, state, {
-	        viewChangeCounter: state.viewChangeCounter + 1
-	      });
-	      var keys = ['title', 'description', 'body', 'tagInput', 'tagList', 'errors', 'articleSlug', 'inProgress'];
-	      var _iteratorNormalCompletion = true;
-	      var _didIteratorError = false;
-	      var _iteratorError = undefined;
-
-	      try {
-	        for (var _iterator = keys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	          var key = _step.value;
-
-	          delete state[key];
-	        }
-	      } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	      } finally {
-	        try {
-	          if (!_iteratorNormalCompletion && _iterator.return) {
-	            _iterator.return();
-	          }
-	        } finally {
-	          if (_didIteratorError) {
-	            throw _iteratorError;
-	          }
-	        }
+	      if (state.outstandingActions) {
+	        state.outstandingActions.forEach(function (promise) {
+	          return promise.cancel();
+	        });
 	      }
-
-	      break;
+	      return Object.assign({}, state, {
+	        title: null,
+	        description: null,
+	        body: null,
+	        tagInput: null,
+	        tagList: null,
+	        errors: null,
+	        articleSlug: null,
+	        inProgress: null,
+	        outstandingActions: null
+	      });
 	    case 'ARTICLE_SUBMITTED':
 	      state = Object.assign({}, state);
 	      state.inProgress = null;
@@ -28599,15 +28598,19 @@
 	      });
 	      break;
 	    case 'HOME_PAGE_UNLOADED':
-	      state = Object.assign({}, state, {
-	        viewChangeCounter: state.viewChangeCounter + 1
+	      if (state.outstandingActions) {
+	        state.outstandingActions.forEach(function (promise) {
+	          return promise.cancel();
+	        });
+	      }
+	      return Object.assign({}, state, {
+	        articles: null,
+	        tags: null,
+	        tab: null,
+	        articlesCount: null,
+	        currentPage: null,
+	        outstandingActions: null
 	      });
-	      delete state.articles;
-	      delete state.tags;
-	      delete state.tab;
-	      delete state.articlesCount;
-	      delete state.currentPage;
-	      break;
 	    case 'CHANGE_TAB':
 	      state = Object.assign({}, state, {
 	        articles: action.payload.articles,
@@ -28651,14 +28654,18 @@
 	      });
 	      break;
 	    case 'PROFILE_PAGE_UNLOADED':
-	      state = Object.assign({}, state, {
-	        viewChangeCounter: state.viewChangeCounter + 1
+	      if (state.outstandingActions) {
+	        state.outstandingActions.forEach(function (promise) {
+	          return promise.cancel();
+	        });
+	      }
+	      return Object.assign({}, state, {
+	        profile: null,
+	        articles: null,
+	        articlesCount: null,
+	        currentPage: null,
+	        outstandingActions: null
 	      });
-	      delete state.profile;
-	      delete state.articles;
-	      delete state.articlesCount;
-	      delete state.currentPage;
-	      break;
 	    case 'FOLLOW_USER':
 	    case 'UNFOLLOW_USER':
 	      state = Object.assign({}, state, {
@@ -28682,8 +28689,13 @@
 
 	  switch (action.type) {
 	    case 'PROFILE_FAVORITES_PAGE_UNLOADED':
+	      if (state.outstandingActions) {
+	        state.outstandingActions.forEach(function (promise) {
+	          return promise.cancel();
+	        });
+	      }
 	      return Object.assign({}, state, {
-	        viewChangeCounter: state.viewChangeCounter + 1
+	        outstandingActions: null
 	      });
 	  }
 
@@ -28709,15 +28721,16 @@
 	      }
 	      break;
 	    case 'SETTINGS_PAGE_UNLOADED':
-	      state = Object.assign({}, state, {
-	        viewChangeCounter: state.viewChangeCounter + 1
-	      });
-	      var _arr = ['errors', 'inProgress'];
-	      for (var _i = 0; _i < _arr.length; _i++) {
-	        var key = _arr[_i];
-	        delete state[key];
+	      if (state.outstandingActions) {
+	        state.outstandingActions.forEach(function (promise) {
+	          return promise.cancel();
+	        });
 	      }
-	      break;
+	      return Object.assign({}, state, {
+	        errors: null,
+	        inProgress: null,
+	        outstandingActions: null
+	      });
 	    case 'ASYNC_START':
 	      if (action.subtype === 'SETTINGS_SAVED') {
 	        state = Object.assign({}, state, { inProgress: true });

@@ -13,13 +13,14 @@ module.exports = (state, action) => {
       }
       break;
     case 'SETTINGS_PAGE_UNLOADED':
-      state = Object.assign({}, state, {
-        viewChangeCounter: state.viewChangeCounter + 1
-      });
-      for (const key of ['errors', 'inProgress']) {
-        delete state[key];
+      if (state.outstandingActions) {
+        state.outstandingActions.forEach(promise => promise.cancel());
       }
-      break;
+      return Object.assign({}, state, {
+        errors: null,
+        inProgress: null,
+        outstandingActions: null
+      });
     case 'ASYNC_START':
       if (action.subtype === 'SETTINGS_SAVED') {
         state = Object.assign({}, state, { inProgress: true });

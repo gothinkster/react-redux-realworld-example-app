@@ -16,14 +16,17 @@ module.exports = (state, action) => {
       break;
     case 'LOGIN_PAGE_UNLOADED':
     case 'REGISTER_PAGE_UNLOADED':
-      state = Object.assign({}, state, {
-        viewChangeCounter: state.viewChangeCounter + 1
-      });
-      const props = ['errors', 'username', 'email', 'password', 'inProgress']
-      for (const key of props) {
-        delete state[key];
+      if (state.outstandingActions) {
+        state.outstandingActions.forEach(promise => promise.cancel());
       }
-      break;
+      return Object.assign({}, state, {
+        errors: null,
+        username: null,
+        email: null,
+        password: null,
+        inProgress: null,
+        outstandingActions: null
+      });
     case 'ASYNC_START':
       if (action.subtype === 'LOGIN' || action.subtype === 'REGISTER') {
         state = Object.assign({}, state);

@@ -49,13 +49,15 @@ module.exports = (state = defaultState, action) => {
       state = Object.assign({}, state, { redirectTo: '/' });
       break;
     case 'ARTICLE_PAGE_UNLOADED':
-      state = Object.assign({}, state, {
-        viewChangeCounter: state.viewChangeCounter + 1
+      if (state.outstandingActions) {
+        state.outstandingActions.forEach(promise => promise.cancel());
+      }
+      return Object.assign({}, state, {
+        article: null,
+        comments: null,
+        commentErrors: null,
+        outstandingActions: null
       });
-      delete state.article;
-      delete state.comments;
-      delete state.commentErrors;
-      break;
     case 'ADD_TAG':
       state = Object.assign({}, state);
       state.tagList.push(state.tagInput);
@@ -82,6 +84,18 @@ module.exports = (state = defaultState, action) => {
       const filter = comment => comment.id !== action.commentId;
       state.comments = _.filter(state.comments, filter);
       break;
+    case 'ASYNC_START':
+      const promise = Object.assign(action.promise, { cancel: action.cancel })
+      return Object.assign({}, state, {
+        outstandingActions: (state.outstandingActions || []).concat([promise])
+      });
+    case 'ASYNC_END':
+      if (state.outstandingActions) {
+        const filter = p => p !== action.promise;
+        return Object.assign({}, state, {
+          outstandingActions: state.outstandingActions.filter(filter)
+        });
+      }
   }
 
   return state;

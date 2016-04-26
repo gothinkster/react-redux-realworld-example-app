@@ -23,23 +23,20 @@ module.exports = (state, action) => {
       }
       break;
     case 'EDITOR_PAGE_UNLOADED':
-      state = Object.assign({}, state, {
-        viewChangeCounter: state.viewChangeCounter + 1
-      });
-      const keys = [
-        'title',
-        'description',
-        'body',
-        'tagInput',
-        'tagList',
-        'errors',
-        'articleSlug',
-        'inProgress'
-      ];
-      for (const key of keys) {
-        delete state[key];
+      if (state.outstandingActions) {
+        state.outstandingActions.forEach(promise => promise.cancel());
       }
-      break;
+      return Object.assign({}, state, {
+        title: null,
+        description: null,
+        body: null,
+        tagInput: null,
+        tagList: null,
+        errors: null,
+        articleSlug: null,
+        inProgress: null,
+        outstandingActions: null
+      });
     case 'ARTICLE_SUBMITTED':
       state = Object.assign({}, state);
       state.inProgress = null;
