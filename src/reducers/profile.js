@@ -11,12 +11,16 @@ module.exports = (state = defaultState, action) => {
       });
       break;
     case 'PROFILE_PAGE_UNLOADED':
-      state = Object.assign({}, state);
-      delete state.profile;
-      delete state.articles;
-      delete state.articlesCount;
-      delete state.currentPage;
-      break;
+      if (state.outstandingActions) {
+        state.outstandingActions.forEach(promise => promise.cancel());
+      }
+      return Object.assign({}, state, {
+        profile: null,
+        articles: null,
+        articlesCount: null,
+        currentPage: null,
+        outstandingActions: null
+      });
     case 'FOLLOW_USER':
     case 'UNFOLLOW_USER':
       state = Object.assign({}, state, {

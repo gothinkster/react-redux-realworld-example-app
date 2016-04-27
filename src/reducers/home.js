@@ -12,13 +12,17 @@ module.exports = (state, action) => {
       });
       break;
     case 'HOME_PAGE_UNLOADED':
-      state = Object.assign({}, state);
-      delete state.articles;
-      delete state.tags;
-      delete state.tab;
-      delete state.articlesCount;
-      delete state.currentPage;
-      break;
+      if (state.outstandingActions) {
+        state.outstandingActions.forEach(promise => promise.cancel());
+      }
+      return Object.assign({}, state, {
+        articles: null,
+        tags: null,
+        tab: null,
+        articlesCount: null,
+        currentPage: null,
+        outstandingActions: null
+      });
     case 'CHANGE_TAB':
       state = Object.assign({}, state, {
         articles: action.payload.articles,

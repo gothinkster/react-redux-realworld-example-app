@@ -41,7 +41,8 @@ class App extends React.Component {
     store.dispatch({
       type: 'APP_LOAD',
       token: token,
-      payload: token ? agent.Auth.current() : null
+      payload: token ? agent.Auth.current() : null,
+      skipTracking: true
     });
   }
 

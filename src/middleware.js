@@ -4,22 +4,40 @@ const agent = require('./agent');
 
 exports.promiseMiddleware = store => next => action => {
   if (isPromise(action.payload)) {
-    store.dispatch({ type: 'ASYNC_START', subtype: action.type });
+    let cancelled = false;
+    if (!action.skipTracking) {
+      store.dispatch({
+        type: 'ASYNC_START',
+        subtype: action.type,
+        promise: action.payload,
+        cancel: () => { cancelled = true; }
+      });
+    }
     action.payload.then(
       res => {
+        if (cancelled) {
+          return;
+        }
         console.log('RESULT', res);
         action.payload = res;
+        if (!action.skipTracking) {
+          store.dispatch({ type: 'ASYNC_END', promise: action.payload });
+        }
         store.dispatch(action);
       },
       error => {
+        if (cancelled) {
+          return;
+        }
         console.log('ERROR', error);
         action.error = true;
         action.payload = error.response.body;
+        if (!action.skipTracking) {
+          store.dispatch({ type: 'ASYNC_END', promise: action.payload });
+        }
         store.dispatch(action);
       }
     );
-
-    store.dispatch({ type: 'LOADING' });
 
     return;
   }
