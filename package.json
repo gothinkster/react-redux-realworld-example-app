@@ -23,6 +23,7 @@
   },
   "scripts": {
     "compile": "webpack",
+    "postinstall": "webpack",
     "watch": "webpack --watch"
   }
 }
