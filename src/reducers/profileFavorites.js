@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (state = defaultState, action) => {
+export default (state = defaultState, action) => {
   switch (action.type) {
     case 'PROFILE_FAVORITES_PAGE_UNLOADED':
       if (state.outstandingActions) {

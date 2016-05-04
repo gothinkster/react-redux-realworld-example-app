@@ -1,10 +1,10 @@
 'use strict';
 
-const Profile = require('./Profile');
-const React = require('react');
-const Router = require('react-router');
-const agent = require('../agent');
-const store = require('../store');
+import Profile from './Profile';
+import React from 'react';
+import { Link } from 'react-router';
+import agent from '../agent';
+import store from '../store';
 
 class ProfileFavorites extends Profile {
   componentWillMount() {
@@ -25,23 +25,23 @@ class ProfileFavorites extends Profile {
     return (
       <ul className="nav nav-pills outline-active">
         <li className="nav-item">
-          <Router.Link
+          <Link
             className="nav-link"
             to={`@${this.state.profile.username}`}>
             My Articles
-          </Router.Link>
+          </Link>
         </li>
 
         <li className="nav-item">
-          <Router.Link
+          <Link
             className="nav-link active"
             to={`@${this.state.profile.username}/favorites`}>
             Favorited Articles
-          </Router.Link>
+          </Link>
         </li>
       </ul>
     );
   }
 }
 
-module.exports = ProfileFavorites;
+export default ProfileFavorites;

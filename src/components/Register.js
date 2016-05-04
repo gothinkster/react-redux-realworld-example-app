@@ -111,4 +111,4 @@ class Register extends React.Component {
   }
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(Register);
+export default connect(mapStateToProps, mapDispatchToProps)(Register);

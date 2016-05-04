@@ -1,8 +1,8 @@
 'use strict';
 
-const React = require('react');
-const Router = require('react-router');
-const store = require('../store');
+import React from 'react';
+import { Link } from 'react-router';
+import store from '../store';
 
 const LoggedOutView = props => {
   if (!props.state.currentUser) {
@@ -10,21 +10,21 @@ const LoggedOutView = props => {
       <ul className="nav navbar-nav pull-xs-right">
 
         <li className="nav-item">
-          <Router.Link to="/" className="nav-link">
+          <Link to="/" className="nav-link">
             Home
-          </Router.Link>
+          </Link>
         </li>
 
         <li className="nav-item">
-          <Router.Link to="login" className="nav-link">
+          <Link to="login" className="nav-link">
             Sign in
-          </Router.Link>
+          </Link>
         </li>
 
         <li className="nav-item">
-          <Router.Link to="register" className="nav-link">
+          <Link to="register" className="nav-link">
             Sign up
-          </Router.Link>
+          </Link>
         </li>
 
       </ul>
@@ -39,30 +39,30 @@ const LoggedInView = props => {
       <ul className="nav navbar-nav pull-xs-right">
 
         <li className="nav-item">
-          <Router.Link to="" className="nav-link">
+          <Link to="" className="nav-link">
             Home
-          </Router.Link>
+          </Link>
         </li>
 
         <li className="nav-item">
-          <Router.Link to="editor" className="nav-link">
+          <Link to="editor" className="nav-link">
             <i className="ion-compose"></i>&nbsp;New Post
-          </Router.Link>
+          </Link>
         </li>
 
         <li className="nav-item">
-          <Router.Link to="settings" className="nav-link">
+          <Link to="settings" className="nav-link">
             <i className="ion-gear-a"></i>&nbsp;Settings
-          </Router.Link>
+          </Link>
         </li>
 
         <li className="nav-item">
-          <Router.Link
+          <Link
             to={`@${props.state.currentUser.username}`}
             className="nav-link">
             <img src={props.state.currentUser.image} className="user-pic" />
             {props.state.currentUser.username}
-          </Router.Link>
+          </Link>
         </li>
 
       </ul>
@@ -78,9 +78,9 @@ class Header extends React.Component {
       <nav className="navbar navbar-light">
         <div className="container">
 
-          <Router.Link to="/" className="navbar-brand">
+          <Link to="/" className="navbar-brand">
             {this.props.state.appName.toLowerCase()}
-          </Router.Link>
+          </Link>
 
 
           <LoggedOutView state={this.props.state} />
@@ -92,4 +92,4 @@ class Header extends React.Component {
   }
 }
 
-module.exports = Header;
+export default Header;

@@ -1,8 +1,8 @@
 'use strict';
 
-const agent = require('./agent');
+import agent from './agent';
 
-exports.promiseMiddleware = store => next => action => {
+const promiseMiddleware = store => next => action => {
   if (isPromise(action.payload)) {
     let cancelled = false;
     if (!action.skipTracking) {
@@ -45,7 +45,7 @@ exports.promiseMiddleware = store => next => action => {
   next(action);
 };
 
-exports.localStorageMiddleware = store => next => action => {
+const localStorageMiddleware = store => next => action => {
   if (action.type === 'REGISTER' || action.type === 'LOGIN') {
     if (!action.error) {
       window.localStorage.setItem('jwt', action.payload.user.token);
@@ -62,3 +62,6 @@ exports.localStorageMiddleware = store => next => action => {
 function isPromise(v) {
   return v && typeof v.then === 'function';
 }
+
+
+export { promiseMiddleware, localStorageMiddleware }

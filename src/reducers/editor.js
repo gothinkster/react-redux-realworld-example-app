@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (state, action) => {
+export default (state, action) => {
   switch (action.type) {
     case 'EDITOR_PAGE_LOADED':
       if (action.payload) {

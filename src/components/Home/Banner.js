@@ -16,4 +16,4 @@ const Banner = ({ appName, token }) => {
   );
 };
 
-module.exports = Banner;
+export default Banner;

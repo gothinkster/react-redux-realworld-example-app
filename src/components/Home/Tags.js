@@ -33,4 +33,4 @@ const Tags = props => {
   }
 };
 
-module.exports = Tags;
+export default Tags;

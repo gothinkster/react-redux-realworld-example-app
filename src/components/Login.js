@@ -94,4 +94,4 @@ class Login extends React.Component {
   }
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -1,9 +1,9 @@
 'use strict';
 
-const ArticlePreview = require('./ArticlePreview');
-const React = require('react');
-const agent = require('../agent');
-const store = require('../store');
+import ArticlePreview from './ArticlePreview';
+import React from 'react';
+import agent from '../agent';
+import store from '../store';
 
 const ListPagination = props => {
   if (props.articlesCount < 10) {
@@ -80,4 +80,4 @@ const ArticleList = props => {
   );
 };
 
-module.exports = ArticleList;
+export default ArticleList;

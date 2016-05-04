@@ -1,6 +1,6 @@
 'use strict';
 
-const React = require('react');
+import React from 'react';
 
 class ListErrors extends React.Component {
   render() {
@@ -25,4 +25,4 @@ class ListErrors extends React.Component {
   }
 }
 
-module.exports = ListErrors;
+export default = ListErrors;

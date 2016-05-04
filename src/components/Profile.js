@@ -1,19 +1,19 @@
 'use strict';
 
-const ArticleList = require('./ArticleList');
-const React = require('react');
-const Router = require('react-router');
-const agent = require('../agent');
-const store = require('../store');
+import ArticleList from './ArticleList';
+import React from 'react';
+import { Link } from 'react-router';
+import agent from '../agent';
+import store from '../store';
 
 const EditProfileSettings = props => {
   if (props.isUser) {
     return (
-      <Router.Link
+      <Link
         to="settings"
         className="btn btn-sm btn-outline-secondary action-btn">
         <i className="ion-gear-a"></i> Edit Profile Settings
-      </Router.Link>
+      </Link>
     );
   }
   return null;
@@ -88,19 +88,19 @@ class Profile extends React.Component {
     return (
       <ul className="nav nav-pills outline-active">
         <li className="nav-item">
-          <Router.Link
+          <Link
             className="nav-link active"
             to={`@${this.state.profile.username}`}>
             My Articles
-          </Router.Link>
+          </Link>
         </li>
 
         <li className="nav-item">
-          <Router.Link
+          <Link
             className="nav-link"
             to={`@${this.state.profile.username}/favorites`}>
             Favorited Articles
-          </Router.Link>
+          </Link>
         </li>
       </ul>
     );
@@ -158,4 +158,4 @@ class Profile extends React.Component {
   }
 }
 
-module.exports = Profile;
+export default Profile;

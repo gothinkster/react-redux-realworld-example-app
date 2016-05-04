@@ -1,9 +1,9 @@
 'use strict';
 
-const ListErrors = require('./ListErrors');
-const React = require('react');
-const agent = require('../agent');
-const store = require('../store');
+import ListErrors from './ListErrors';
+import React from 'react';
+import agent from '../agent';
+import store from '../store';
 
 class Editor extends React.Component {
   constructor() {
@@ -155,4 +155,4 @@ class Editor extends React.Component {
   }
 }
 
-module.exports = Editor;
+export default Editor;

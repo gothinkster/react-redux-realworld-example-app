@@ -1,10 +1,10 @@
 'use strict';
 
-const React = require('react');
-const Router = require('react-router');
-const agent = require('../agent');
-const marked = require('marked');
-const store = require('../store');
+import React from 'react';
+import Router from 'react-router';
+import agent from '../agent';
+import marked from 'marked';
+import store from '../store';
 
 const DeleteButton = props => {
   const del = () => {
@@ -301,4 +301,4 @@ class Article extends React.Component {
   }
 }
 
-module.exports = Article;
+export default Article;

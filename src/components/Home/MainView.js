@@ -95,4 +95,4 @@ const MainView = props => {
   );
 };
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(MainView);
+export default connect(mapStateToProps, mapDispatchToProps)(MainView);
