@@ -9,21 +9,18 @@ const Promise = global.Promise;
 
 const mapStateToProps = state => ({
   appName: state.appName,
-  articles: state.articles,
-  articlesCount: state.articlesCount,
-  currentPage: state.currentPage,
-  loading: state.loading,
-  tab: state.tab,
-  tag: state.tag,
+  tags: state.tags,
   token: state.token
 });
 
 const mapDispatchToProps = dispatch => ({
+  onClickTag: (tag, payload) =>
+    dispatch({ type: 'APPLY_TAG_FILTER', tag, payload }),
   onLoad: (tab, payload) =>
     dispatch({ type: 'HOME_PAGE_LOADED', tab, payload }),
   onUnload: () =>
     dispatch({  type: 'HOME_PAGE_UNLOADED' })
-})
+});
 
 class Home extends React.Component {
   componentWillMount() {
@@ -47,21 +44,16 @@ class Home extends React.Component {
 
         <div className="container page">
           <div className="row">
-            <MainView
-              token={this.props.token}
-              tab={this.props.tab}
-              articles={this.props.articles}
-              articlesCount={this.props.articlesCount}
-              loading={this.props.loading}
-              currentPage={this.props.currentPage}
-              tag={this.props.tag} />
+            <MainView />
 
             <div className="col-md-3">
               <div className="sidebar">
 
                 <p>Popular Tags</p>
 
-                <Tags tags={this.props.tags} />
+                <Tags
+                  tags={this.props.tags}
+                  onClickTag={this.props.onClickTag} />
 
               </div>
             </div>

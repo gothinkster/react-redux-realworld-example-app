@@ -1,4 +1,5 @@
 import React from 'react';
+import agent from '../../agent';
 
 const Tags = props => {
   const tags = props.tags;
@@ -9,11 +10,7 @@ const Tags = props => {
           tags.map(tag => {
             const handleClick = ev => {
               ev.preventDefault();
-              store.dispatch({
-                type: 'APPLY_TAG_FILTER',
-                tag: tag,
-                payload: agent.Articles.byTag(tag)
-              });
+              props.onClickTag(tag, agent.Articles.byTag(tag));
             };
 
             return (
