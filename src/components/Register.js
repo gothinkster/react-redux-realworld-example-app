@@ -1,52 +1,53 @@
-'use strict';
+import { Link } from 'react-router';
+import ListErrors from './ListErrors';
+import React from 'react';
+import agent from '../agent';
+import { connect } from 'react-redux';
 
-const ListErrors = require('./ListErrors');
-const React = require('react');
-const Router = require('react-router');
-const agent = require('../agent');
-const store = require('../store');
+const mapStateToProps = state => ({
+  errors: state.errors,
+  email: state.email,
+  password: state.password,
+  inProgress: state.inProgress,
+  username: state.username
+});
+
+const mapDispatchToProps = dispatch => ({
+  onChangeEmail: value =>
+    dispatch({ type: 'UPDATE_FIELD', key: 'email', value }),
+  onChangePassword: value =>
+    dispatch({ type: 'UPDATE_FIELD', key: 'password', value }),
+  onChangeUsername: value =>
+    dispatch({ type: 'UPDATE_FIELD', key: 'username', value }),
+  onSubmit: (username, email, password) => {
+    const payload = agent.Auth.register(username, email, password);
+    dispatch({ type: 'REGISTER', payload })
+  },
+  onUnload: () =>
+    dispatch({ type: 'REGISTER_PAGE_UNLOADED' })
+});
 
 class Register extends React.Component {
   constructor() {
     super();
-    this.state = store.getState();
-    this.changeUsername = ev => store.dispatch({
-      type: 'UPDATE_FIELD',
-      key: 'username',
-      value: ev.target.value
-    });
-    this.changeEmail = ev => store.dispatch({
-      type: 'UPDATE_FIELD',
-      key: 'email',
-      value: ev.target.value
-    });
-    this.changePassword = ev => store.dispatch({
-      type: 'UPDATE_FIELD',
-      key: 'password',
-      value: ev.target.value
-    });
-    this.submitForm = ev => {
+    this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
+    this.changePassword = ev => this.props.onChangePassword(ev.target.value);
+    this.changeUsername = ev => this.props.onChangeUsername(ev.target.value);
+    this.submitForm = (username, email, password) => ev => {
       ev.preventDefault();
-      store.dispatch({
-        type: 'REGISTER',
-        payload: agent.Auth.register(this.state.username, this.state.email,
-          this.state.password)
-      });
+      this.props.onSubmit(username, email, password);
     }
   }
 
-  componentDidMount() {
-    this.unsubscribe = store.subscribe(() => {
-      this.setState(store.getState());
-    });
-  }
-
   componentWillUnmount() {
-    this.unsubscribe && this.unsubscribe();
-    store.dispatch({ type: 'REGISTER_PAGE_UNLOADED' });
+    this.props.onUnload();
   }
 
   render() {
+    const email = this.props.email;
+    const password = this.props.password;
+    const username = this.props.username;
+
     return (
       <div className="auth-page">
         <div className="container page">
@@ -55,14 +56,14 @@ class Register extends React.Component {
             <div className="col-md-6 offset-md-3 col-xs-12">
               <h1 className="text-xs-center">Sign Up</h1>
               <p className="text-xs-center">
-                <Router.Link to="login">
+                <Link to="login">
                   Have an account?
-                </Router.Link>
+                </Link>
               </p>
 
-              <ListErrors errors={this.state.errors} />
+              <ListErrors errors={this.props.errors} />
 
-              <form onSubmit={this.submitForm}>
+              <form onSubmit={this.submitForm(username, email, password)}>
                 <fieldset>
 
                   <fieldset className="form-group">
@@ -70,7 +71,7 @@ class Register extends React.Component {
                       className="form-control form-control-lg"
                       type="text"
                       placeholder="Username"
-                      value={this.state.username}
+                      value={this.props.username}
                       onChange={this.changeUsername} />
                   </fieldset>
 
@@ -79,7 +80,7 @@ class Register extends React.Component {
                       className="form-control form-control-lg"
                       type="email"
                       placeholder="Email"
-                      value={this.state.email}
+                      value={this.props.email}
                       onChange={this.changeEmail} />
                   </fieldset>
 
@@ -88,14 +89,14 @@ class Register extends React.Component {
                       className="form-control form-control-lg"
                       type="password"
                       placeholder="Password"
-                      value={this.state.password}
+                      value={this.props.password}
                       onChange={this.changePassword} />
                   </fieldset>
 
                   <button
                     className="btn btn-lg btn-primary pull-xs-right"
                     type="submit"
-                    disabled={this.state.inProgress}>
+                    disabled={this.props.inProgress}>
                     Sign in
                   </button>
 
@@ -110,4 +111,4 @@ class Register extends React.Component {
   }
 }
 
-module.exports = Register;
+module.exports = connect(mapStateToProps, mapDispatchToProps)(Register);
