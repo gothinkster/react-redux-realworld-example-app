@@ -1,6 +1,7 @@
 'use strict';
 
 const ReactDOM = require('react-dom');
+const ReactRedux = require('react-redux');
 const React = require('react');
 const Router = require('react-router');
 const agent = require('./agent');
@@ -68,17 +69,19 @@ App.contextTypes = {
 };
 
 ReactDOM.render((
-  <Router.Router history={Router.hashHistory}>
-    <Router.Route path="/" component={App}>
-      <Router.IndexRoute component={Home} />
-      <Router.Route path="login" component={Login} />
-      <Router.Route path="register" component={Register} />
-      <Router.Route path="editor" component={Editor} />
-      <Router.Route path="editor/:slug" component={Editor} />
-      <Router.Route path="article/:id" component={Article} />
-      <Router.Route path="settings" component={Settings} />
-      <Router.Route path="@:username" component={Profile} />
-      <Router.Route path="@:username/favorites" component={ProfileFavorites} />
-    </Router.Route>
-  </Router.Router>
+  <ReactRedux.Provider store={store}>
+    <Router.Router history={Router.hashHistory}>
+      <Router.Route path="/" component={App}>
+        <Router.IndexRoute component={Home} />
+        <Router.Route path="login" component={Login} />
+        <Router.Route path="register" component={Register} />
+        <Router.Route path="editor" component={Editor} />
+        <Router.Route path="editor/:slug" component={Editor} />
+        <Router.Route path="article/:id" component={Article} />
+        <Router.Route path="settings" component={Settings} />
+        <Router.Route path="@:username" component={Profile} />
+        <Router.Route path="@:username/favorites" component={ProfileFavorites} />
+      </Router.Route>
+    </Router.Router>
+  </ReactRedux.Provider>
 ), document.getElementById('main'));
