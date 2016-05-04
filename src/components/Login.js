@@ -1,46 +1,47 @@
 'use strict';
 
-const ListErrors = require('./ListErrors');
-const React = require('react');
-const Router = require('react-router');
-const agent = require('../agent');
-const store = require('../store');
+import { Link } from 'react-router';
+import ListErrors from './ListErrors';
+import React from 'react';
+import agent from '../agent';
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => ({
+  errors: state.errors,
+  email: state.email,
+  password: state.password,
+  inProgress: state.inProgress
+});
+
+const mapDispatchToProps = dispatch => ({
+  onChangeEmail: value =>
+    dispatch({ type: 'UPDATE_FIELD', key: 'email', value }),
+  onChangePassword: value =>
+    dispatch({ type: 'UPDATE_FIELD', key: 'password', value }),
+  onSubmit: (email, password) =>
+    dispatch({ type: 'LOGIN', payload: agent.Auth.login(email, password) }),
+  onUnload: () =>
+    dispatch({ type: 'LOGIN_PAGE_UNLOADED' })
+});
 
 class Login extends React.Component {
   constructor() {
     super();
-    this.state = store.getState();
-    this.changeEmail = ev => store.dispatch({
-      type: 'UPDATE_FIELD',
-      key: 'email',
-      value: ev.target.value
-    });
-    this.changePassword = ev => store.dispatch({
-      type: 'UPDATE_FIELD',
-      key: 'password',
-      value: ev.target.value
-    });
-    this.submitForm = ev => {
+    this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
+    this.changePassword = ev => this.props.onChangePassword(ev.target.value);
+    this.submitForm = (email, password) => ev => {
       ev.preventDefault();
-      store.dispatch({
-        type: 'LOGIN',
-        payload: agent.Auth.login(this.state.email, this.state.password)
-      });
+      this.props.onSubmit(email, password);
     };
   }
 
-  componentDidMount() {
-    this.unsubscribe = store.subscribe(() => {
-      this.setState(store.getState());
-    });
-  }
-
   componentWillUnmount() {
-    this.unsubscribe && this.unsubscribe();
-    store.dispatch({ type: 'LOGIN_PAGE_UNLOADED' });
+    this.props.onUnload();
   }
 
   render() {
+    const email = this.props.email;
+    const password = this.props.password;
     return (
       <div className="auth-page">
         <div className="container page">
@@ -49,14 +50,14 @@ class Login extends React.Component {
             <div className="col-md-6 offset-md-3 col-xs-12">
               <h1 className="text-xs-center">Sign In</h1>
               <p className="text-xs-center">
-                <Router.Link to="register">
+                <Link to="register">
                   Need an account?
-                </Router.Link>
+                </Link>
               </p>
 
-              <ListErrors errors={this.state.errors} />
+              <ListErrors errors={this.props.errors} />
 
-              <form onSubmit={this.submitForm}>
+              <form onSubmit={this.submitForm(email, password)}>
                 <fieldset>
 
                   <fieldset className="form-group">
@@ -64,7 +65,7 @@ class Login extends React.Component {
                       className="form-control form-control-lg"
                       type="email"
                       placeholder="Email"
-                      value={this.state.email}
+                      value={email}
                       onChange={this.changeEmail} />
                   </fieldset>
 
@@ -73,14 +74,14 @@ class Login extends React.Component {
                       className="form-control form-control-lg"
                       type="password"
                       placeholder="Password"
-                      value={this.state.password}
+                      value={password}
                       onChange={this.changePassword} />
                   </fieldset>
 
                   <button
                     className="btn btn-lg btn-primary pull-xs-right"
                     type="submit"
-                    disabled={this.state.inProgress}>
+                    disabled={this.props.inProgress}>
                     Sign in
                   </button>
 
@@ -95,4 +96,4 @@ class Login extends React.Component {
   }
 }
 
-module.exports = Login;
+module.exports = connect(mapStateToProps, mapDispatchToProps)(Login);
