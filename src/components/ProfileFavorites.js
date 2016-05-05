@@ -1,47 +1,51 @@
 'use strict';
 
-const Profile = require('./Profile');
-const React = require('react');
-const Router = require('react-router');
-const agent = require('../agent');
-const store = require('../store');
+import { Profile, mapStateToProps } from './Profile';
+import React from 'react';
+import { Link } from 'react-router';
+import agent from '../agent';
+import { connect } from 'react-redux';
+
+const mapDispatchToProps = dispatch => ({
+  onLoad: (payload) =>
+    dispatch({ type: 'PROFILE_FAVORITES_PAGE_LOADED', payload }),
+  onUnload: () =>
+    dispatch({ type: 'PROFILE_FAVORITES_PAGE_UNLOADED' })
+});
 
 class ProfileFavorites extends Profile {
   componentWillMount() {
-    store.dispatch({
-      type: 'PROFILE_FAVORITES_PAGE_LOADED',
-      payload: Promise.all([
-        agent.Profile.get(this.props.params.username),
-        agent.Articles.favoritedBy(this.props.params.username)
-      ])
-    });
+    this.props.onLoad(Promise.all([
+      agent.Profile.get(this.props.params.username),
+      agent.Articles.favoritedBy(this.props.params.username)
+    ]));
   }
 
   componentWillUnmount() {
-    store.dispatch({ type: 'PROFILE_FAVORITES_PAGE_UNLOADED' });
+    this.props.onUnload();
   }
 
   renderTabs() {
     return (
       <ul className="nav nav-pills outline-active">
         <li className="nav-item">
-          <Router.Link
+          <Link
             className="nav-link"
-            to={`@${this.state.profile.username}`}>
+            to={`@${this.props.profile.username}`}>
             My Articles
-          </Router.Link>
+          </Link>
         </li>
 
         <li className="nav-item">
-          <Router.Link
+          <Link
             className="nav-link active"
-            to={`@${this.state.profile.username}/favorites`}>
+            to={`@${this.props.profile.username}/favorites`}>
             Favorited Articles
-          </Router.Link>
+          </Link>
         </li>
       </ul>
     );
   }
 }
 
-module.exports = ProfileFavorites;
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileFavorites);

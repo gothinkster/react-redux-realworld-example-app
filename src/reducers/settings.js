@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (state, action) => {
+export default (state, action) => {
   switch (action.type) {
     case 'SETTINGS_SAVED':
       state = Object.assign({}, state);

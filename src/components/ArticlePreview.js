@@ -1,9 +1,9 @@
 'use strict';
 
-const React = require('react');
-const Router = require('react-router');
-const agent = require('../agent');
-const store = require('../store');
+import React from 'react';
+import { Link } from 'react-router';
+import agent from '../agent';
+import store from '../store';
 
 const FAVORITED_CLASS = 'btn btn-sm btn-primary';
 const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
@@ -32,14 +32,14 @@ const ArticlePreview = props => {
   return (
     <div className="article-preview">
       <div className="article-meta">
-        <Router.Link to={`@${article.author.username}`}>
+        <Link to={`@${article.author.username}`}>
           <img src={article.author.image} />
-        </Router.Link>
+        </Link>
 
         <div className="info">
-          <Router.Link className="author" to={`@${article.author.username}`}>
+          <Link className="author" to={`@${article.author.username}`}>
             {article.author.username}
-          </Router.Link>
+          </Link>
           <span className="date">
             {new Date(article.createdAt).toDateString()}
           </span>
@@ -52,7 +52,7 @@ const ArticlePreview = props => {
         </div>
       </div>
 
-      <Router.Link to={`article/${article.slug}`} className="preview-link">
+      <Link to={`article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <span>Read more...</span>
@@ -67,9 +67,9 @@ const ArticlePreview = props => {
             })
           }
         </ul>
-      </Router.Link>
+      </Link>
     </div>
   );
 }
 
-module.exports = ArticlePreview;
+export default ArticlePreview;

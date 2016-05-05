@@ -1,12 +1,12 @@
 'use strict';
 
-const articleList = require('./reducers/articleList');
-const auth = require('./reducers/auth');
-const editor = require('./reducers/editor');
-const home = require('./reducers/home');
-const profile = require('./reducers/profile');
-const profileFavorites = require('./reducers/profileFavorites');
-const settings = require('./reducers/settings');
+import articleList from './reducers/articleList';
+import auth from './reducers/auth';
+import editor from './reducers/editor';
+import home from './reducers/home';
+import profile from './reducers/profile';
+import profileFavorites from './reducers/profileFavorites';
+import settings from './reducers/settings';
 
 const defaultState = {
   appName: 'Conduit',
@@ -14,7 +14,7 @@ const defaultState = {
   viewChangeCounter: 0
 };
 
-module.exports = (state = defaultState, action) => {
+export default (state = defaultState, action) => {
   state = articleList(state, action);
   state = auth(state, action);
   state = editor(state, action);

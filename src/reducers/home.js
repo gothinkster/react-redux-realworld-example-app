@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (state, action) => {
+export default (state, action) => {
   switch (action.type) {
     case 'HOME_PAGE_LOADED':
       state = Object.assign({}, state, {

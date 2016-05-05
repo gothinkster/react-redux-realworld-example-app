@@ -1,7 +1,9 @@
 'use strict';
 
-const superagent =
-  require('superagent-promise')(require('superagent'), global.Promise);
+import superagentPromise from 'superagent-promise';
+import _superagent from 'superagent';
+
+const superagent = superagentPromise(_superagent, global.Promise);
 
 const API_ROOT = 'https://conduit.productionready.io/api';
 
@@ -86,7 +88,7 @@ const Profile = {
     requests.del(`/profiles/${username}/follow`)
 };
 
-module.exports = {
+export default {
   Articles,
   Auth,
   Comments,

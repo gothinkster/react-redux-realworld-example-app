@@ -1,10 +1,9 @@
-const Redux = require('redux');
-const middleware = require('./middleware');
-const reducer = require('./reducer');
+import { applyMiddleware, createStore } from 'redux';
+import { promiseMiddleware, localStorageMiddleware } from './middleware';
+import reducer from './reducer';
 
-const applyMiddleware = Redux.applyMiddleware(middleware.promiseMiddleware,
-  middleware.localStorageMiddleware);
+const middleware = applyMiddleware(promiseMiddleware, localStorageMiddleware);
 
-const store = Redux.createStore(reducer, applyMiddleware);
+const store = createStore(reducer, middleware);
 
-module.exports = store;
+export default store;
