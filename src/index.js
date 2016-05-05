@@ -8,6 +8,7 @@ import agent from './agent';
 import history from 'history';
 import store from './store';
 
+import App from './components/App';
 import Article from './components/Article';
 import Editor from './components/Editor';
 import Header from './components/Header';
@@ -17,56 +18,6 @@ import Profile from './components/Profile';
 import ProfileFavorites from './components/ProfileFavorites';
 import Register from './components/Register';
 import Settings from './components/Settings';
-
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = store.getState();
-  }
-
-  componentDidMount() {
-    store.subscribe(() => {
-      this.setState(store.getState());
-
-      if (store.getState().redirectTo) {
-        this.context.router.replace(store.getState().redirectTo);
-        store.dispatch({ type: 'REDIRECT' });
-      }
-    });
-
-    const token = window.localStorage.getItem('jwt');
-    if (token) {
-      agent.setToken(token);
-    }
-
-    store.dispatch({
-      type: 'APP_LOAD',
-      token: token,
-      payload: token ? agent.Auth.current() : null,
-      skipTracking: true
-    });
-  }
-
-  render() {
-    if (this.state.appLoaded) {
-      return (
-        <div>
-          <Header state={this.state} />
-          {this.props.children}
-        </div>
-      );
-    }
-    return (
-      <div>
-        <Header state={this.state} />
-      </div>
-    );
-  }
-}
-
-App.contextTypes = {
-  router: React.PropTypes.object.isRequired
-};
 
 ReactDOM.render((
   <Provider store={store}>

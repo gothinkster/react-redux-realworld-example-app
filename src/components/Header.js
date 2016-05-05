@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import store from '../store';
 
 const LoggedOutView = props => {
-  if (!props.state.currentUser) {
+  if (!props.currentUser) {
     return (
       <ul className="nav navbar-nav pull-xs-right">
 
@@ -34,7 +34,7 @@ const LoggedOutView = props => {
 };
 
 const LoggedInView = props => {
-  if (props.state.currentUser) {
+  if (props.currentUser) {
     return (
       <ul className="nav navbar-nav pull-xs-right">
 
@@ -58,10 +58,10 @@ const LoggedInView = props => {
 
         <li className="nav-item">
           <Link
-            to={`@${props.state.currentUser.username}`}
+            to={`@${props.currentUser.username}`}
             className="nav-link">
-            <img src={props.state.currentUser.image} className="user-pic" />
-            {props.state.currentUser.username}
+            <img src={props.currentUser.image} className="user-pic" />
+            {props.currentUser.username}
           </Link>
         </li>
 
@@ -79,12 +79,12 @@ class Header extends React.Component {
         <div className="container">
 
           <Link to="/" className="navbar-brand">
-            {this.props.state.appName.toLowerCase()}
+            {this.props.appName.toLowerCase()}
           </Link>
 
-          <LoggedOutView state={this.props.state} />
+          <LoggedOutView state={this.props.currentUser} />
 
-          <LoggedInView state={this.props.state} />
+          <LoggedInView state={this.props.currentUser} />
         </div>
       </nav>
     );
