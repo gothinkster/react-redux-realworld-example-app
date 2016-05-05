@@ -4,7 +4,7 @@ import ArticleList from './ArticleList';
 import React from 'react';
 import { Link } from 'react-router';
 import agent from '../agent';
-import store from '../store';
+import { connect } from 'react-redux';
 
 const EditProfileSettings = props => {
   if (props.isUser) {
@@ -57,31 +57,30 @@ const FollowUserButton = props => {
   );
 };
 
+const mapStateToProps = state => ({
+  articles: state.articles,
+  articlesCount: state.articlesCount,
+  currentPage: state.currentPage,
+  currentUser: state.currentUser,
+  profile: state.profile
+});
+
+const mapDispatchToProps = dispatch => ({
+  onLoad: payload =>
+    dispatch({ type: 'PROFILE_PAGE_LOADED', payload }),
+  onUnload: () => dispatch({ type: 'PROFILE_PAGE_UNLOADED' })
+});
+
 class Profile extends React.Component {
-  constructor() {
-    super();
-    this.state = store.getState();
-  }
-
-  componentDidMount() {
-    this.unsubscribe = store.subscribe(() => {
-      this.setState(store.getState());
-    });
-  }
-
   componentWillMount() {
-    store.dispatch({
-      type: 'PROFILE_PAGE_LOADED',
-      payload: Promise.all([
-        agent.Profile.get(this.props.params.username),
-        agent.Articles.byAuthor(this.props.params.username)
-      ])
-    });
+    this.props.onLoad(Promise.all([
+      agent.Profile.get(this.props.params.username),
+      agent.Articles.byAuthor(this.props.params.username)
+    ]));
   }
 
   componentWillUnmount() {
-    this.unsubscribe && this.unsubscribe();
-    store.dispatch({ type: 'PROFILE_PAGE_UNLOADED' });
+    this.props.onUnload();
   }
 
   renderTabs() {
@@ -90,7 +89,7 @@ class Profile extends React.Component {
         <li className="nav-item">
           <Link
             className="nav-link active"
-            to={`@${this.state.profile.username}`}>
+            to={`@${this.props.profile.username}`}>
             My Articles
           </Link>
         </li>
@@ -98,7 +97,7 @@ class Profile extends React.Component {
         <li className="nav-item">
           <Link
             className="nav-link"
-            to={`@${this.state.profile.username}/favorites`}>
+            to={`@${this.props.profile.username}/favorites`}>
             Favorited Articles
           </Link>
         </li>
@@ -107,13 +106,14 @@ class Profile extends React.Component {
   }
 
   render() {
-    const profile = this.state.profile;
-    if (!this.state.profile) {
+    console.log('XX render', this.props.profile);
+    const profile = this.props.profile;
+    if (!profile) {
       return null;
     }
 
-    const isUser = this.state.currentUser &&
-      profile.username === this.state.currentUser.username;
+    const isUser = this.props.currentUser &&
+      this.props.profile.username === this.props.currentUser.username;
 
     return (
       <div className="profile-page">
@@ -145,9 +145,9 @@ class Profile extends React.Component {
               </div>
 
               <ArticleList
-                articles={this.state.articles}
-                articlesCount={this.state.articlesCount}
-                state={this.state.currentPage} />
+                articles={this.props.articles}
+                articlesCount={this.props.articlesCount}
+                state={this.props.currentPage} />
             </div>
 
           </div>
@@ -158,4 +158,5 @@ class Profile extends React.Component {
   }
 }
 
-export default Profile;
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export { Profile as Profile, mapStateToProps as mapStateToProps };
