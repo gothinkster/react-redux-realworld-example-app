@@ -82,9 +82,9 @@ class Header extends React.Component {
             {this.props.appName.toLowerCase()}
           </Link>
 
-          <LoggedOutView state={this.props.currentUser} />
+          <LoggedOutView currentUser={this.props.currentUser} />
 
-          <LoggedInView state={this.props.currentUser} />
+          <LoggedInView currentUser={this.props.currentUser} />
         </div>
       </nav>
     );

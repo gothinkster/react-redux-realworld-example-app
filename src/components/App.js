@@ -25,7 +25,7 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const token = window.localStorage.getItem('jwt');
     if (token) {
       agent.setToken(token);
