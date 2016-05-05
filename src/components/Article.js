@@ -1,7 +1,7 @@
 'use strict';
 
+import { Link } from 'react-router';
 import React from 'react';
-import Router from 'react-router';
 import agent from '../agent';
 import marked from 'marked';
 import store from '../store';
@@ -35,17 +35,17 @@ const Comment = props => {
         <p className="card-text">{comment.body}</p>
       </div>
       <div className="card-footer">
-        <Router.Link
+        <Link
           to={`@${comment.author.username}`}
           className="comment-author">
           <img src={comment.author.image} className="comment-author-img" />
-        </Router.Link>
+        </Link>
         &nbsp;
-        <Router.Link
+        <Link
           to={`@${comment.author.username}`}
           className="comment-author">
           {comment.author.username}
-        </Router.Link>
+        </Link>
         <span className="date-posted">
           {new Date(comment.createdAt).toDateString()}
         </span>
@@ -137,9 +137,9 @@ const CommentContainer = props => {
     return (
       <div className="col-xs-12 col-md-8 offset-md-2">
         <p>
-          <Router.Link to="login">Sign in</Router.Link>
+          <Link to="login">Sign in</Link>
           &nbsp;or&nbsp;
-          <Router.Link to="register">sign up</Router.Link>
+          <Link to="register">sign up</Link>
           &nbsp;to add comments on this article.
         </p>
 
@@ -156,14 +156,14 @@ const ArticleMeta = props => {
   const article = props.article;
   return (
     <div className="article-meta">
-      <Router.Link to={`@${article.author.username}`}>
+      <Link to={`@${article.author.username}`}>
         <img src={article.author.image} />
-      </Router.Link>
+      </Link>
 
       <div className="info">
-        <Router.Link to={`@${article.author.username}`} className="author">
+        <Link to={`@${article.author.username}`} className="author">
           {article.author.username}
-        </Router.Link>
+        </Link>
         <span className="date">
           {new Date(article.createdAt).toDateString()}
         </span>
@@ -186,11 +186,11 @@ const ArticleActions = props => {
     return (
       <span>
 
-        <Router.Link
+        <Link
           to={`/editor/${article.slug}`}
           className="btn btn-outline-secondary btn-sm">
           <i className="ion-edit"></i> Edit Article
-        </Router.Link>
+        </Link>
 
         <button className="btn btn-outline-danger btn-sm" onClick={del}>
           <i className="ion-trash-a"></i> Delete Article
