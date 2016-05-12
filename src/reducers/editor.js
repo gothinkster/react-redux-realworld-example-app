@@ -51,6 +51,18 @@ export default (state, action) => {
         state = Object.assign({}, state, { inProgress: true });
       }
       break;
+    case 'ADD_TAG':
+      state = Object.assign({}, state);
+      state.tagList.push(state.tagInput);
+      state.tagInput = '';
+      break;
+    case 'REMOVE_TAG':
+      state = Object.assign({}, state);
+      const index = state.tagList.indexOf(action.tag);
+      if (index !== -1) {
+        state.tagList.splice(index, 1);
+      }
+      break;
   }
 
   return state;
