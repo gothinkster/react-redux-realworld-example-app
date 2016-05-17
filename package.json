@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Placeholder",
   "dependencies": {
+    "history": "2.1.1",
     "marked": "0.3.5",
     "react": "15.0.0",
     "react-dom": "15.0.0",
