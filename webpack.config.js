@@ -6,7 +6,13 @@ module.exports = {
   },
   module: {
     loaders: [
-      { loader: 'babel', query: { presets: ['react', 'es2015'] } }
+      {
+        loader: 'babel',
+        query: {
+          presets: ['react', 'es2015'],
+          plugins: ['babel-plugin-transform-object-rest-spread']
+        }
+      }
     ]
   }
 };

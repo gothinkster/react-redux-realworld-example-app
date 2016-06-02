@@ -3,21 +3,16 @@
 export default (state, action) => {
   switch (action.type) {
     case 'APP_LOAD':
-      const assignments = {
+      return {
+        ...state,
         token: action.token || null,
-        appLoaded: true
+        appLoaded: true,
+        currentUser: action.payload ? action.payload.user : null
       };
-      if (action.payload) {
-        assignments.currentUser = action.payload.user;
-      }
-      state = Object.assign({}, state, assignments)
-      break;
     case 'REDIRECT':
-      state = Object.assign({}, state, { redirectTo: null });
-      break;
+      return { ...state, redirectTo: null };
     case 'UPDATE_FIELD':
-      state = Object.assign({}, state, { [action.key]: action.value });
-      break;
+      return { ...state, [action.key]: action.value };
   }
 
   return state;

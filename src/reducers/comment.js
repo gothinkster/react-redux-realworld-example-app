@@ -3,19 +3,19 @@
 export default (state, action) => {
   switch (action.type) {
     case 'ADD_COMMENT':
-      state = Object.assign({}, state);
-      if (action.error) {
-        state.commentErrors = action.payload.errors;
-      } else {
-        state.comments = state.comments || [];
-        state.comments.unshift(action.payload.comment);
-      }
-      break;
+      return {
+        ...state,
+        commentErrors: action.error ? action.payload.errors : null,
+        comments: action.error ?
+          null :
+          (state.comments || []).concat([action.payload.comment])
+      };
     case 'DELETE_COMMENT':
-      state = Object.assign({}, state);
-      const filter = comment => comment.id !== action.commentId;
-      state.comments = _.filter(state.comments, filter);
-      break;
+      const commentId = action.commentId
+      return {
+        ...state,
+        comments: state.comments.filter(comment => comment.id !== commentId)
+      };
   }
 
   return state;
