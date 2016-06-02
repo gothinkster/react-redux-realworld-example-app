@@ -23,9 +23,6 @@ export default (state, action) => {
       }
       break;
     case 'EDITOR_PAGE_UNLOADED':
-      if (state.outstandingActions) {
-        state.outstandingActions.forEach(promise => promise.cancel());
-      }
       return Object.assign({}, state, {
         title: null,
         description: null,
@@ -35,7 +32,8 @@ export default (state, action) => {
         errors: null,
         articleSlug: null,
         inProgress: null,
-        outstandingActions: null
+        outstandingActions: null,
+        viewChangeCounter: state.viewChangeCounter + 1
       });
     case 'ARTICLE_SUBMITTED':
       state = Object.assign({}, state);

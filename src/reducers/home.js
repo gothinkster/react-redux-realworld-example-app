@@ -12,16 +12,14 @@ export default (state, action) => {
       });
       break;
     case 'HOME_PAGE_UNLOADED':
-      if (state.outstandingActions) {
-        state.outstandingActions.forEach(promise => promise.cancel());
-      }
       return Object.assign({}, state, {
         articles: null,
         tags: null,
         tab: null,
         articlesCount: null,
         currentPage: null,
-        outstandingActions: null
+        outstandingActions: null,
+        viewChangeCounter: state.viewChangeCounter + 1
       });
     case 'CHANGE_TAB':
       state = Object.assign({}, state, {

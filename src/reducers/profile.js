@@ -11,15 +11,13 @@ export default (state = defaultState, action) => {
       });
       break;
     case 'PROFILE_PAGE_UNLOADED':
-      if (state.outstandingActions) {
-        state.outstandingActions.forEach(promise => promise.cancel());
-      }
       return Object.assign({}, state, {
         profile: null,
         articles: null,
         articlesCount: null,
         currentPage: null,
-        outstandingActions: null
+        outstandingActions: null,
+        viewChangeCounter: state.viewChangeCounter + 1
       });
     case 'FOLLOW_USER':
     case 'UNFOLLOW_USER':

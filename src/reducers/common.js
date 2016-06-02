@@ -18,18 +18,6 @@ export default (state, action) => {
     case 'UPDATE_FIELD':
       state = Object.assign({}, state, { [action.key]: action.value });
       break;
-    case 'ASYNC_START':
-      const promise = Object.assign(action.promise, { cancel: action.cancel })
-      return Object.assign({}, state, {
-        outstandingActions: (state.outstandingActions || []).concat([promise])
-      });
-    case 'ASYNC_END':
-      if (state.outstandingActions) {
-        const filter = p => p !== action.promise;
-        return Object.assign({}, state, {
-          outstandingActions: state.outstandingActions.filter(filter)
-        });
-      }
   }
 
   return state;

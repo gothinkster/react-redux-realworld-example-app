@@ -11,11 +11,9 @@ export default (state = defaultState, action) => {
       });
       break;
     case 'PROFILE_FAVORITES_PAGE_UNLOADED':
-      if (state.outstandingActions) {
-        state.outstandingActions.forEach(promise => promise.cancel());
-      }
       return Object.assign({}, state, {
-        outstandingActions: null
+        outstandingActions: null,
+        viewChangeCounter: state.viewChangeCounter + 1
       });
   }
 

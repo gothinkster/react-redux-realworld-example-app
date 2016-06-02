@@ -12,14 +12,12 @@ export default (state, action) => {
       state = Object.assign({}, state, { redirectTo: '/' });
       break;
     case 'ARTICLE_PAGE_UNLOADED':
-      if (state.outstandingActions) {
-        state.outstandingActions.forEach(promise => promise.cancel());
-      }
       return Object.assign({}, state, {
         article: null,
         comments: null,
         commentErrors: null,
-        outstandingActions: null
+        outstandingActions: null,
+        viewChangeCounter: state.viewChangeCounter + 1
       });
   }
 

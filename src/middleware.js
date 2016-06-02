@@ -4,30 +4,26 @@ import agent from './agent';
 
 const promiseMiddleware = store => next => action => {
   if (isPromise(action.payload)) {
-    let cancelled = false;
-    if (!action.skipTracking) {
-      store.dispatch({
-        type: 'ASYNC_START',
-        subtype: action.type,
-        promise: action.payload,
-        cancel: () => { cancelled = true; }
-      });
-    }
+    store.dispatch({ type: 'ASYNC_START', subtype: action.type });
+
+    const currentView = store.getState().viewChangeCounter;
+    const skipTracking = action.skipTracking;
+
     action.payload.then(
       res => {
-        if (cancelled) {
-          return;
+        const currentState = store.getState()
+        if (!skipTracking && currentState.viewChangeCounter !== currentView) {
+          return
         }
         console.log('RESULT', res);
         action.payload = res;
-        if (!action.skipTracking) {
-          store.dispatch({ type: 'ASYNC_END', promise: action.payload });
-        }
+        store.dispatch({ type: 'ASYNC_END', promise: action.payload });
         store.dispatch(action);
       },
       error => {
-        if (cancelled) {
-          return;
+        const currentState = store.getState()
+        if (!skipTracking && currentState.viewChangeCounter !== currentView) {
+          return
         }
         console.log('ERROR', error);
         action.error = true;

@@ -16,16 +16,14 @@ export default (state, action) => {
       break;
     case 'LOGIN_PAGE_UNLOADED':
     case 'REGISTER_PAGE_UNLOADED':
-      if (state.outstandingActions) {
-        state.outstandingActions.forEach(promise => promise.cancel());
-      }
       return Object.assign({}, state, {
         errors: null,
         username: null,
         email: null,
         password: null,
         inProgress: null,
-        outstandingActions: null
+        outstandingActions: null,
+        viewChangeCounter: state.viewChangeCounter + 1
       });
     case 'ASYNC_START':
       if (action.subtype === 'LOGIN' || action.subtype === 'REGISTER') {
