@@ -34,15 +34,9 @@ const FollowUserButton = props => {
   const handleClick = ev => {
     ev.preventDefault();
     if (props.user.following) {
-      store.dispatch({
-        type: 'UNFOLLOW_USER',
-        payload: agent.Profile.unfollow(props.user.username)
-      });
+      props.unfollow(props.user.username)
     } else {
-      store.dispatch({
-        type: 'FOLLOW_USER',
-        payload: agent.Profile.follow(props.user.username)
-      });
+      props.follow(props.user.username)
     }
   };
 
@@ -58,16 +52,21 @@ const FollowUserButton = props => {
 };
 
 const mapStateToProps = state => ({
-  articles: state.articles,
-  articlesCount: state.articlesCount,
-  currentPage: state.currentPage,
-  currentUser: state.currentUser,
+  ...state.articleList,
+  currentUser: state.common.currentUser,
   profile: state.profile
 });
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: payload =>
-    dispatch({ type: 'PROFILE_PAGE_LOADED', payload }),
+  onFollow: username => dispatch({
+    type: 'FOLLOW_USER',
+    payload: agent.Profile.follow(username)
+  }),
+  onLoad: payload => dispatch({ type: 'PROFILE_PAGE_LOADED', payload }),
+  onUnfollow: username => dispatch({
+    type: 'UNFOLLOW_USER',
+    payload: agent.Profile.unfollow(username)
+  }),
   onUnload: () => dispatch({ type: 'PROFILE_PAGE_UNLOADED' })
 });
 
@@ -106,7 +105,6 @@ class Profile extends React.Component {
   }
 
   render() {
-    console.log('XX render', this.props.profile);
     const profile = this.props.profile;
     if (!profile) {
       return null;
@@ -128,7 +126,12 @@ class Profile extends React.Component {
                 <p>{profile.bio}</p>
 
                 <EditProfileSettings isUser={isUser} />
-                <FollowUserButton isUser={isUser} user={profile} />
+                <FollowUserButton
+                  isUser={isUser}
+                  user={profile}
+                  follow={this.props.onFollow}
+                  unfollow={this.props.onUnfollow}
+                  />
 
               </div>
             </div>

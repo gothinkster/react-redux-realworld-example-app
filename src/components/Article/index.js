@@ -9,10 +9,8 @@ import { connect } from 'react-redux';
 import marked from 'marked';
 
 const mapStateToProps = state => ({
-  article: state.article,
-  commentErrors: state.commentErrors,
-  comments: state.comments,
-  currentUser: state.currentUser
+  ...state.article,
+  currentUser: state.common.currentUser
 });
 
 const mapDispatchToProps = dispatch => ({

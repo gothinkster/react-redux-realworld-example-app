@@ -1,6 +1,6 @@
 'use strict';
 
-export default (state, action) => {
+export default (state = {}, action) => {
   switch (action.type) {
     case 'EDITOR_PAGE_LOADED':
       return {
@@ -10,29 +10,15 @@ export default (state, action) => {
         description: action.payload ? action.payload.article.description : '',
         body: action.payload ? action.payload.article.body : '',
         tagInput: '',
-        tagList: action.payload ? action.payload.article.tagList : ''
+        tagList: action.payload ? action.payload.article.tagList : []
       };
     case 'EDITOR_PAGE_UNLOADED':
-      return {
-        ...state,
-        title: null,
-        description: null,
-        body: null,
-        tagInput: null,
-        tagList: null,
-        errors: null,
-        articleSlug: null,
-        inProgress: null,
-        outstandingActions: null,
-        viewChangeCounter: state.viewChangeCounter + 1
-      };
+      return {};
     case 'ARTICLE_SUBMITTED':
-      const redirectUrl = `article/${action.payload.article.slug}`;
       return {
         ...state,
         inProgress: null,
-        errors: action.error ? action.payload.errors : null,
-        redirectTo: action.error ? null : redirectUrl
+        errors: action.error ? action.payload.errors : null
       };
     case 'ASYNC_START':
       if (action.subtype === 'ARTICLE_SUBMITTED') {
@@ -48,8 +34,10 @@ export default (state, action) => {
     case 'REMOVE_TAG':
       return {
         ...state,
-        tagList: state.tagList.filter(tag => tag === action.tag)
+        tagList: state.tagList.filter(tag => tag !== action.tag)
       };
+    case 'UPDATE_FIELD_EDITOR':
+      return { ...state, [action.key]: action.value };
   }
 
   return state;

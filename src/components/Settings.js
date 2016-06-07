@@ -122,8 +122,8 @@ class SettingsForm extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  errors: state.errors,
-  currentUser: state.currentUser
+  ...state.settings,
+  currentUser: state.common.currentUser
 });
 
 const mapDispatchToProps = dispatch => ({

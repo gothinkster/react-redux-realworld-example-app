@@ -8,9 +8,9 @@ import { connect } from 'react-redux';
 const Promise = global.Promise;
 
 const mapStateToProps = state => ({
-  appName: state.appName,
-  tags: state.tags,
-  token: state.token
+  ...state.home,
+  appName: state.common.appName,
+  token: state.common.token
 });
 
 const mapDispatchToProps = dispatch => ({

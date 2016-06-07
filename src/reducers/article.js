@@ -1,6 +1,6 @@
 'use strict';
 
-export default (state, action) => {
+export default (state = {}, action) => {
   switch (action.type) {
     case 'ARTICLE_PAGE_LOADED':
       return {
@@ -9,16 +9,21 @@ export default (state, action) => {
         comments: action.payload[1].comments
       };
       break;
-    case 'DELETE_ARTICLE':
-      return { ...state, redirectTo: '/' };
     case 'ARTICLE_PAGE_UNLOADED':
+      return {};
+    case 'ADD_COMMENT':
       return {
         ...state,
-        article: null,
-        comments: null,
-        commentErrors: null,
-        outstandingActions: null,
-        viewChangeCounter: state.viewChangeCounter + 1
+        commentErrors: action.error ? action.payload.errors : null,
+        comments: action.error ?
+          null :
+          (state.comments || []).concat([action.payload.comment])
+      };
+    case 'DELETE_COMMENT':
+      const commentId = action.commentId
+      return {
+        ...state,
+        comments: state.comments.filter(comment => comment.id !== commentId)
       };
   }
 

@@ -27,6 +27,7 @@
   "scripts": {
     "compile": "webpack",
     "postinstall": "webpack",
+    "start": "node server.js",
     "watch": "webpack --watch"
   }
 }

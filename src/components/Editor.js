@@ -6,14 +6,7 @@ import agent from '../agent';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => ({
-  articleSlug: state.articleSlug,
-  body: state.body,
-  description: state.description,
-  errors: state.errors,
-  inProgress: state.inProgress,
-  tagInput: state.tagInput,
-  tagList: state.tagList,
-  title: state.title
+  ...state.editor
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -22,13 +15,13 @@ const mapDispatchToProps = dispatch => ({
   onLoad: payload =>
     dispatch({ type: 'EDITOR_PAGE_LOADED', payload }),
   onRemoveTag: tag =>
-    dispatch({ type: 'REMOVE_TAG' }),
+    dispatch({ type: 'REMOVE_TAG', tag }),
   onSubmit: payload =>
     dispatch({ type: 'ARTICLE_SUBMITTED', payload }),
   onUnload: payload =>
     dispatch({ type: 'EDITOR_PAGE_UNLOADED' }),
   onUpdateField: (key, value) =>
-    dispatch({ type: 'UPDATE_FIELD', key, value })
+    dispatch({ type: 'UPDATE_FIELD_EDITOR', key, value })
 });
 
 class Editor extends React.Component {

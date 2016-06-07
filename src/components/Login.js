@@ -4,18 +4,13 @@ import React from 'react';
 import agent from '../agent';
 import { connect } from 'react-redux';
 
-const mapStateToProps = state => ({
-  errors: state.errors,
-  email: state.email,
-  password: state.password,
-  inProgress: state.inProgress
-});
+const mapStateToProps = state => ({ ...state.auth });
 
 const mapDispatchToProps = dispatch => ({
   onChangeEmail: value =>
-    dispatch({ type: 'UPDATE_FIELD', key: 'email', value }),
+    dispatch({ type: 'UPDATE_FIELD_AUTH', key: 'email', value }),
   onChangePassword: value =>
-    dispatch({ type: 'UPDATE_FIELD', key: 'password', value }),
+    dispatch({ type: 'UPDATE_FIELD_AUTH', key: 'password', value }),
   onSubmit: (email, password) =>
     dispatch({ type: 'LOGIN', payload: agent.Auth.login(email, password) }),
   onUnload: () =>

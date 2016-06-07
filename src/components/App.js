@@ -4,10 +4,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => ({
-  appLoaded: state.appLoaded,
-  appName: state.appName,
-  currentUser: state.currentUser,
-  redirectTo: state.redirectTo
+  appLoaded: state.common.appLoaded,
+  appName: state.common.appName,
+  currentUser: state.common.currentUser,
+  redirectTo: state.common.redirectTo
 });
 
 const mapDispatchToProps = dispatch => ({

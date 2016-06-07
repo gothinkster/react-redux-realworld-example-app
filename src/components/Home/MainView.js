@@ -55,13 +55,9 @@ const TagFilterTab = props => {
 };
 
 const mapStateToProps = state => ({
-  articles: state.articles,
-  articlesCount: state.articlesCount,
-  currentPage: state.currentPage,
-  loading: state.loading,
-  tab: state.tab,
-  tag: state.tag,
-  token: state.token
+  ...state.articleList,
+  tags: state.home.tags,
+  token: state.common.token
 });
 
 const mapDispatchToProps = dispatch => ({
