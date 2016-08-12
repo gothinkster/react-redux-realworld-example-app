@@ -77,4 +77,4 @@ const ArticlePreview = props => {
   );
 }
 
-export default connect(() => ({}), mapDispatchToProps)(ArticleActions);
+export default connect(() => ({}), mapDispatchToProps)(ArticlePreview);
