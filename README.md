@@ -9,7 +9,7 @@ We're currently working on some docs for the codebase (explaining where function
 
 ## Getting started
 
-You can view a live demo over at https://redux.productionready.io/
+You can view a live demo over at https://react-redux.realworld.io/
 
 To get the frontend running locally:
 
