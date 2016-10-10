@@ -2,6 +2,8 @@
 
 > ### Redux codebase containing real world examples (CRUD, auth, advanced patterns, etc)
 
+### [Demo](https://react-redux.realworld.io)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
+
 Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1353) and is now the official React + Redux [RealWorld](https://github.com/GoThinkster/realworld/) implementation.
 
 This codebase is now feature complete and the RFC is open. **Your input is greatly appreciated; please submit bug fixes via pull requests & feedback via issues**.
