@@ -13,11 +13,17 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onLoad: (payload) =>
     dispatch({ type: 'HOME_PAGE_LOADED', payload }),
+  onUnload: () =>
+    dispatch({  type: 'HOME_PAGE_UNLOADED' })
 });
 
 class Home extends React.Component {
   componentWillMount() {
     this.props.onLoad(agent.Articles.all());
+  }
+
+  componentWillUnmount() {
+    this.props.onUnload();
   }
 
   render() {
