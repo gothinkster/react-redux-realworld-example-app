@@ -1,7 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
-
 import agent from '../agent';
+import { connect } from 'react-redux';
 
 const mapDispatchToProps = dispatch => ({
   onSetPage: (page, payload) =>

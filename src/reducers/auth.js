@@ -1,3 +1,5 @@
+'use strict';
+
 export default (state = {}, action) => {
   switch (action.type) {
     case 'LOGIN':
@@ -14,10 +16,10 @@ export default (state = {}, action) => {
       if (action.subtype === 'LOGIN' || action.subtype === 'REGISTER') {
         return { ...state, inProgress: true };
       }
-      return state;
+      break;
     case 'UPDATE_FIELD_AUTH':
       return { ...state, [action.key]: action.value };
-    default:
-      return state;
   }
+
+  return state;
 };

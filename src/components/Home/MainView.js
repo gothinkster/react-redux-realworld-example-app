@@ -1,8 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux';
-
 import ArticleList from '../ArticleList';
+import React from 'react';
 import agent from '../../agent';
+import { connect } from 'react-redux';
 
 const YourFeedTab = props => {
   if (props.token) {

@@ -1,9 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router';
-import { connect } from 'react-redux';
+'use strict';
 
 import ArticleList from './ArticleList';
+import React from 'react';
+import { Link } from 'react-router';
 import agent from '../agent';
+import { connect } from 'react-redux';
 
 const EditProfileSettings = props => {
   if (props.isUser) {
@@ -161,4 +162,4 @@ class Profile extends React.Component {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
-export { Profile, mapStateToProps }
+export { Profile as Profile, mapStateToProps as mapStateToProps };

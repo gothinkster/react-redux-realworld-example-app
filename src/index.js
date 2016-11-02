@@ -1,12 +1,17 @@
+'use strict';
+
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import React from 'react';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+import agent from './agent';
+import history from 'history';
 import store from './store';
 
 import App from './components/App';
 import Article from './components/Article';
 import Editor from './components/Editor';
+import Header from './components/Header';
 import Home from './components/Home';
 import Login from './components/Login';
 import Profile from './components/Profile';

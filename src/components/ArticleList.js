@@ -1,7 +1,8 @@
-import React from 'react';
+'use strict';
 
 import ArticlePreview from './ArticlePreview';
 import ListPagination from './ListPagination';
+import React from 'react';
 
 const ArticleList = props => {
   if (!props.articles) {

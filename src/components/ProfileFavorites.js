@@ -1,8 +1,10 @@
+'use strict';
+
 import { Profile, mapStateToProps } from './Profile';
-import { connect } from 'react-redux';
 import React from 'react';
 import { Link } from 'react-router';
 import agent from '../agent';
+import { connect } from 'react-redux';
 
 const mapDispatchToProps = dispatch => ({
   onLoad: (payload) =>

@@ -1,6 +1,5 @@
-import React from 'react';
-
 import Comment from './Comment';
+import React from 'react';
 
 const CommentList = props => {
   return (

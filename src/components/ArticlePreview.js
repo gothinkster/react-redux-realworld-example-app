@@ -1,8 +1,9 @@
+'use strict';
+
 import React from 'react';
 import { Link } from 'react-router';
-import { connect } from 'react-redux';
-
 import agent from '../agent';
+import { connect } from 'react-redux';
 
 const FAVORITED_CLASS = 'btn btn-sm btn-primary';
 const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
@@ -27,9 +28,9 @@ const ArticlePreview = props => {
   const handleClick = ev => {
     ev.preventDefault();
     if (article.favorited) {
-      props.unfavorite(article.slug);
+      this.props.unfavorite(article.slug);
     } else {
-      props.favorite(article.slug);
+      this.props.favorite(article.slug);
     }
   };
 
