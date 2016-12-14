@@ -20,6 +20,10 @@ class App extends React.Component {
 
   componentWillMount() {
     store.subscribe(() => this.setState(store.getState()));
+    // subscription takes place after Redux store initialization action
+    // so listener won't update component's initial state -
+    // the app state needs to be synchronized manually
+    this.setState(store.getState());
   }
 
   render() {
