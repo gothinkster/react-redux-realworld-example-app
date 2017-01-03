@@ -28,9 +28,9 @@ const ArticlePreview = props => {
   const handleClick = ev => {
     ev.preventDefault();
     if (article.favorited) {
-      this.props.unfavorite(article.slug);
+      props.unfavorite(article.slug);
     } else {
-      this.props.favorite(article.slug);
+      props.favorite(article.slug);
     }
   };
 
