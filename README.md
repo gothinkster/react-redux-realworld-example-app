@@ -7,7 +7,7 @@ Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1
 
 We're currently working on some docs for the codebase (explaining where functionality is located, how it works, etc) but most things should be self explanatory if you have a minimal understanding of React/Redux.
 
-<a href="https://thinkster.io/tutorials/https://thinkster.io/tutorials/build-a-real-world-react-redux-application"><img height="40" width="454" src="https://raw.githubusercontent.com/gothinkster/realworld/master/media/learn-btn-hr.png" /></a>
+<a href="https://thinkster.io/tutorials/build-a-real-world-react-redux-application"><img height="40" width="454" src="https://raw.githubusercontent.com/gothinkster/realworld/master/media/learn-btn-hr.png" /></a>
 
 
 ## Getting started
