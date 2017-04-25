@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Link } from 'react-router';
+import { inject, observer } from 'mobx-react';
 
 const LoggedOutView = props => {
   if (!props.currentUser) {
@@ -71,6 +72,8 @@ const LoggedInView = props => {
   return null;
 };
 
+@inject('profileStore', 'commonStore')
+@observer
 class Header extends React.Component {
   render() {
     return (
@@ -78,12 +81,12 @@ class Header extends React.Component {
         <div className="container">
 
           <Link to="/" className="navbar-brand">
-            {this.props.appName.toLowerCase()}
+            {this.props.commonStore.appName.toLowerCase()}
           </Link>
 
-          <LoggedOutView currentUser={this.props.currentUser} />
+          <LoggedOutView currentUser={this.props.profileStore.currentUser} />
 
-          <LoggedInView currentUser={this.props.currentUser} />
+          <LoggedInView currentUser={this.props.profileStore.currentUser} />
         </div>
       </nav>
     );
