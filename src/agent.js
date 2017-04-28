@@ -15,7 +15,7 @@ const tokenPlugin = req => {
   if (token) {
     req.set('authorization', `Token ${token}`);
   }
-}
+};
 
 const requests = {
   del: url =>
