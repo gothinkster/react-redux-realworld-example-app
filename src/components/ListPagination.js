@@ -7,6 +7,10 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: 'SET_PAGE', page, payload })
 });
 
+const mapStateToProps = state => ({
+    tag: state.articleList.tag
+})
+
 const ListPagination = props => {
   if (props.articlesCount <= 10) {
     return null;
@@ -17,7 +21,13 @@ const ListPagination = props => {
     range.push(i);
   }
 
-  const setPage = page => props.onSetPage(page, agent.Articles.all(page));
+  const setPage = page => {
+    if(props.tag) {
+      props.onSetPage(page, agent.Articles.byTag(props.tag, page))
+    }else {
+      props.onSetPage(page, agent.Articles.all(page))
+    }
+  };
 
   return (
     <nav>
@@ -48,4 +58,4 @@ const ListPagination = props => {
   );
 };
 
-export default connect(() => ({}), mapDispatchToProps)(ListPagination);
+export default connect(mapStateToProps, mapDispatchToProps)(ListPagination);
