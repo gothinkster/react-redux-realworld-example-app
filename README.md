@@ -8,7 +8,7 @@
 
 Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1353). The codebase is now feature complete; please submit bug fixes via pull requests & feedback via issues.
 
-We also have notes in [our wiki](https://github.com/gothinkster/react-redux-realworld-example-app/wiki) about how the various patterns used in this codeabase and how they work (thanks [**@thejmazz**](https://github.com/thejmazz)!)
+We also have notes in [our wiki](https://github.com/gothinkster/react-redux-realworld-example-app/wiki) about how the various patterns used in this codeabase and how they work (thanks [@thejmazz](https://github.com/thejmazz)!)
 
 
 ## Getting started
