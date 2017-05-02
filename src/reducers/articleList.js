@@ -56,16 +56,6 @@ export default (state = {}, action) => {
         currentPage: 0,
         tag: null
       };
-    case 'APPLY_TAG_FILTER':
-      return {
-        ...state,
-        pager: action.pager,
-        articles: action.payload.articles,
-        articlesCount: action.payload.articlesCount,
-        tab: null,
-        tag: action.tag,
-        currentPage: 0
-      };
     case 'PROFILE_PAGE_LOADED':
     case 'PROFILE_FAVORITES_PAGE_LOADED':
       return {
