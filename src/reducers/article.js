@@ -1,17 +1,22 @@
-'use strict';
+import {
+  ARTICLE_PAGE_LOADED,
+  ARTICLE_PAGE_UNLOADED,
+  ADD_COMMENT,
+  DELETE_COMMENT
+} from '../constants/actionTypes';
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case 'ARTICLE_PAGE_LOADED':
+    case ARTICLE_PAGE_LOADED:
       return {
         ...state,
         article: action.payload[0].article,
         comments: action.payload[1].comments
       };
       break;
-    case 'ARTICLE_PAGE_UNLOADED':
+    case ARTICLE_PAGE_UNLOADED:
       return {};
-    case 'ADD_COMMENT':
+    case ADD_COMMENT:
       return {
         ...state,
         commentErrors: action.error ? action.payload.errors : null,
@@ -19,7 +24,7 @@ export default (state = {}, action) => {
           null :
           (state.comments || []).concat([action.payload.comment])
       };
-    case 'DELETE_COMMENT':
+    case DELETE_COMMENT:
       const commentId = action.commentId
       return {
         ...state,

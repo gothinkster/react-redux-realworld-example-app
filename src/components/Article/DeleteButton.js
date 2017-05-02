@@ -1,10 +1,11 @@
 import React from 'react';
 import agent from '../../agent';
 import { connect } from 'react-redux';
+import { DELETE_COMMENT } from '../../constants/actionTypes';
 
 const mapDispatchToProps = dispatch => ({
   onClick: (payload, commentId) =>
-    dispatch({ type: 'DELETE_COMMENT', payload, commentId })
+    dispatch({ type: DELETE_COMMENT, payload, commentId })
 });
 
 const DeleteButton = props => {

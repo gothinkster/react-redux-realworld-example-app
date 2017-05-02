@@ -4,6 +4,11 @@ import { Link } from 'react-router';
 import agent from '../agent';
 import { connect } from 'react-redux';
 import store from '../store';
+import {
+  SETTINGS_SAVED,
+  SETTINGS_PAGE_UNLOADED,
+  LOGOUT
+} from '../constants/actionTypes';
 
 class SettingsForm extends React.Component {
   constructor() {
@@ -127,10 +132,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onClickLogout: () => dispatch({ type: 'LOGOUT' }),
+  onClickLogout: () => dispatch({ type: LOGOUT }),
   onSubmitForm: user =>
-    dispatch({ type: 'SETTINGS_SAVED', payload: agent.Auth.save(user) }),
-  onUnload: () => dispatch({ type: 'SETTINGS_PAGE_UNLOADED' })
+    dispatch({ type: SETTINGS_SAVED, payload: agent.Auth.save(user) }),
+  onUnload: () => dispatch({ type: SETTINGS_PAGE_UNLOADED })
 });
 
 class Settings extends React.Component {

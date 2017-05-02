@@ -1,10 +1,11 @@
 import React from 'react';
 import agent from '../../agent';
 import { connect } from 'react-redux';
+import { ADD_COMMENT } from '../../constants/actionTypes';
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: payload =>
-    dispatch({ type: 'ADD_COMMENT', payload })
+    dispatch({ type: ADD_COMMENT, payload })
 });
 
 class CommentInput extends React.Component {
