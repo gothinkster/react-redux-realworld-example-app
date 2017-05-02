@@ -148,6 +148,7 @@ class Profile extends React.Component {
               </div>
 
               <ArticleList
+                pager={this.props.pager}
                 articles={this.props.articles}
                 articlesCount={this.props.articlesCount}
                 state={this.props.currentPage} />

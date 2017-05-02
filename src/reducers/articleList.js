@@ -27,6 +27,7 @@ export default (state = {}, action) => {
     case 'APPLY_TAG_FILTER':
       return {
         ...state,
+        pager: action.pager,
         articles: action.payload.articles,
         articlesCount: action.payload.articlesCount,
         tab: null,
@@ -36,6 +37,7 @@ export default (state = {}, action) => {
     case 'HOME_PAGE_LOADED':
       return {
         ...state,
+        pager: action.pager,
         tags: action.payload[0].tags,
         articles: action.payload[1].articles,
         articlesCount: action.payload[1].articlesCount,
@@ -47,6 +49,7 @@ export default (state = {}, action) => {
     case 'CHANGE_TAB':
       return {
         ...state,
+        pager: action.pager,
         articles: action.payload.articles,
         articlesCount: action.payload.articlesCount,
         tab: action.tab,
@@ -57,6 +60,7 @@ export default (state = {}, action) => {
     case 'PROFILE_FAVORITES_PAGE_LOADED':
       return {
         ...state,
+        pager: action.pager,
         articles: action.payload[1].articles,
         articlesCount: action.payload[1].articlesCount,
         currentPage: 0

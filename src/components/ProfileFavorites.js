@@ -7,15 +7,15 @@ import agent from '../agent';
 import { connect } from 'react-redux';
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: (payload) =>
-    dispatch({ type: 'PROFILE_FAVORITES_PAGE_LOADED', payload }),
+  onLoad: (pager, payload) =>
+    dispatch({ type: 'PROFILE_FAVORITES_PAGE_LOADED', pager, payload }),
   onUnload: () =>
     dispatch({ type: 'PROFILE_FAVORITES_PAGE_UNLOADED' })
 });
 
 class ProfileFavorites extends Profile {
   componentWillMount() {
-    this.props.onLoad(Promise.all([
+    this.props.onLoad(page => agent.Articles.favoritedBy(this.props.params.username, page), Promise.all([
       agent.Profile.get(this.props.params.username),
       agent.Articles.favoritedBy(this.props.params.username)
     ]));
