@@ -1,5 +1,3 @@
-'use strict';
-
 import ArticleList from './ArticleList';
 import React from 'react';
 import { Link } from 'react-router';
@@ -127,7 +125,7 @@ class Profile extends React.Component {
             <div className="row">
               <div className="col-xs-12 col-md-10 offset-md-1">
 
-                <img src={profile.image} className="user-img" />
+                <img src={profile.image} className="user-img" alt={profile.username} />
                 <h4>{profile.username}</h4>
                 <p>{profile.bio}</p>
 
@@ -169,4 +167,4 @@ class Profile extends React.Component {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
-export { Profile as Profile, mapStateToProps as mapStateToProps };
+export { Profile, mapStateToProps };

@@ -1,5 +1,3 @@
-'use strict';
-
 import agent from './agent';
 import {
   ASYNC_START,

@@ -9,7 +9,7 @@ export default (state = {}, action) => {
       };
     case HOME_PAGE_UNLOADED:
       return {};
+    default:
+      return state;
   }
-
-  return state;
 };
