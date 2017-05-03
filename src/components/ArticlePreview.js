@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import { Link } from 'react-router';
 import agent from '../agent';
@@ -39,7 +37,7 @@ const ArticlePreview = props => {
     <div className="article-preview">
       <div className="article-meta">
         <Link to={`@${article.author.username}`}>
-          <img src={article.author.image} />
+          <img src={article.author.image} alt={article.author.username} />
         </Link>
 
         <div className="info">

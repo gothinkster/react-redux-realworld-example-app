@@ -46,6 +46,8 @@ export default (state = {}, action) => {
       };
     case UPDATE_FIELD_EDITOR:
       return { ...state, [action.key]: action.value };
+    default:
+      return state;
   }
 
   return state;

@@ -1,9 +1,7 @@
 import ListErrors from './ListErrors';
 import React from 'react';
-import { Link } from 'react-router';
 import agent from '../agent';
 import { connect } from 'react-redux';
-import store from '../store';
 import {
   SETTINGS_SAVED,
   SETTINGS_PAGE_UNLOADED,

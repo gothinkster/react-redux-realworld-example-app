@@ -1,5 +1,3 @@
-'use strict';
-
 import { Profile, mapStateToProps } from './Profile';
 import React from 'react';
 import { Link } from 'react-router';
@@ -12,7 +10,7 @@ import {
 
 const mapDispatchToProps = dispatch => ({
   onLoad: (pager, payload) =>
-    dispatch({ type: 'PROFILE_FAVORITES_PAGE_LOADED', pager, payload }),
+    dispatch({ type: PROFILE_FAVORITES_PAGE_LOADED, pager, payload }),
   onUnload: () =>
     dispatch({ type: PROFILE_FAVORITES_PAGE_UNLOADED })
 });

@@ -1,5 +1,3 @@
-'use strict';
-
 import ListErrors from './ListErrors';
 import React from 'react';
 import agent from '../agent';

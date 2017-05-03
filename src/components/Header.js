@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -59,7 +57,7 @@ const LoggedInView = props => {
           <Link
             to={`@${props.currentUser.username}`}
             className="nav-link">
-            <img src={props.currentUser.image} className="user-pic" />
+            <img src={props.currentUser.image} className="user-pic" alt={props.currentUser.username} />
             {props.currentUser.username}
           </Link>
         </li>
