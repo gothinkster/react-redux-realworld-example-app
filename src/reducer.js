@@ -1,5 +1,3 @@
-'use strict';
-
 import article from './reducers/article';
 import articleList from './reducers/articleList';
 import auth from './reducers/auth';

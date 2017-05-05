@@ -1,10 +1,14 @@
-'use strict';
-
 import ArticleList from './ArticleList';
 import React from 'react';
 import { Link } from 'react-router';
 import agent from '../agent';
 import { connect } from 'react-redux';
+import {
+  FOLLOW_USER,
+  UNFOLLOW_USER,
+  PROFILE_PAGE_LOADED,
+  PROFILE_PAGE_UNLOADED
+} from '../constants/actionTypes';
 
 const EditProfileSettings = props => {
   if (props.isUser) {
@@ -59,15 +63,15 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onFollow: username => dispatch({
-    type: 'FOLLOW_USER',
+    type: FOLLOW_USER,
     payload: agent.Profile.follow(username)
   }),
-  onLoad: payload => dispatch({ type: 'PROFILE_PAGE_LOADED', payload }),
+  onLoad: payload => dispatch({ type: PROFILE_PAGE_LOADED, payload }),
   onUnfollow: username => dispatch({
-    type: 'UNFOLLOW_USER',
+    type: UNFOLLOW_USER,
     payload: agent.Profile.unfollow(username)
   }),
-  onUnload: () => dispatch({ type: 'PROFILE_PAGE_UNLOADED' })
+  onUnload: () => dispatch({ type: PROFILE_PAGE_UNLOADED })
 });
 
 class Profile extends React.Component {
@@ -121,7 +125,7 @@ class Profile extends React.Component {
             <div className="row">
               <div className="col-xs-12 col-md-10 offset-md-1">
 
-                <img src={profile.image} className="user-img" />
+                <img src={profile.image} className="user-img" alt={profile.username} />
                 <h4>{profile.username}</h4>
                 <p>{profile.bio}</p>
 
@@ -148,6 +152,7 @@ class Profile extends React.Component {
               </div>
 
               <ArticleList
+                pager={this.props.pager}
                 articles={this.props.articles}
                 articlesCount={this.props.articlesCount}
                 state={this.props.currentPage} />
@@ -162,4 +167,4 @@ class Profile extends React.Component {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);
-export { Profile as Profile, mapStateToProps as mapStateToProps };
+export { Profile, mapStateToProps };

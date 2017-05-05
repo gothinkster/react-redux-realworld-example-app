@@ -1,21 +1,23 @@
-'use strict';
-
 import { Profile, mapStateToProps } from './Profile';
 import React from 'react';
 import { Link } from 'react-router';
 import agent from '../agent';
 import { connect } from 'react-redux';
+import {
+  PROFILE_FAVORITES_PAGE_LOADED,
+  PROFILE_FAVORITES_PAGE_UNLOADED
+} from '../constants/actionTypes';
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: (payload) =>
-    dispatch({ type: 'PROFILE_FAVORITES_PAGE_LOADED', payload }),
+  onLoad: (pager, payload) =>
+    dispatch({ type: PROFILE_FAVORITES_PAGE_LOADED, pager, payload }),
   onUnload: () =>
-    dispatch({ type: 'PROFILE_FAVORITES_PAGE_UNLOADED' })
+    dispatch({ type: PROFILE_FAVORITES_PAGE_UNLOADED })
 });
 
 class ProfileFavorites extends Profile {
   componentWillMount() {
-    this.props.onLoad(Promise.all([
+    this.props.onLoad(page => agent.Articles.favoritedBy(this.props.params.username, page), Promise.all([
       agent.Profile.get(this.props.params.username),
       agent.Articles.favoritedBy(this.props.params.username)
     ]));

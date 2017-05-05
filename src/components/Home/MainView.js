@@ -2,12 +2,13 @@ import ArticleList from '../ArticleList';
 import React from 'react';
 import agent from '../../agent';
 import { connect } from 'react-redux';
+import { CHANGE_TAB } from '../../constants/actionTypes';
 
 const YourFeedTab = props => {
   if (props.token) {
     const clickHandler = ev => {
       ev.preventDefault();
-      props.onTabClick('feed', agent.Articles.feed());
+      props.onTabClick('feed', agent.Articles.feed, agent.Articles.feed());
     }
 
     return (
@@ -26,7 +27,7 @@ const YourFeedTab = props => {
 const GlobalFeedTab = props => {
   const clickHandler = ev => {
     ev.preventDefault();
-    props.onTabClick('all', agent.Articles.all());
+    props.onTabClick('all', agent.Articles.all, agent.Articles.all());
   };
   return (
     <li className="nav-item">
@@ -61,7 +62,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onTabClick: (tab, payload) => dispatch({ type: 'CHANGE_TAB', tab, payload })
+  onTabClick: (tab, pager, payload) => dispatch({ type: CHANGE_TAB, tab, pager, payload })
 });
 
 const MainView = props => {
@@ -83,6 +84,7 @@ const MainView = props => {
       </div>
 
       <ArticleList
+        pager={props.pager}
         articles={props.articles}
         loading={props.loading}
         articlesCount={props.articlesCount}
