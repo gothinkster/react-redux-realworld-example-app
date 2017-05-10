@@ -60,16 +60,17 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onSetPage: (tab, p) => dispatch({
+  onSetPage: (tab, p, tag) => dispatch({
     type: 'SET_PAGE',
     page: p,
-    payload: tab === 'feed' ? agent.Articles.feed(p) : agent.Articles.all(p)
+    payload: tab === 'feed' ? agent.Articles.feed(p) : 
+      tab === 'all' ? agent.Articles.all(p) : agent.Articles.byTag(tag, p)
   }),
   onTabClick: (tab, payload) => dispatch({ type: 'CHANGE_TAB', tab, payload })
 });
 
 const MainView = props => {
-  const onSetPage = page => props.onSetPage(props.tab, page);
+  const onSetPage = page => props.onSetPage(props.tab, page, props.tag);
   return (
     <div className="col-md-9">
       <div className="feed-toggle">
