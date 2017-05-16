@@ -1,5 +1,5 @@
 import { applyMiddleware, createStore, compose } from 'redux';
-import createLogger from 'redux-logger'
+import {createLogger} from 'redux-logger'
 import { promiseMiddleware, localStorageMiddleware } from './middleware';
 import reducer from './reducer';
 
