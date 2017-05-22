@@ -9,11 +9,13 @@
   "dependencies": {
     "history": "^4.3.0",
     "marked": "^0.3.6",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
-    "react-redux": "^4.4.5",
-    "react-router": "^2.8.1",
+    "prop-types": "^15.5.10",
+    "react": "^15.5.0",
+    "react-dom": "^15.5.0",
+    "react-redux": "^4.4.8",
+    "react-router": "^3.0.4",
     "redux": "^3.6.0",
+    "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.1",
     "superagent": "^2.3.0",
     "superagent-promise": "^1.1.0"
