@@ -15,6 +15,7 @@ export default (state = defaultState, action) => {
     case 'REDIRECT':
       return { ...state, redirectTo: null };
     case 'LOGIN':
+    case 'REGISTER'
       return {
         ...state,
         redirectTo: action.error ? null : '/',
