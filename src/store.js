@@ -7,7 +7,8 @@ import home from './reducers/home';
 const reducer = combineReducers({
   auth,
   common,
-  home
+  home,
+  settings
 });
 
 const middleware = applyMiddleware(promiseMiddleware, localStorageMiddleware);
