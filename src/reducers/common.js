@@ -23,7 +23,7 @@ export default (state = defaultState, action) => {
         currentUser: action.error ? null : action.payload.user
       };
     case 'LOGIN':
-    case 'REGISTER'
+    case 'REGISTER':
       return {
         ...state,
         redirectTo: action.error ? null : '/',
