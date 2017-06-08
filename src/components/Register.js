@@ -11,53 +11,64 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: 'UPDATE_FIELD_AUTH', key: 'email', value }),
   onChangePassword: value =>
     dispatch({ type: 'UPDATE_FIELD_AUTH', key: 'password', value }),
-  onSubmit: (email, password) =>
-    dispatch({ type: 'LOGIN', payload: agent.Auth.login(email, password) }),
-  onUnload: () =>
-    dispatch({ type: 'LOGIN_PAGE_UNLOADED' })
+  onChangeUsername: value =>
+    dispatch({ type: 'UPDATE_FIELD_AUTH', key: 'username', value }),
+  onSubmit: (username, email, password) => {
+    const payload = agent.Auth.register(username, email, password);
+    dispatch({ type: 'REGISTER', payload })
+  }
 });
 
-class Login extends React.Component {
+class Register extends React.Component {
   constructor() {
     super();
     this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
     this.changePassword = ev => this.props.onChangePassword(ev.target.value);
-    this.submitForm = (email, password) => ev => {
+    this.changeUsername = ev => this.props.onChangeUsername(ev.target.value);
+    this.submitForm = (username, email, password) => ev => {
       ev.preventDefault();
-      this.props.onSubmit(email, password);
-    };
-   componentWillUnmount() {
-    this.props.onUnload();
+      this.props.onSubmit(username, email, password);
     }
   }
 
   render() {
     const email = this.props.email;
     const password = this.props.password;
+    const username = this.props.username;
+
     return (
       <div className="auth-page">
         <div className="container page">
           <div className="row">
 
             <div className="col-md-6 offset-md-3 col-xs-12">
-              <h1 className="text-xs-center">Sign In</h1>
+              <h1 className="text-xs-center">Sign Up</h1>
               <p className="text-xs-center">
-                <Link to="register">
-                  Need an account?
+                <Link to="login">
+                  Have an account?
                 </Link>
               </p>
 
               <ListErrors errors={this.props.errors} />
 
-              <form onSubmit={this.submitForm(email, password)}>
+              <form onSubmit={this.submitForm(username, email, password)}>
                 <fieldset>
+
+                  <fieldset className="form-group">
+                    <input
+                      className="form-control form-control-lg"
+                      type="text"
+                      placeholder="Username"
+                      value={this.props.username}
+                      onChange={this.changeUsername} />
+                  </fieldset>
 
                   <fieldset className="form-group">
                     <input
                       className="form-control form-control-lg"
                       type="email"
                       placeholder="Email"
-                      value={email}
+                      value={this.props.email}
                       onChange={this.changeEmail} />
                   </fieldset>
 
@@ -66,7 +77,7 @@ class Login extends React.Component {
                       className="form-control form-control-lg"
                       type="password"
                       placeholder="Password"
-                      value={password}
+                      value={this.props.password}
                       onChange={this.changePassword} />
                   </fieldset>
 
@@ -88,4 +99,4 @@ class Login extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Register);
