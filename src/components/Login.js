@@ -18,7 +18,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
   onSubmit: (email, password) =>
     dispatch({ type: LOGIN, payload: agent.Auth.login(email, password) }),
-  onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED })
+  onUnload: () =>
+    dispatch({ type: LOGIN_PAGE_UNLOADED })
 });
 
 class Login extends React.Component {
@@ -62,8 +63,7 @@ class Login extends React.Component {
                       type="email"
                       placeholder="Email"
                       value={email}
-                      onChange={this.changeEmail}
-                    />
+                      onChange={this.changeEmail} />
                   </fieldset>
 
                   <fieldset className="form-group">
@@ -72,15 +72,13 @@ class Login extends React.Component {
                       type="password"
                       placeholder="Password"
                       value={password}
-                      onChange={this.changePassword}
-                    />
+                      onChange={this.changePassword} />
                   </fieldset>
 
                   <button
                     className="btn btn-lg btn-primary pull-xs-right"
                     type="submit"
-                    disabled={this.props.inProgress}
-                  >
+                    disabled={this.props.inProgress}>
                     Sign in
                   </button>
 
