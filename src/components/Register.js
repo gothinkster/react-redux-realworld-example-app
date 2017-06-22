@@ -20,10 +20,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'username', value }),
   onSubmit: (username, email, password) => {
     const payload = agent.Auth.register(username, email, password);
-    dispatch({ type: REGISTER, payload })
+    dispatch({ type: REGISTER, payload });
   },
-  onUnload: () =>
-    dispatch({ type: REGISTER_PAGE_UNLOADED })
+  onUnload: () => dispatch({ type: REGISTER_PAGE_UNLOADED })
 });
 
 class Register extends React.Component {
@@ -35,7 +34,7 @@ class Register extends React.Component {
     this.submitForm = (username, email, password) => ev => {
       ev.preventDefault();
       this.props.onSubmit(username, email, password);
-    }
+    };
   }
 
   componentWillUnmount() {
@@ -43,9 +42,7 @@ class Register extends React.Component {
   }
 
   render() {
-    const email = this.props.email;
-    const password = this.props.password;
-    const username = this.props.username;
+    const { email, username, password } = this.props;
 
     return (
       <div className="auth-page">
@@ -71,7 +68,8 @@ class Register extends React.Component {
                       type="text"
                       placeholder="Username"
                       value={this.props.username}
-                      onChange={this.changeUsername} />
+                      onChange={this.changeUsername}
+                    />
                   </fieldset>
 
                   <fieldset className="form-group">
@@ -80,7 +78,8 @@ class Register extends React.Component {
                       type="email"
                       placeholder="Email"
                       value={this.props.email}
-                      onChange={this.changeEmail} />
+                      onChange={this.changeEmail}
+                    />
                   </fieldset>
 
                   <fieldset className="form-group">
@@ -89,13 +88,15 @@ class Register extends React.Component {
                       type="password"
                       placeholder="Password"
                       value={this.props.password}
-                      onChange={this.changePassword} />
+                      onChange={this.changePassword}
+                    />
                   </fieldset>
 
                   <button
                     className="btn btn-lg btn-primary pull-xs-right"
                     type="submit"
-                    disabled={this.props.inProgress}>
+                    disabled={this.props.inProgress}
+                  >
                     Sign in
                   </button>
 
