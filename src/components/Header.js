@@ -1,11 +1,9 @@
-'use strict';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
-import { Link } from 'react-router';
-import React from 'react';
-
-class Header extends React.Component {
+class Header extends Component {
   render() {
-    return (
+    return(
       <nav className="navbar navbar-light">
         <div className="container">
 
@@ -14,22 +12,25 @@ class Header extends React.Component {
           </Link>
 
           <ul className="nav navbar-nav pull-xs-right">
+
             <li className="nav-item">
               <Link to="/" className="nav-link">
-                Home
+              Home
               </Link>
             </li>
 
             <li className="nav-item">
               <Link to="login" className="nav-link">
-                Sign in
+              Sign In
               </Link>
             </li>
+
           </ul>
+
         </div>
       </nav>
-    );
+    )
   }
 }
 
-export default Header;
+export default Header; 
