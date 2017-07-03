@@ -1,5 +1,3 @@
-'use strict';
-
 import ArticlePreview from './ArticlePreview';
 import React from 'react';
 

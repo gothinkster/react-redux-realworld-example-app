@@ -1,9 +1,7 @@
-'use strict';
+import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
 
-import { Link } from 'react-router';
-import React from 'react';
-
-class Header extends React.Component {
+class Header extends Component {
   render() {
     return (
       <nav className="navbar navbar-light">
