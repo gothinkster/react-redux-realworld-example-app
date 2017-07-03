@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-class Login extends React.Component {
+class Login extends Component {
   render() {
     return (
       <div className="auth-page">

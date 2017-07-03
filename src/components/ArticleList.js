@@ -1,34 +1,33 @@
-'use strict';
-
-import ArticlePreview from './ArticlePreview';
 import React from 'react';
+import ArticlePreview from './ArticlePreview';
 
 const ArticleList = props => {
-  if (!props.articles) {
+  if(!props.articles) {
     return (
       <div className="article-preview">Loading...</div>
     );
   }
 
-  if (props.articles.length === 0) {
+  if(props.articles.length === 0) {
     return (
       <div className="article-preview">
-        No articles are here... yet.
+        No articles are here... yet. 
       </div>
     );
   }
 
-  return (
+  return(
     <div>
       {
         props.articles.map(article => {
-          return (
+          return(
             <ArticlePreview article={article} key={article.slug} />
           );
         })
       }
     </div>
   );
+
 };
 
-export default ArticleList;
+export default ArticleList; 
