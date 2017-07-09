@@ -31,3 +31,52 @@ ReactDOM.render((
     </Router>
   </Provider>
 ), document.getElementById('root'));
+
+import { createStore } from 'redux';
+
+const defaultState = { checked: false };
+
+// well-written reducer should not have side effects -> same result every time called
+// reducers do not modify or rely on state
+// good practice to encapsulate a lot of logic in reducers, easy to test, debug, refactor
+const reducer = function(state = defaultState, action) {
+  switch (action.type) {
+    case 'TOGGLE':
+      return { ...state, checked: !state.checked };
+  }
+  return state;
+}
+
+const store = createStore(reducer);
+
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = store.getState();
+  }
+
+  // componentWillMount function is a "react lifecycle hook"
+  // called when component is created, so put initialization logic here
+  componentWillMount() {
+    // setState function modifies react component's own internal state
+    // render function is called whenever state of the app changes
+    store.describe(() => this.setState(store.getState()));
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>To-Do List</h1>
+        <div>
+          Learn Redux
+        </div>
+      </div>
+
+      // <h1>Hello, World!</h1>
+    );
+  }
+}
+
+ReactDOM.render((
+  <App />
+), document.getElementById('main'));
