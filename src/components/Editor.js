@@ -100,7 +100,7 @@ class Editor extends React.Component {
 
               <ListErrors errors={this.props.errors}></ListErrors>
 
-              <form>
+              <form onSubmit={this.submitForm}>
                 <fieldset>
 
                   <fieldset className="form-group">
@@ -158,9 +158,8 @@ class Editor extends React.Component {
 
                   <button
                     className="btn btn-lg pull-xs-right btn-primary"
-                    type="button"
-                    disabled={this.props.inProgress}
-                    onClick={this.submitForm}>
+                    type="submit"
+                    disabled={this.props.inProgress}>
                     Publish Article
                   </button>
 
