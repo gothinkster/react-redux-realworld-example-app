@@ -1,6 +1,6 @@
 import ArticleList from './ArticleList';
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import agent from '../agent';
 import { connect } from 'react-redux';
 import {
@@ -14,7 +14,7 @@ const EditProfileSettings = props => {
   if (props.isUser) {
     return (
       <Link
-        to="settings"
+        to="/settings"
         className="btn btn-sm btn-outline-secondary action-btn">
         <i className="ion-gear-a"></i> Edit Profile Settings
       </Link>
@@ -77,8 +77,8 @@ const mapDispatchToProps = dispatch => ({
 class Profile extends React.Component {
   componentWillMount() {
     this.props.onLoad(Promise.all([
-      agent.Profile.get(this.props.params.username),
-      agent.Articles.byAuthor(this.props.params.username)
+      agent.Profile.get(this.props.match.params.username),
+      agent.Articles.byAuthor(this.props.match.params.username)
     ]));
   }
 
@@ -92,7 +92,7 @@ class Profile extends React.Component {
         <li className="nav-item">
           <Link
             className="nav-link active"
-            to={`@${this.props.profile.username}`}>
+            to={`/@${this.props.profile.username}`}>
             My Articles
           </Link>
         </li>
@@ -100,7 +100,7 @@ class Profile extends React.Component {
         <li className="nav-item">
           <Link
             className="nav-link"
-            to={`@${this.props.profile.username}/favorites`}>
+            to={`/@${this.props.profile.username}/favorites`}>
             Favorited Articles
           </Link>
         </li>

@@ -71,18 +71,18 @@ class Editor extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.params.slug !== nextProps.params.slug) {
-      if (nextProps.params.slug) {
+    if (this.props.match.params.slug !== nextProps.match.params.slug) {
+      if (nextProps.match.params.slug) {
         this.props.onUnload();
-        return this.props.onLoad(agent.Articles.get(this.props.params.slug));
+        return this.props.onLoad(agent.Articles.get(this.props.match.params.slug));
       }
       this.props.onLoad(null);
     }
   }
 
   componentWillMount() {
-    if (this.props.params.slug) {
-      return this.props.onLoad(agent.Articles.get(this.props.params.slug));
+    if (this.props.match.params.slug) {
+      return this.props.onLoad(agent.Articles.get(this.props.match.params.slug));
     }
     this.props.onLoad(null);
   }
