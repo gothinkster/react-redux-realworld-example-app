@@ -1,5 +1,5 @@
 import DeleteButton from './DeleteButton';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import React from 'react';
 
 const Comment = props => {
@@ -13,13 +13,13 @@ const Comment = props => {
       </div>
       <div className="card-footer">
         <Link
-          to={`@${comment.author.username}`}
+          to={`/@${comment.author.username}`}
           className="comment-author">
           <img src={comment.author.image} className="comment-author-img" alt={comment.author.username} />
         </Link>
         &nbsp;
         <Link
-          to={`@${comment.author.username}`}
+          to={`/@${comment.author.username}`}
           className="comment-author">
           {comment.author.username}
         </Link>
