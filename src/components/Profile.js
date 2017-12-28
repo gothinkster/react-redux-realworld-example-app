@@ -86,6 +86,16 @@ class Profile extends React.Component {
     this.props.onUnload();
   }
 
+  componentWillReceiveProps(nextProps){
+    if(nextProps.match.params.username && nextProps.match.params.username !== this.props.match.params.username){
+      this.props.onUnload();
+      this.props.onLoad(Promise.all([
+        agent.Profile.get(nextProps.match.params.username),
+        agent.Articles.byAuthor(nextProps.match.params.username)
+      ]));
+    }
+  }
+
   renderTabs() {
     return (
       <ul className="nav nav-pills outline-active">
