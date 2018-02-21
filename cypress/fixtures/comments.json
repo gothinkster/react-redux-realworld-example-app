@@ -1,0 +1,64 @@
+{
+  "comments": [
+    {
+      "id": 1,
+      "createdAt": "2016-02-18T03:22:56.637Z",
+      "updatedAt": "2016-02-18T03:22:56.637Z",
+      "body": "Wait a minute - you've been declared dead. You can't give orders around here.",
+      "author": {
+        "username": "jake",
+        "bio": "I work at statefarm",
+        "image": "https://i.stack.imgur.com/xHWG8.jpg",
+        "following": false
+      }
+    },
+    {
+      "id": 2,
+      "createdAt": "2016-02-18T03:22:56.637Z",
+      "updatedAt": "2016-02-18T03:22:56.637Z",
+      "body": "Wait a minute - you've been declared dead. You can't give orders around here.",
+      "author": {
+        "username": "johnjacob",
+        "bio": "I work at statefarm",
+        "image": "https://i.stack.imgur.com/xHWG8.jpg",
+        "following": false
+      }
+    },
+    {
+      "id": 3,
+      "createdAt": "2016-02-18T03:22:56.637Z",
+      "updatedAt": "2016-02-18T03:22:56.637Z",
+      "body": "Besides, you look good in a dress.",
+      "author": {
+        "username": "jake",
+        "bio": "I work at statefarm",
+        "image": "https://i.stack.imgur.com/xHWG8.jpg",
+        "following": false
+      }
+    },
+    {
+      "id": 4,
+      "createdAt": "2016-02-18T03:22:56.637Z",
+      "updatedAt": "2016-02-18T03:22:56.637Z",
+      "body": "It's called 'taking advantage.' It's what gets you ahead in life. I care deeply for nature. Whoa, this guy's straight? What's Spanish for \"I know you speak English?\"",
+      "author": {
+        "username": "johnjacob",
+        "bio": "I work at statefarm",
+        "image": "https://i.stack.imgur.com/xHWG8.jpg",
+        "following": false
+      }
+    },
+    {
+      "id": 5,
+      "createdAt": "2016-02-18T03:22:56.637Z",
+      "updatedAt": "2016-02-18T03:22:56.637Z",
+      "body": "There's only one man I've ever called a coward, and that's Brian Doyle Murray. No, what I'm calling you is a television actor.\n\nBad news. Andy Griffith turned us down. He didn't like his trailer. I'm half machine. I'm a monster.",
+      "author": {
+        "username": "jake",
+        "bio": "I work at statefarm",
+        "image": "https://i.stack.imgur.com/xHWG8.jpg",
+        "following": false
+      }
+    }
+  ]
+}
