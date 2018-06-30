@@ -5,6 +5,7 @@
   "devDependencies": {
     "cross-env": "^4.0.0",
     "cypress": "^1.4.2",
+    "npm-run-all": "^4.1.2",
     "react-scripts": "0.9.5"
   },
   "dependencies": {
@@ -26,7 +27,9 @@
   "scripts": {
     "start": "cross-env PORT=4100 react-scripts start",
     "build": "react-scripts build",
-    "test": "cross-env PORT=4100 react-scripts test --env=jsdom",
+    "test:e2e": "cypress run",
+    "test:unit": "cross-env PORT=4100 react-scripts test --env=jsdom",
+    "test": "npm-run-all -s test:unit -p -r start test:e2e",
     "eject": "react-scripts eject"
   }
 }
