@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "cross-env": "^4.0.0",
-    "cypress": "^1.4.2",
+    "cross-env": "^5.2.0",
+    "cypress": "^3.0.2",
     "npm-run-all": "^4.1.2",
     "react-scripts": "0.9.5"
   },
