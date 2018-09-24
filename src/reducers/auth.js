@@ -11,6 +11,7 @@ export default (state = {}, action) => {
   switch (action.type) {
     case LOGIN:
     case REGISTER:
+      if (!action.payload) return state;
       return {
         ...state,
         inProgress: false,
