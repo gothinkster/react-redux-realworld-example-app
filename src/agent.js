@@ -3,7 +3,8 @@ import _superagent from 'superagent';
 
 const superagent = superagentPromise(_superagent, global.Promise);
 
-const API_ROOT = 'https://conduit.productionready.io/api';
+//POINTING API_ROOT AT HTTPS:// SERVICE WITHOUT HAVING HTTPS:// INITIALIZED ON OUR END CAUSES USE HEADACHES INVOLVED 
+const API_ROOT = 'http://conduit.productionready.io/api';
 
 const encode = encodeURIComponent;
 const responseBody = res => res.body;
