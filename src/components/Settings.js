@@ -64,6 +64,7 @@ class SettingsForm extends React.Component {
     return (
       <form onSubmit={this.submitForm}>
         <fieldset>
+<<<<<<< HEAD
 
           <fieldset className="form-group">
           <label for="imageInput" className="form-control-label">Profile Image</label>
@@ -75,6 +76,8 @@ class SettingsForm extends React.Component {
               onChange={this.updateState('image')} />
           </fieldset>
 
+=======
+>>>>>>> remove-profile-images
           <fieldset className="form-group">
           <label for="usernameInput" className="form-control-label">Username</label>
             <input
