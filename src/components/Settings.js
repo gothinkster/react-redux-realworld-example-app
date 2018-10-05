@@ -66,47 +66,47 @@ class SettingsForm extends React.Component {
         <fieldset>
 
           <fieldset className="form-group">
+          <label className="form-control-label">Profile Image</label>
             <input
               className="form-control"
               type="text"
-              placeholder="URL of profile picture"
               value={this.state.image}
               onChange={this.updateState('image')} />
           </fieldset>
 
           <fieldset className="form-group">
+          <label className="form-control-label">Username</label>
             <input
               className="form-control form-control-lg"
               type="text"
-              placeholder="Username"
               value={this.state.username}
               onChange={this.updateState('username')} />
           </fieldset>
 
           <fieldset className="form-group">
+          <label className="form-control-label">Bio</label>
             <textarea
               className="form-control form-control-lg"
               rows="8"
-              placeholder="Short bio about you"
               value={this.state.bio}
               onChange={this.updateState('bio')}>
             </textarea>
           </fieldset>
 
           <fieldset className="form-group">
+          <label className="form-control-label">E-mail</label>
             <input
               className="form-control form-control-lg"
               type="email"
-              placeholder="Email"
               value={this.state.email}
               onChange={this.updateState('email')} />
           </fieldset>
 
           <fieldset className="form-group">
+            <label className="form-control-label">Change Password</label>
             <input
               className="form-control form-control-lg"
               type="password"
-              placeholder="New Password"
               value={this.state.password}
               onChange={this.updateState('password')} />
           </fieldset>
