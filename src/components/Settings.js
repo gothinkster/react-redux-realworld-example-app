@@ -66,8 +66,9 @@ class SettingsForm extends React.Component {
         <fieldset>
 
           <fieldset className="form-group">
-          <label className="form-control-label">Profile Image</label>
+          <label for="imageInput" className="form-control-label">Profile Image</label>
             <input
+              id="imageInput"
               className="form-control"
               type="text"
               value={this.state.image}
@@ -75,8 +76,9 @@ class SettingsForm extends React.Component {
           </fieldset>
 
           <fieldset className="form-group">
-          <label className="form-control-label">Username</label>
+          <label for="usernameInput" className="form-control-label">Username</label>
             <input
+              id="usernameInput"
               className="form-control form-control-lg"
               type="text"
               value={this.state.username}
@@ -84,8 +86,9 @@ class SettingsForm extends React.Component {
           </fieldset>
 
           <fieldset className="form-group">
-          <label className="form-control-label">Bio</label>
+          <label for="bioTextArea" className="form-control-label">Bio</label>
             <textarea
+              id="bioTextArea"
               className="form-control form-control-lg"
               rows="8"
               value={this.state.bio}
@@ -94,8 +97,9 @@ class SettingsForm extends React.Component {
           </fieldset>
 
           <fieldset className="form-group">
-          <label className="form-control-label">E-mail</label>
+          <label for="emailInput" className="form-control-label">E-mail</label>
             <input
+              id="emailInput"
               className="form-control form-control-lg"
               type="email"
               value={this.state.email}
@@ -103,8 +107,9 @@ class SettingsForm extends React.Component {
           </fieldset>
 
           <fieldset className="form-group">
-            <label className="form-control-label">Change Password</label>
+            <label for="passwordInput" className="form-control-label">Change Password</label>
             <input
+              id="passwordInput"
               className="form-control form-control-lg"
               type="password"
               value={this.state.password}
