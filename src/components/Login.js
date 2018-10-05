@@ -3,6 +3,7 @@ import ListErrors from './ListErrors';
 import React from 'react';
 import agent from '../agent';
 import { connect } from 'react-redux';
+import authenticateUser from "../services/auth";
 import {
   UPDATE_FIELD_AUTH,
   LOGIN,
