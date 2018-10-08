@@ -64,49 +64,43 @@ class SettingsForm extends React.Component {
     return (
       <form onSubmit={this.submitForm}>
         <fieldset>
-
           <fieldset className="form-group">
+          <label for="usernameInput" className="form-control-label">Username</label>
             <input
-              className="form-control"
-              type="text"
-              placeholder="URL of profile picture"
-              value={this.state.image}
-              onChange={this.updateState('image')} />
-          </fieldset>
-
-          <fieldset className="form-group">
-            <input
+              id="usernameInput"
               className="form-control form-control-lg"
               type="text"
-              placeholder="Username"
               value={this.state.username}
               onChange={this.updateState('username')} />
           </fieldset>
 
           <fieldset className="form-group">
+          <label for="bioTextArea" className="form-control-label">Bio</label>
             <textarea
+              id="bioTextArea"
               className="form-control form-control-lg"
               rows="8"
-              placeholder="Short bio about you"
               value={this.state.bio}
               onChange={this.updateState('bio')}>
             </textarea>
           </fieldset>
 
           <fieldset className="form-group">
+          <label for="emailInput" className="form-control-label">E-mail</label>
             <input
+              id="emailInput"
               className="form-control form-control-lg"
               type="email"
-              placeholder="Email"
               value={this.state.email}
               onChange={this.updateState('email')} />
           </fieldset>
 
           <fieldset className="form-group">
+            <label for="passwordInput" className="form-control-label">Change Password</label>
             <input
+              id="passwordInput"
               className="form-control form-control-lg"
               type="password"
-              placeholder="New Password"
               value={this.state.password}
               onChange={this.updateState('password')} />
           </fieldset>
