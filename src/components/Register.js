@@ -34,32 +34,33 @@ class Register extends React.Component {
     this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
     this.changePassword = ev => this.props.onChangePassword(ev.target.value);
     this.changeUsername = ev => this.props.onChangeUsername(ev.target.value);
-    this.changeFullName = ev => {
-      const firstNameRegEx = /^[A-z]+/;
-      const lastNameRegEx = /[A-z]+$/;
-      const firstName = ev.target.value.match(firstNameRegEx) !== null ? ev.target.value.match(firstNameRegEx)[0] : "";
-      this.props.onChangeFirstName(lastName);
-      this.props.onChangeLastName(lastName);
-    }
+
     this.submitForm = (username, email, password) => ev => {
       ev.preventDefault();
       this.props.onSubmit(username, email, password);
     }
 
-
-
+    this.changeFullName = this.changeFullName.bind(this);
   }
 
   componentWillUnmount() {
     this.props.onUnload();
   }
 
+
+
+  changeFullName(event) {
+    const nameArr = event.target.value.split(" ", 2);
+    const lastName = nameArr[1] ? nameArr[1] : "";
+    this.props.onChangeFirstName(nameArr[0]);    
+    this.props.onChangeLastName(lastName);
+  }
+
   render() {
-    const email = this.props.email;
-    const password = this.props.password;
-    const username = this.props.username;
+    const {email, password, username, errors, fullName, inProgress } = this.props;    
 
     return (
+
       <div className="auth-page">
         <div className="container page">
           <div className="row">
@@ -72,27 +73,28 @@ class Register extends React.Component {
                 </Link>
               </p>
 
-              <ListErrors errors={this.props.errors} />
+              <ListErrors errors={errors} />
 
               <form onSubmit={this.submitForm(username, email, password)}>
                 <fieldset>
 
                   <fieldset className="form-group">
-                  <label htmlFor="fullNameInput" className="form-control-label">Full Name</label>
+                  <label htmlFor="fullNameInput" className="form-group-label">Full Name</label>
                     <input
                       id="fullNameInput"
                       className="form-control form-control-lg"
                       type="text"
-                      value={this.props.fullName}
+                      value={fullName}
                       onChange={this.changeFullName} />
                   </fieldset>
 
                   <fieldset className="form-group">
+                    <label htmlFor="usernameInput" className="form-group-label">Username</label>                  
                     <input
                       id="usernameInput"
                       className="form-control form-control-lg"
                       type="text"
-                      value={this.props.username}
+                      value={username}
                       onChange={this.changeUsername} />
                   </fieldset>
 
@@ -102,7 +104,7 @@ class Register extends React.Component {
                     id="emailInput"
                       className="form-control form-control-lg"
                       type="email"
-                      value={this.props.email}
+                      value={email}
                       onChange={this.changeEmail} />
                   </fieldset>
 
@@ -112,14 +114,14 @@ class Register extends React.Component {
                       id="passwordInput"
                       className="form-control form-control-lg"
                       type="password"
-                      value={this.props.password}
+                      value={password}
                       onChange={this.changePassword} />
                   </fieldset>
 
                   <button
                     className="btn btn-lg btn-primary pull-xs-right"
                     type="submit"
-                    disabled={this.props.inProgress}>
+                    disabled={inProgress}>
                     Sign up
                   </button>
 
