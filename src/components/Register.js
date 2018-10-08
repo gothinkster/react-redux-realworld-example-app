@@ -66,28 +66,31 @@ class Register extends React.Component {
                 <fieldset>
 
                   <fieldset className="form-group">
+                  <label className="form-group-label" htmlFor="usernameInput">Username</label>
                     <input
+                      id="usernameInput"
                       className="form-control form-control-lg"
                       type="text"
-                      placeholder="Username"
                       value={this.props.username}
                       onChange={this.changeUsername} />
                   </fieldset>
 
                   <fieldset className="form-group">
+                  <label className="form-group-label" htmlFor="emailInput">Email</label>                  
                     <input
+                    id="emailInput"
                       className="form-control form-control-lg"
                       type="email"
-                      placeholder="Email"
                       value={this.props.email}
                       onChange={this.changeEmail} />
                   </fieldset>
 
                   <fieldset className="form-group">
+                  <label className="form-group-label" htmlFor="passwordInput">Password</label>                  
                     <input
+                      id="passwordInput"
                       className="form-control form-control-lg"
                       type="password"
-                      placeholder="Password"
                       value={this.props.password}
                       onChange={this.changePassword} />
                   </fieldset>
