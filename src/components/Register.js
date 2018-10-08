@@ -51,9 +51,8 @@ class Register extends React.Component {
 
   changeFullName(event) {
     const nameArr = event.target.value.split(" ", 2);
-    const lastName = nameArr[1] ? nameArr[1] : "";
     this.props.onChangeFirstName(nameArr[0]);    
-    this.props.onChangeLastName(lastName);
+    this.props.onChangeLastName(nameArr[1] || "");
   }
 
   render() {
