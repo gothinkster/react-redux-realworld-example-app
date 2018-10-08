@@ -35,10 +35,10 @@ class Register extends React.Component {
     this.changePassword = ev => this.props.onChangePassword(ev.target.value);
     this.changeUsername = ev => this.props.onChangeUsername(ev.target.value);
     this.changeFullName = ev => {
-      const firstNameRegEx = /^\S+/;
-      const lastNameRegEx = /[" "]\S+$/;
+      const firstNameRegEx = /^[A-z]+/;
+      const lastNameRegEx = /[" "][A-z]+$/;
       const firstName = ev.target.value.match(firstNameRegEx) !== null ? ev.target.value.match(firstNameRegEx)[0] : "";
-      const lastName = ev.target.value.match(lastNameRegEx) !== null ? ev.target.value.match(lastNameRegEx)[0].substring(1) : "";
+      const lastName = ev.target.value.match(lastNameRegEx) !== null ? ev.target.value.match(lastNameRegEx)[0] : "";
       this.props.onChangeFirstName(firstName);
       this.props.onChangeLastName(lastName);
     }
