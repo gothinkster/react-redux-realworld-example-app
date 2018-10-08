@@ -2,6 +2,7 @@ import ListErrors from './ListErrors';
 import React from 'react';
 import agent from '../agent';
 import { connect } from 'react-redux';
+import SubmitArticle from "./services/article";
 import {
   ADD_TAG,
   EDITOR_PAGE_LOADED,
@@ -34,39 +35,18 @@ class Editor extends React.Component {
   constructor() {
     super();
 
-    const updateFieldEvent =
-      key => ev => this.props.onUpdateField(key, ev.target.value);
-    this.changeTitle = updateFieldEvent('title');
-    this.changeDescription = updateFieldEvent('description');
-    this.changeBody = updateFieldEvent('body');
-    this.changeTagInput = updateFieldEvent('tagInput');
+    this.state = {
+      url: "",
+      title: "",
+      summary: "",
+      tagInput: "",
+      tags: []
+    };    
 
-    this.watchForEnter = ev => {
-      if (ev.keyCode === 13) {
-        ev.preventDefault();
-        this.props.onAddTag();
-      }
-    };
+    this.updateField = this.updateField.bind(this);
 
     this.removeTagHandler = tag => () => {
       this.props.onRemoveTag(tag);
-    };
-
-    this.submitForm = ev => {
-      ev.preventDefault();
-      const article = {
-        title: this.props.title,
-        description: this.props.description,
-        body: this.props.body,
-        tagList: this.props.tagList
-      };
-
-      const slug = { slug: this.props.articleSlug };
-      const promise = this.props.articleSlug ?
-        agent.Articles.update(Object.assign(article, slug)) :
-        agent.Articles.create(article);
-
-      this.props.onSubmit(promise);
     };
   }
 
@@ -91,6 +71,29 @@ class Editor extends React.Component {
     this.props.onUnload();
   }
 
+  updateField(event) {
+    this.setState({[event.target.name]: event.target.value});
+  }  
+
+  watchForEnter(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      this.setState(prevState => ({[event.target.name] : [...prevState["tags"], event.target.value]}));
+    }
+  };
+
+  submitForm(event) {
+    const {url, title, summary, tags} = this.state;
+    event.preventDefault();
+
+    const article = {
+      url,
+      title,
+      summary,
+      tags
+    };    
+  };
+
   render() {
     return (
       <div className="editor-page">
@@ -104,45 +107,52 @@ class Editor extends React.Component {
                 <fieldset>
 
                   <fieldset className="form-group">
+                    <label htmlFor="urlInput" className="form-control-label">URL</label>                  
                     <input
+                      id="urlInput"
+                      className="form-control"
+                      type="text"
+                      name="url"
+                      value={this.state.url}
+                      onChange={this.updateField} />
+                  </fieldset>                  
+
+                  <fieldset className="form-group">
+                    <label htmlFor="titleInput" className="form-control-label">Title</label>
+                    <input
+                      id="titleInput"
+                      name="titleInput"
                       className="form-control form-control-lg"
                       type="text"
-                      placeholder="Article Title"
                       value={this.props.title}
-                      onChange={this.changeTitle} />
+                      onChange={this.updateField} />
                   </fieldset>
 
                   <fieldset className="form-group">
-                    <input
-                      className="form-control"
-                      type="text"
-                      placeholder="What's this article about?"
-                      value={this.props.description}
-                      onChange={this.changeDescription} />
-                  </fieldset>
-
-                  <fieldset className="form-group">
+                    <label htmlFor="summaryInput" className="form-control-label">Summary</label>                  
                     <textarea
+                      id="summaryInput"
+                      name="summaryInput"
                       className="form-control"
                       rows="8"
-                      placeholder="Write your article (in markdown)"
                       value={this.props.body}
-                      onChange={this.changeBody}>
+                      onChange={this.updateField}>
                     </textarea>
                   </fieldset>
 
                   <fieldset className="form-group">
+                    <label htmlFor="tagsInput" className="form-control-label">Tags</label>                  
                     <input
+                      id="tagsInput"
+                      name="tagInput"
                       className="form-control"
                       type="text"
-                      placeholder="Enter tags"
-                      value={this.props.tagInput}
-                      onChange={this.changeTagInput}
+                      value={this.state.tagInput}
+                      onChange={this.updateField}
                       onKeyUp={this.watchForEnter} />
 
                     <div className="tag-list">
-                      {
-                        (this.props.tagList || []).map(tag => {
+                        {this.state.tags.length > 0 && ([this.state.tags].map(tag => {
                           return (
                             <span className="tag-default tag-pill" key={tag}>
                               <i  className="ion-close-round"
@@ -152,7 +162,7 @@ class Editor extends React.Component {
                             </span>
                           );
                         })
-                      }
+                        )}
                     </div>
                   </fieldset>
 
