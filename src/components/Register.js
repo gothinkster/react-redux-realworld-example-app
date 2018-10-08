@@ -12,7 +12,8 @@ import {
 const mapStateToProps = state => ({ ...state.auth });
 
 const mapDispatchToProps = dispatch => ({
-  onChangeFullName: value => dispatch({type: UPDATE_FIELD_AUTH, key: 'firstname', value }),
+  onChangeFirstName: value => dispatch({type: UPDATE_FIELD_AUTH, key: 'firstname', value }),
+  onChangeLastName: value => dispatch({type: UPDATE_FIELD_AUTH, key: 'lastname', value }),  
   onChangeEmail: value =>
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
   onChangePassword: value =>
@@ -34,11 +35,12 @@ class Register extends React.Component {
     this.changePassword = ev => this.props.onChangePassword(ev.target.value);
     this.changeUsername = ev => this.props.onChangeUsername(ev.target.value);
     this.changeFullName = ev => {
-      const firstNameRegEx = /^\D+[" "]/;
-      const lastNameRegEx = /[" "]\D+$/;
-      const firstName = firstNameRegEx.match(ev.target.value).slice(0, -1);
-      const lastName = lastNameRegEx.match(ev.target.value).substring(1);
-      console.log(firstName); 
+      const firstNameRegEx = /^\S+/;
+      const lastNameRegEx = /[" "]\S+$/;
+      const firstName = ev.target.value.match(firstNameRegEx) !== null ? ev.target.value.match(firstNameRegEx)[0] : "";
+      const lastName = ev.target.value.match(lastNameRegEx) !== null ? ev.target.value.match(lastNameRegEx)[0].substring(1) : "";
+      this.props.onChangeFirstName(firstName);
+      this.props.onChangeLastName(lastName);
     }
     this.submitForm = (username, email, password) => ev => {
       ev.preventDefault();
