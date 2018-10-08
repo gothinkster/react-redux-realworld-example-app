@@ -12,6 +12,7 @@ import {
 const mapStateToProps = state => ({ ...state.auth });
 
 const mapDispatchToProps = dispatch => ({
+  onChangeFullName: value => dispatch({type: UPDATE_FIELD_AUTH, key: 'firstname', value }),
   onChangeEmail: value =>
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
   onChangePassword: value =>
@@ -32,10 +33,20 @@ class Register extends React.Component {
     this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
     this.changePassword = ev => this.props.onChangePassword(ev.target.value);
     this.changeUsername = ev => this.props.onChangeUsername(ev.target.value);
+    this.changeFullName = ev => {
+      const firstNameRegEx = /^\D+[" "]/;
+      const lastNameRegEx = /[" "]\D+$/;
+      const firstName = firstNameRegEx.match(ev.target.value).slice(0, -1);
+      const lastName = lastNameRegEx.match(ev.target.value).substring(1);
+      console.log(firstName); 
+    }
     this.submitForm = (username, email, password) => ev => {
       ev.preventDefault();
       this.props.onSubmit(username, email, password);
     }
+
+
+
   }
 
   componentWillUnmount() {
@@ -64,6 +75,16 @@ class Register extends React.Component {
 
               <form onSubmit={this.submitForm(username, email, password)}>
                 <fieldset>
+
+                  <fieldset className="form-group">
+                  <label htmlFor="firstNameInput" className="form-control-label" >Full Name</label>
+                    <input
+                      id="firstNameInput"
+                      className="form-control form-control-lg"
+                      type="text"
+                      value={this.props.fullName}
+                      onChange={this.changeFullName} />
+                  </fieldset>
 
                   <fieldset className="form-group">
                     <input
