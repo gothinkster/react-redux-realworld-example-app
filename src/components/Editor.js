@@ -44,6 +44,9 @@ class Editor extends React.Component {
     };    
 
     this.updateField = this.updateField.bind(this);
+    this.watchForEnter = this.watchForEnter.bind(this);
+    this.removeTagHandler = this.removeTagHandler.bind(this);
+    this.submitForm = this.submitForm.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -72,14 +75,16 @@ class Editor extends React.Component {
   }  
 
   watchForEnter(event) {
+    event.preventDefault();
     if (event.keyCode === 13) {
-      event.preventDefault();
-      this.setState(prevState => ({tags: [...prevState["tags"], event.target.value]}));
+      this.setState(prevState => ({tags: [...prevState.tags, prevState.tagInput], tagInput: ""}));
     }
   };
 
-  removeTagHandler(event) {
-    this.setState(prevState => ({tags: prevState["tags"].filter(tag => tag !== event.target.value)}));
+  removeTagHandler(event, tag) {
+    console.log("removeTagHandler runs");
+    console.log(tag);
+    this.setState(prevState => ({tags: prevState["tags"].splice(index -1, 1)}));
   };
 
   submitForm(event) {
@@ -150,26 +155,28 @@ class Editor extends React.Component {
                       type="text"
                       value={tagInput}
                       onChange={this.updateField}
-                      onKeyUp={this.watchForEnter} />
+                      onKeyUp={this.watchForEnter} />                  
 
                     <div className="tag-list">
-                        {this.state.tags.length > 0 && ([this.state.tags].map(tag => {
+                        {tags.length > 0 && (tags.map(tag => {
                           return (
                             <span className="tag-default tag-pill" key={tag}>
                               <i  className="ion-close-round"
-                                  onClick={this.removeTagHandler(tag)}>
+                                  onClick={(event, tag) => this.removeTagHandler(event, tag)}>
                               </i>
                               {tag}
                             </span>
                           );
                         })
                         )}
-                    </div>
+                    </div>                        
                   </fieldset>
+
+                                            
 
                   <button
                     className="btn btn-lg pull-xs-right btn-primary"
-                    type="button"
+                    type="submit"
                     disabled={this.props.inProgress}
                     onClick={this.submitForm}>
                     Publish Article
