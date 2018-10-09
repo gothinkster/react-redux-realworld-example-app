@@ -1,7 +1,5 @@
 import ListErrors from './ListErrors';
 import React from 'react';
-import agent from '../agent';
-
 import SubmitArticle from "./services/article";
 
 class Editor extends React.Component {
@@ -49,6 +47,11 @@ class Editor extends React.Component {
       summary,
       tags
     };    
+
+    console.log(article);
+
+    SubmitArticle(article);
+
   };
 
   render() {
