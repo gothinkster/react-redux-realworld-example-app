@@ -81,10 +81,10 @@ class Editor extends React.Component {
     }
   };
 
-  removeTagHandler(event, tag) {
-    console.log("removeTagHandler runs");
-    console.log(tag);
-    this.setState(prevState => ({tags: prevState["tags"].splice(index -1, 1)}));
+  removeTagHandler(event, index) {
+    let splicedTags = this.state.tags;
+    splicedTags.splice(index, 1);
+    this.setState({tags: splicedTags});
   };
 
   submitForm(event) {
@@ -158,11 +158,11 @@ class Editor extends React.Component {
                       onKeyUp={this.watchForEnter} />                  
 
                     <div className="tag-list">
-                        {tags.length > 0 && (tags.map(tag => {
+                        {tags.length > 0 && (tags.map((tag, index) => {
                           return (
                             <span className="tag-default tag-pill" key={tag}>
                               <i  className="ion-close-round"
-                                  onClick={(event, tag) => this.removeTagHandler(event, tag)}>
+                                  onClick={event => this.removeTagHandler(event, index)}>
                               </i>
                               {tag}
                             </span>
