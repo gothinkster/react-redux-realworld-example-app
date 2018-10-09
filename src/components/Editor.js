@@ -112,7 +112,7 @@ class Editor extends React.Component {
                     <div className="tag-list">
                         {tags.length > 0 && (tags.map((tag, index) => {
                           return (
-                            <span className="tag-default tag-pill">
+                            <span className="tag-default tag-pill" key={index}>
                               <i  className="ion-close-round"
                                   onClick={event => this.removeTagHandler(event, index)}>
                               </i>
