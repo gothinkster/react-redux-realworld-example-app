@@ -12,7 +12,6 @@ import Profile from '../components/Profile';
 import ProfileFavorites from '../components/ProfileFavorites';
 import Register from '../components/Register';
 import Settings from '../components/Settings';
-import SubmitArticle from "../components/submitArticle";
 import { store } from '../store';
 import { push } from 'react-router-redux';
 

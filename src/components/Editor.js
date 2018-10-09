@@ -44,10 +44,6 @@ class Editor extends React.Component {
     };    
 
     this.updateField = this.updateField.bind(this);
-
-    this.removeTagHandler = tag => () => {
-      this.props.onRemoveTag(tag);
-    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -78,8 +74,12 @@ class Editor extends React.Component {
   watchForEnter(event) {
     if (event.keyCode === 13) {
       event.preventDefault();
-      this.setState(prevState => ({[event.target.name] : [...prevState["tags"], event.target.value]}));
+      this.setState(prevState => ({tags: [...prevState["tags"], event.target.value]}));
     }
+  };
+
+  removeTagHandler(event) {
+    this.setState(prevState => ({tags: prevState["tags"].filter(tag => tag !== event.target.value)}));
   };
 
   submitForm(event) {
@@ -95,6 +95,7 @@ class Editor extends React.Component {
   };
 
   render() {
+    const {url, title, summary, tagInput, tags} = this.state;
     return (
       <div className="editor-page">
         <div className="container page">
@@ -113,7 +114,7 @@ class Editor extends React.Component {
                       className="form-control"
                       type="text"
                       name="url"
-                      value={this.state.url}
+                      value={url}
                       onChange={this.updateField} />
                   </fieldset>                  
 
@@ -121,10 +122,10 @@ class Editor extends React.Component {
                     <label htmlFor="titleInput" className="form-control-label">Title</label>
                     <input
                       id="titleInput"
-                      name="titleInput"
+                      name="title"
                       className="form-control form-control-lg"
                       type="text"
-                      value={this.props.title}
+                      value={title}
                       onChange={this.updateField} />
                   </fieldset>
 
@@ -132,10 +133,10 @@ class Editor extends React.Component {
                     <label htmlFor="summaryInput" className="form-control-label">Summary</label>                  
                     <textarea
                       id="summaryInput"
-                      name="summaryInput"
+                      name="summary"
                       className="form-control"
                       rows="8"
-                      value={this.props.body}
+                      value={summary}
                       onChange={this.updateField}>
                     </textarea>
                   </fieldset>
@@ -147,7 +148,7 @@ class Editor extends React.Component {
                       name="tagInput"
                       className="form-control"
                       type="text"
-                      value={this.state.tagInput}
+                      value={tagInput}
                       onChange={this.updateField}
                       onKeyUp={this.watchForEnter} />
 
