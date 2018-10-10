@@ -84,14 +84,15 @@ class Editor extends React.Component {
   }
 
   submitForm(event) {
-    const {url, title, summary, tags} = this.state;
+    const {url, title, summary, tags, snippets} = this.state;
     event.preventDefault();
 
     const article = {
       url,
       title,
       summary,
-      tags
+      tags,
+      snippets
     };    
     SubmitArticle(article);
     this.resetFields();
@@ -122,7 +123,7 @@ class Editor extends React.Component {
                       <option>Stack Overflow Post</option>                                        
                     </select>
                   </fieldset>
-                  
+
                   <fieldset className="form-group">
                     <label htmlFor="urlInput" className="form-control-label">URL</label>                  
                     <input
