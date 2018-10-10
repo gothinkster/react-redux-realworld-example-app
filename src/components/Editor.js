@@ -17,6 +17,7 @@ class Editor extends React.Component {
     this.updateField = this.updateField.bind(this);
     this.watchForEnter = this.watchForEnter.bind(this);
     this.removeTagHandler = this.removeTagHandler.bind(this);
+    this.isDisabled = this.isDisabled.bind(this);
     this.submitForm = this.submitForm.bind(this);
   }
 
@@ -37,6 +38,14 @@ class Editor extends React.Component {
     this.setState({tags: splicedTags});
   };
 
+  isDisabled() {
+    const {url, title, summary, tags} = this.state;
+    if (url.length === 0 || title.length === 0 || summary.length === 0 || tags.length ===0) {
+      return true;
+    }
+    return false;
+  }
+
   submitForm(event) {
     const {url, title, summary, tags} = this.state;
     event.preventDefault();
@@ -47,11 +56,7 @@ class Editor extends React.Component {
       summary,
       tags
     };    
-
-    console.log(article);
-
     SubmitArticle(article);
-
   };
 
   render() {
@@ -131,8 +136,8 @@ class Editor extends React.Component {
 
                   <button
                     className="btn btn-lg pull-xs-right btn-primary"
-                    type="submit"
-                    disabled={this.props.inProgress}
+                    type="button"
+                    disabled={this.isDisabled()}
                     onClick={this.submitForm}>
                     Publish Article
                   </button>
