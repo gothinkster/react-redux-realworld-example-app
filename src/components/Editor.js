@@ -67,12 +67,20 @@ class Editor extends React.Component {
     this.setState({[event.target.name] : arr});
   };
 
+  isValidUrl(url) {
+    //simple validation forces the link provided to use http or https protocol for at least a touch
+    //more safety
+    const regExp = /^((http|https):\/\/)[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/;
+    return url.match(regExp) ? true : false;
+
+  }
+
   isDisabled() {
     const {url, title, summary, tags, type, snippets} = this.state;
-    if (type !== "Stack Overflow Post" && (url.length === 0 || title.length === 0 || summary.length === 0 || tags.length === 0)) {
+    if (type !== "Stack Overflow Post" && (url.length === 0 || !this.isValidUrl(url) || title.length === 0 || summary.length === 0 || tags.length === 0)) {
       return true;
     }
-    else if (type === "Stack Overflow Post" && (url.length === 0 || title.length === 0 || snippets.length === 0 || tags.length === 0)) {
+    else if (type === "Stack Overflow Post" && (url.length === 0 || !this.isValidUrl(url) || title.length === 0 || snippets.length === 0 || tags.length === 0)) {
       return true;
     }
     return false;
@@ -186,7 +194,6 @@ class Editor extends React.Component {
                                   </span>
                                 )
                               })}
-
                             </div>
                           );
                         })
