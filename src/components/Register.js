@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
 import agent from '../agent';
-import update from 'react-addons-update';
+import update from 'immutability-helper';
 
 class Register extends React.Component {
   constructor() {
@@ -24,7 +24,7 @@ class Register extends React.Component {
         lastName: /^\D+$/,
         username: /^\D{5,}$/,
         password: /^\D{8,}$/,
-        email: /^\D+\@\D\.\D+$/
+        email: /^\D+@\D\.\D+$/
       }      
     };
 
@@ -46,31 +46,36 @@ class Register extends React.Component {
     const {errors, patterns} = this.state;
     const nameArr = event.target.value.split(" ", 2);
     const error = nameArr[0].match(patterns.firstName) === null || typeof nameArr[1] === "undefined" || !nameArr[1].match(patterns.lastName) ? true : false;
-    this.setState({errors: {fullName: error}});
+    this.setState({errors: update(errors, {fullName: {$set: error}})});
     this.setState({firstName: nameArr[0], lastName: nameArr[1] || ""});
   }
 
   changeEmail(event) {
-    const error = event.target.value.match(this.state.patterns.email) === null ? true : false;
-    this.setState({errors: {email: error}});
+    const {errors, patterns} = this.state;
+    const error = event.target.value.match(patterns.email) === null ? true : false;
+    this.setState({errors: update(errors, {email: {$set: error}})});
     this.setState({email: event.target.value});
   }
 
   changePassword(event) {
-    const error = event.target.value.match(this.state.patterns.username) === null ? true : false;
-    this.setState({errors: {username: error}});        
+    const {errors, patterns} = this.state;
+    const error = event.target.value.match(patterns.password) === null ? true : false;
+    console.log(error);
+    this.setState({errors: update(errors, {password: {$set: error}})});     
     this.setState({password: event.target.value})
   }
 
   changeUsername(event) {
-    const error = event.target.value.match(this.state.patterns.username) === null ? true : false;
-    this.setState({errors: {username: error}});    
+    const {errors, patterns} = this.state;
+    const error = event.target.value.match(patterns.username) === null ? true : false;
+    this.setState({errors: update(errors, {username: {$set: error}})});
     this.setState({username: event.target.value});
   }
 
   checkForErrors() {
-    for(let error of this.state.errors) {
-      if (error) {
+    const {errors} = this.state;
+    for(var key in errors) {
+      if (errors[key] === true) {        
         return true;
       }
     }
@@ -78,8 +83,8 @@ class Register extends React.Component {
   }
 
   isDisabled() {
-    const {firstName, lastName, username, email, password, errors } = this.state;
-    if (firstName.length === 0 || lastName.length === 0 || username.length === 0 || email.length === 0 || password.length === 0 || this.checkForErrors()) {
+    const {firstName, lastName, username, email, password } = this.state;
+    if (firstName.length === 0 || lastName.length === 0 || username.length === 0 || email.length === 0 || password.length === 0 || this.checkForErrors() === true) {
       return true;
     }
     return false;
