@@ -1,13 +1,11 @@
 describe('Registration', () => {
   beforeEach(() => {
     cy.server();
-    cy
-      .route(
-        /.*\/api\/articles(\?limit=(\d+)&offset=(\d+))?/,
-        'fixture:articles.json'
-      )
-      .as('loadArticles');
     cy.route(/.*\/api\/tags/, 'fixture:tags.json').as('loadTags');
+    cy.route(/.*\/api\/articles\/feed(\?limit=(\d+)&offset=(\d+))?/, {
+      articles: [],
+      articlesCount: 0
+    }).as('loadFeed');
 
     cy.visit('/register', {
       // see https://github.com/cypress-io/cypress/issues/95#issuecomment-281273126
@@ -17,45 +15,42 @@ describe('Registration', () => {
     });
   });
 
-  it('Should the page title must be set', () => {
+  it('Should appear the page title', () => {
     cy.get('.auth-page h1').contains('Sign Up');
   });
 
-  it('Should the sign up form works', () => {
-    cy.route({
-      method: 'POST',
-      url: /.*\/api\/users/,
-      status: 200,
-      response: {
-        user: {
-          id: Date.now() / 1000,
-          email: 'john.doe@mail.wtf',
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          username: 'john.doe',
-          bio: null,
-          image: null,
-          token:
-            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzIwOTUsInVzZXJuYW1lIjoiQW1ldCB1dCB1dCIsImV4cCI6MTUzNTU1Mjk2OX0.yJKrKsYGuBw3fOvcxW7Llnuct6kCIHR0hakOxbemb7s'
-        }
+  it('Should register a new user', () => {
+    const newUser = {
+      username: 'joe_doe',
+      email: 'joe@doe.me',
+      password: 'P4$$w0rd'
+    };
+
+    cy.route('POST', /.*\/api\/users/, {
+      user: {
+        id: Date.now(),
+        email: newUser.email,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        username: newUser.username,
+        bio: null,
+        image: null,
+        token: 'jwt'
       }
-    });
+    }).as('postUser');
 
-    cy.get('.auth-page form').as('form');
+    cy.get('input[placeholder="Username"]').type(newUser.username);
+    cy.get('input[placeholder="Email"]').type(newUser.email);
+    cy.get('input[placeholder="Password"]').type(newUser.password);
+    cy.get('.container.page').screenshot();
+    cy.get('.auth-page form').submit();
 
-    cy.get('@form')
-      .find('input[placeholder="Username"]')
-      .type('john.doe');
-    cy.get('@form')
-      .find('input[placeholder="Email"]')
-      .type('john.doe@mail.wtf');
-    cy.get('@form')
-      .find('input[placeholder="Password"]')
-      .type('p4$$W0rd');
-    cy.get('@form').submit();
+    cy.wait(['@postUser', '@loadTags', '@loadFeed']);
+
+    cy.get(`a[href="/@${newUser.username}"]`).contains(newUser.username);
   });
 
-  it('Should fail when send empty form', () => {
+  it('Should show form errors', () => {
     cy.route({
       method: 'POST',
       url: /.*\/api\/users/,
@@ -71,9 +66,15 @@ describe('Registration', () => {
           ]
         }
       }
-    });
+    }).as('postUser');
 
     cy.get('.auth-page form').submit();
+    cy.wait('@postUser');
     cy.get('.auth-page .error-messages');
+  });
+
+  afterEach(() => {
+    cy.screenshot();
+    cy.reload();
   });
 });
