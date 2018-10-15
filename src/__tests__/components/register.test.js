@@ -27,17 +27,6 @@ describe("Renders Register component", () => {
 
     describe("when all fields are properly filled out", () => {
 
-        beforeEach(() => {            
-            wrapper = shallow(<Register />);    
-            wrapper.setState({
-                firstName : "Joe",
-                lastName : "Shmo",
-                userName : "JoeShmo",
-                email : "Joe.Shmo@curly.com",
-                password : "weakPass1!"                                                                
-            });
-        });
-
         it("does not render any warnings", () => {
             expect(wrapper.find(".error")).toHaveLength(0);
         });
