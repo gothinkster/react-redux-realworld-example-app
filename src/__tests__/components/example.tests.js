@@ -20,7 +20,7 @@ describe("Renders Register component", () => {
     });  
 
     
-    it('renders the form', (state) => {
+    it('renders the form', ({state}) => {
         store=mockStore(state, agent);
         wrapper = shallow(<Register store={store} />);        
         expect(wrapper.find('form').exists()).to.equal(true);
