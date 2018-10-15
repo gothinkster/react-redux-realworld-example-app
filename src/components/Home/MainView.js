@@ -65,32 +65,40 @@ const mapDispatchToProps = dispatch => ({
   onTabClick: (tab, pager, payload) => dispatch({ type: CHANGE_TAB, tab, pager, payload })
 });
 
-const MainView = props => {
-  return (
-    <div className="col-md-9">
-      <div className="feed-toggle">
-        <ul className="nav nav-pills outline-active">
+class MainView extends React.Component {
+  constructor() {
+    super();
 
-          <YourFeedTab
-            token={props.token}
-            tab={props.tab}
-            onTabClick={props.onTabClick} />
+    
 
-          <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
+  }
+  render() { 
+    return (
+      <div className="col-md-9">
+        <div className="feed-toggle">
+          <ul className="nav nav-pills outline-active">
 
-          <TagFilterTab tag={props.tag} />
+            <YourFeedTab
+              token={this.props.token}
+              tab={this.props.tab}
+              onTabClick={this.props.onTabClick} />
 
-        </ul>
+            <GlobalFeedTab tab={this.props.tab} onTabClick={this.props.onTabClick} />
+
+            <TagFilterTab tag={this.props.tag} />
+
+          </ul>
+        </div>
+
+        <ArticleList
+          pager={this.props.pager}
+          articles={this.props.articles}
+          loading={this.props.loading}
+          articlesCount={this.props.articlesCount}
+          currentPage={this.props.currentPage} />
       </div>
-
-      <ArticleList
-        pager={props.pager}
-        articles={props.articles}
-        loading={props.loading}
-        articlesCount={props.articlesCount}
-        currentPage={props.currentPage} />
-    </div>
-  );
+    );
+  }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainView);
