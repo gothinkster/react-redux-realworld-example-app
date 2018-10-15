@@ -14,4 +14,15 @@ const SubmitArticle = article => {
     requests.post("/article/submit", article);    
 };
 
+const fetchArticles = pageNumber => {
+    //return up to ten articles based on their index in the database
+    const index = pageNumber -1;
+}
+
+const getArticleCount = () => {
+    //return the number of articles in the database
+    const count = requests.post("/article/count");  
+    return count;
+};
+
 export default SubmitArticle;
