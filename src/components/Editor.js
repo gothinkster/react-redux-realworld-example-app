@@ -39,19 +39,17 @@ class Editor extends React.Component {
 
   submitForm(event) {
     const {url, title, summary, tags} = this.state;
+    const views = 0;
     event.preventDefault();
 
     const article = {
       url,
       title,
       summary,
-      tags
+      tags,
+      views
     };    
-
-    console.log(article);
-
     SubmitArticle(article);
-
   };
 
   render() {
