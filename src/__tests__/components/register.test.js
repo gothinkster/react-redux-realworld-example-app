@@ -27,15 +27,14 @@ describe("Renders Register component", () => {
 
     describe("when all fields are properly filled out", () => {
 
-        beforeEach(() => {
-            
+        beforeEach(() => {            
             wrapper = shallow(<Register />);    
             wrapper.setState({
-                "firstName" : "Joe",
-                "firstName" : "Shmo",
-                "firstName" : "JoeShmo",
-                "firstName" : "Joe.Shmo@curly.com",
-                "password" : "abcdefgh"                                                                
+                firstName : "Joe",
+                lastName : "Shmo",
+                userName : "JoeShmo",
+                email : "Joe.Shmo@curly.com",
+                password : "weakPass1!"                                                                
             });
         });
 
@@ -43,9 +42,16 @@ describe("Renders Register component", () => {
             expect(wrapper.find(".error")).toHaveLength(0);
         });
 
-        it("disables the Submit button", () => {
+        it("enables the Submit button", () => {
+            wrapper.setState({
+                firstName : "Joe",
+                lastName : "Shmo",
+                username : "JoeShmo",
+                email : "Joe.Shmo@curly.com",
+                password : "weakPass1!"                                                                
+            });            
             expect(wrapper.find("button").get(0).props.disabled).toBe(false);       
         });
     });
-
+    
 });
