@@ -22,9 +22,9 @@ class Register extends React.Component {
       patterns: {
         firstName: /^\D+$/,
         lastName: /^\D+$/,
-        username: /^\D{5,}$/,
-        password: /^\D{8,}$/,
-        email: /^\D+@\D\.\D+$/
+        username: /^\w{5,}$/,
+        password: /^.{8,}$/,
+        email: /^[\w\.]+@\w+\.\w+$/
       }      
     };
 
@@ -60,7 +60,6 @@ class Register extends React.Component {
   changePassword(event) {
     const {errors, patterns} = this.state;
     const error = event.target.value.match(patterns.password) === null ? true : false;
-    console.log(error);
     this.setState({errors: update(errors, {password: {$set: error}})});     
     this.setState({password: event.target.value})
   }
