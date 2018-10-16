@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 import ListErrors from './ListErrors';
 import React from 'react';
-import agent from '../agent';
 import { connect } from 'react-redux';
 import {
   UPDATE_FIELD_AUTH,
   LOGIN,
   LOGIN_PAGE_UNLOADED
 } from '../constants/actionTypes';
+import authenticateUser from '../services/auth';
 
 const mapStateToProps = state => ({ ...state.auth });
 
@@ -17,7 +17,7 @@ const mapDispatchToProps = dispatch => ({
   onChangePassword: value =>
     dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
   onSubmit: (email, password) =>
-    dispatch({ type: LOGIN, payload: agent.Auth.login(email, password) }),
+    dispatch({ type: LOGIN, payload: authenticateUser(email, password) }),
   onUnload: () =>
     dispatch({ type: LOGIN_PAGE_UNLOADED })
 });
