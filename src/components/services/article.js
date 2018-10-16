@@ -7,22 +7,32 @@ const API_ROOT = "http://127.0.0.1:8081";
 const responseBody = res => res.body;
 
 const requests = {
-    post: (url, body) => superagent.post(`${API_ROOT}${url}`, body).then(responseBody)
+    post: (url, body) => superagent.post(`${API_ROOT}${url}`, body).then(responseBody),
+    get: (url, body) => superagent.get(`${API_ROOT}${url}`, body).then(responseBody)
 };
 
-const SubmitArticle = article => {
+export const SubmitArticle = article => {
     requests.post("/article/submit", article);    
 };
 
-const fetchArticles = pageNumber => {
+export const fetchArticles = pageNumber => {
     //return up to ten articles based on their index in the database
-    const index = pageNumber -1;
+    return requests.get(`/articles/${pageNumber}`).then(result => {
+        return result;
+    },
+    err => {
+        return err;
+    });  
+
 }
 
-const getArticleCount = () => {
+export const getArticleCount = () => {
     //return the number of articles in the database
-    const count = requests.post("/article/count");  
-    return count;
+    return requests.get("/article/count").then(result => {
+        return result;
+    },
+    err => {
+        return err;
+    });  
 };
 
-export default SubmitArticle;

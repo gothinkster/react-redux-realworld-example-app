@@ -1,6 +1,7 @@
 import ArticleList from '../ArticleList';
 import React from 'react';
 import agent from '../../agent';
+import { getArticleCount, fetchArticles } from "../services/article";
 import { connect } from 'react-redux';
 import { CHANGE_TAB } from '../../constants/actionTypes';
 
@@ -69,9 +70,33 @@ class MainView extends React.Component {
   constructor() {
     super();
 
-    
-
+    this.state = {
+      articlesCount: 0,
+      currentPage: 1,
+      loading: true,
+      articles: []
+    };
   }
+
+  componentDidMount() {
+    const getCount = new Promise((resolve, reject) => { 
+      resolve(getArticleCount());
+    });
+
+    getCount.then(result => {
+      this.setState({articlesCount: result.count});
+    });
+
+    const getArticles = new Promise((resolve, reject) => { 
+      resolve(fetchArticles(this.state.currentPage));
+    });
+
+    getArticles.then(result => {
+      this.setState({articles: result.articles});
+    });
+  };
+  
+
   render() { 
     return (
       <div className="col-md-9">
@@ -93,9 +118,8 @@ class MainView extends React.Component {
         <ArticleList
           pager={this.props.pager}
           articles={this.props.articles}
-          loading={this.props.loading}
-          articlesCount={this.props.articlesCount}
-          currentPage={this.props.currentPage} />
+          articlesCount={this.state.articlesCount}
+          currentPage={this.state.currentPage} />
       </div>
     );
   }

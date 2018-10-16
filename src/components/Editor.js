@@ -1,6 +1,6 @@
 import ListErrors from './ListErrors';
 import React from 'react';
-import SubmitArticle from "./services/article";
+import { SubmitArticle } from "./services/article";
 
 class Editor extends React.Component {
   constructor() {
@@ -92,7 +92,7 @@ class Editor extends React.Component {
   }
 
   submitForm(event) {
-    const {url, title, summary, tags} = this.state;
+    const {url, title, summary, tags, snippets} = this.state;
     const views = 0;
     event.preventDefault();
 
