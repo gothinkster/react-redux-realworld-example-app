@@ -1,0 +1,26 @@
+.snippet-container {    
+    font-size: 0.8rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    white-space: nowrap;
+    margin-bottom: 0.2rem;
+    background-color: #f3f3f3;
+    color: #818a91 !important;
+    margin-top: 0.1rem;
+    border: 1px solid #818a91;
+    border-radius: 8px;
+    padding-left: 0.2rem;
+    margin-left: 0.3rem;
+    margin-right: 0.3rem;
+
+}
+
+.snippet-span {
+    display: block;
+    font-style: italic;
+}
+
+.ion-close-round {
+    float: right;
+    margin-right: 5px;    
+}
