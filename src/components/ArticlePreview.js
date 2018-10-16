@@ -38,11 +38,6 @@ const ArticlePreview = props => {
     }
   };
 
-  const onHandleLinkClickTrack = event => {
-    event.persist();
-
-  };
-
   return (
     <div className="article-preview">
       <div className="article-meta">
@@ -63,7 +58,7 @@ const ArticlePreview = props => {
         </div>
       </div>
       <span className="viewsCounter">This article has {views} views</span>
-      <Link to={`/article/${article.slug}`} onClick={onHandleLinkClickTrack} className="preview-link">
+      <Link to={`/article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <span>Read more...</span>        
