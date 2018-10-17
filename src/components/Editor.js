@@ -48,7 +48,7 @@ class Editor extends React.Component {
   }
 
   submitForm(event) {
-    const {url, title, summary, tags} = this.state;
+    const {url, title, summary, tags} = this.state;    
     event.preventDefault();
 
     const article = {
@@ -57,7 +57,7 @@ class Editor extends React.Component {
       summary,
       tags
     };    
-    SubmitArticle(article, this.props.currentUser);
+    SubmitArticle(article, this.props.currentUser.username);
   };
 
   render() {
