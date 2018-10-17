@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "history": "^4.6.3",
+    "immutability-helper": "^2.8.1",
     "marked": "^0.3.6",
     "prop-types": "^15.5.10",
     "react": "^16.3.0",
