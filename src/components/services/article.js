@@ -11,6 +11,13 @@ const requests = {
 };
 
 const SubmitArticle = article => {
+    //initialize favoritesCount for article to zero
+    article['favoritesCount'] = 0;
+    //define slug
+    article['slug'] = "";
+    //generate timeStamp for article
+    
+    //append author data
     requests.post("/article/submit", article);    
 };
 
