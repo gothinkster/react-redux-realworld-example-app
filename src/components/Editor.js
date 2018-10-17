@@ -1,6 +1,7 @@
 import ListErrors from './ListErrors';
 import React from 'react';
 import SubmitArticle from "./services/article";
+import { connect } from 'react-redux';
 
 class Editor extends React.Component {
   constructor() {
@@ -56,7 +57,7 @@ class Editor extends React.Component {
       summary,
       tags
     };    
-    SubmitArticle(article);
+    SubmitArticle(article, this.props.currentUser);
   };
 
   render() {
@@ -153,4 +154,10 @@ class Editor extends React.Component {
   }
 }
 
-export default Editor;
+const mapStateToProps = state => {
+  return {
+    currentUser: state.common.currentUser  
+  }
+};
+
+export default connect(mapStateToProps)(Editor);
