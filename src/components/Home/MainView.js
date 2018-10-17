@@ -99,7 +99,6 @@ class MainView extends React.Component {
   
 
   render() { 
-    console.log(this.state.articles);
     return (
       <div className="col-md-9">
         <div className="feed-toggle">

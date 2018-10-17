@@ -17,9 +17,6 @@ const ArticleList = props => {
     );
   }
 
-  console.log(props.articles);
-  console.log(props.articlesCount);
-
   return (
     <div>
       {

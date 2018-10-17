@@ -61,7 +61,7 @@ class Article extends React.Component {
 
               <ul className="tag-list">
                 {
-                  this.props.article.tagList.map(tag => {
+                  this.props.article.tags.map(tag => {
                     return (
                       <li
                         className="tag-default tag-pill tag-outline"
