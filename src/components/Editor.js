@@ -1,6 +1,6 @@
 import ListErrors from './ListErrors';
 import React from 'react';
-import SubmitArticle from "./services/article";
+import SubmitArticle from "../services/article";
 
 class Editor extends React.Component {
   constructor() {
