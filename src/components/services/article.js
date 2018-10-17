@@ -10,14 +10,20 @@ const requests = {
     post: (url, body) => superagent.post(`${API_ROOT}${url}`, body).then(responseBody)
 };
 
-const SubmitArticle = article => {
+const SubmitArticle = (article, user) => {
     //initialize favoritesCount for article to zero
     article['favoritesCount'] = 0;
     //define slug
     article['slug'] = "";
     //generate timeStamp for article
-    
+    article['createdAt'] = new Date().toISOString();
     //append author data
+    article['author'] = user;
+    //sort, convert to lowercase, then remove duplicate tags
+    article['tags'] = article['tags'].sort().map(tag => tag.toLowerCase()).filter((tag, index, arr) => {
+        return !index || tag !== arr[index -1];
+    });
+
     requests.post("/article/submit", article);    
 };
 
