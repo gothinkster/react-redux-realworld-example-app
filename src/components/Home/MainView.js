@@ -83,6 +83,7 @@ class MainView extends React.Component {
       resolve(getArticleCount());
     });
 
+
     getCount.then(result => {
       this.setState({articlesCount: result.count});
     });
@@ -98,6 +99,7 @@ class MainView extends React.Component {
   
 
   render() { 
+    console.log(this.state.articles);
     return (
       <div className="col-md-9">
         <div className="feed-toggle">
@@ -117,7 +119,7 @@ class MainView extends React.Component {
 
         <ArticleList
           pager={this.props.pager}
-          articles={this.props.articles}
+          articles={this.state.articles}
           articlesCount={this.state.articlesCount}
           currentPage={this.state.currentPage} />
       </div>
