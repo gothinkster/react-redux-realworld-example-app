@@ -13,9 +13,8 @@ const requests = {
 const SubmitArticle = (article, username) => {
     //initialize favoritesCount for article to zero
     article['favoritesCount'] = 0;
-    //define slug
-    
-    article['slug'] = "";
+    //define slug (single string, dash delimited, uuid applied(append uuid at back-end))
+    article['slug'] = article.title.replace(" ", "-");
     //generate timeStamp for article
     article['createdAt'] = new Date().toISOString();
     //append author data
