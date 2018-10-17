@@ -4,6 +4,9 @@
   "private": true,
   "devDependencies": {
     "cross-env": "^5.1.4",
+    "husky": "^1.1.2",
+    "prettier": "1.14.3",
+    "pretty-quick": "^1.8.0",
     "react-scripts": "1.1.1"
   },
   "dependencies": {
@@ -26,6 +29,7 @@
     "start": "cross-env PORT=4100 react-scripts start",
     "build": "react-scripts build",
     "test": "cross-env PORT=4100 react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "precommit": "pretty-quick --staged"
   }
 }
