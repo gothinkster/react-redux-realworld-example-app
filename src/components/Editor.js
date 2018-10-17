@@ -49,13 +49,13 @@ class Editor extends React.Component {
       switch(event.target.name) {
         case "tagInput" :
           this.setState(prevState => ({tags: [...prevState.tags, prevState.tagInput], tagInput: ""}));          
-        break;
+          break;
+
         case "snippetInput" :
           this.setState(prevState => ({snippets: [...prevState.snippets, prevState.snippetInput], snippetInput: ""}));          
-        break;
+          break;
 
         default: 
-        break;
       }     
     }
   };
@@ -68,14 +68,17 @@ class Editor extends React.Component {
   };
 
   isDisabled() {
-    const {url, title, summary, tags, type, snippets} = this.state;
-    if (type !== "Stack Overflow Post" && (url.length === 0 || title.length === 0 || summary.length === 0 || tags.length === 0)) {
-      return true;
-    }
-    else if (type === "Stack Overflow Post" && (url.length === 0 || title.length === 0 || snippets.length === 0 || tags.length === 0)) {
-      return true;
-    }
-    return false;
+    const {url, title, summary, tags, type, snippets} = this.state;    
+    const postTypeValidValue = type === "Stack Overflow Post" ? snippets : summary;
+    const arr = [url, title, tags, postTypeValidValue];
+    let bool = false;    
+    arr.map(value => { 
+      if (value.length === 0) {
+          bool = true;
+          return;
+      }
+    });
+    return bool;
   }
 
   insertLineBreaks(text) {
