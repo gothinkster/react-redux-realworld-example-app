@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import React from 'react';
-import agent from '../agent';
-import update from 'immutability-helper';
+import { Link } from "react-router-dom";
+import React from "react";
+import agent from "../agent";
+import update from "immutability-helper";
 
 class Register extends React.Component {
   constructor() {
@@ -17,15 +17,15 @@ class Register extends React.Component {
         fullName: false,
         username: false,
         email: false,
-        password:  false
+        password: false
       },
       patterns: {
         firstName: /^\D+$/,
         lastName: /^\D+$/,
         username: /^\w{5,}$/,
         password: /^.{8,}$/,
-        email: /^[\w\.]+@\w+\.\w+$/
-      }      
+        email: /^[\w.]+@\w+.\w+$/
+      }
     };
 
     this.isDisabled = this.isDisabled.bind(this);
@@ -33,48 +33,39 @@ class Register extends React.Component {
     this.submitForm = (username, email, password) => ev => {
       ev.preventDefault();
       agent.Auth.register(username, email, password);
+    };
+
+    this.updateFields = this.updateFields.bind(this);
+  }
+
+  updateFields(event) {
+    const { errors, patterns } = this.state;
+    let error;
+    if (event.target.name === "fullName") {
+      const nameArr = event.target.value.split(" ", 2);
+      error =
+        nameArr[0].match(patterns.firstName) === null ||
+        typeof nameArr[1] === "undefined" ||
+        !nameArr[1].match(patterns.lastName)
+          ? true
+          : false;
+      this.setState({ firstName: nameArr[0], lastName: nameArr[1] || "" });
+    } else {
+      error =
+        event.target.value.match(patterns[event.target.name]) === null
+          ? true
+          : false;
+      this.setState({ [event.target.name]: event.target.value });
     }
-
-    this.changeFullName = this.changeFullName.bind(this);
-    this.changeEmail = this.changeEmail.bind(this);
-    this.changeUsername = this.changeUsername.bind(this);
-    this.changePassword = this.changePassword.bind(this);
-    this.checkForErrors = this.checkForErrors.bind(this);
-  }
-
-  changeFullName(event) {
-    const {errors, patterns} = this.state;
-    const nameArr = event.target.value.split(" ", 2);
-    const error = nameArr[0].match(patterns.firstName) === null || typeof nameArr[1] === "undefined" || !nameArr[1].match(patterns.lastName) ? true : false;
-    this.setState({errors: update(errors, {fullName: {$set: error}})});
-    this.setState({firstName: nameArr[0], lastName: nameArr[1] || ""});
-  }
-
-  changeEmail(event) {
-    const {errors, patterns} = this.state;
-    const error = event.target.value.match(patterns.email) === null ? true : false;
-    this.setState({errors: update(errors, {email: {$set: error}})});
-    this.setState({email: event.target.value});
-  }
-
-  changePassword(event) {
-    const {errors, patterns} = this.state;
-    const error = event.target.value.match(patterns.password) === null ? true : false;
-    this.setState({errors: update(errors, {password: {$set: error}})});     
-    this.setState({password: event.target.value})
-  }
-
-  changeUsername(event) {
-    const {errors, patterns} = this.state;
-    const error = event.target.value.match(patterns.username) === null ? true : false;
-    this.setState({errors: update(errors, {username: {$set: error}})});
-    this.setState({username: event.target.value});
+    this.setState({
+      errors: update(errors, { [event.target.name]: { $set: error } })
+    });
   }
 
   checkForErrors() {
-    const {errors} = this.state;
-    for(var key in errors) {
-      if (errors[key] === true) {        
+    const { errors } = this.state;
+    for (var key in errors) {
+      if (errors[key] === true) {
         return true;
       }
     }
@@ -82,88 +73,121 @@ class Register extends React.Component {
   }
 
   isDisabled() {
-    const {firstName, lastName, username, email, password } = this.state;
-    if (firstName.length === 0 || lastName.length === 0 || username.length === 0 || email.length === 0 || password.length === 0 || this.checkForErrors() === true) {
+    const { firstName, lastName, username, email, password } = this.state;
+    if (
+      firstName.length === 0 ||
+      lastName.length === 0 ||
+      username.length === 0 ||
+      email.length === 0 ||
+      password.length === 0 ||
+      this.checkForErrors() === true
+    ) {
       return true;
     }
     return false;
   }
 
   render() {
-    const {email, password, username, errors, fullName} = this.state;    
+    const { email, password, username, errors, fullName } = this.state;
 
     return (
-
       <div className="auth-page">
         <div className="container page">
           <div className="row">
-
             <div className="col-md-6 offset-md-3 col-xs-12">
               <h1 className="text-xs-center">Sign Up</h1>
               <p className="text-xs-center">
-                <Link to="/login">
-                  Have an account?
-                </Link>
+                <Link to="/login">Have an account?</Link>
               </p>
 
               <form onSubmit={this.submitForm(username, email, password)}>
                 <fieldset>
-
                   <fieldset className="form-group">
-                  <label htmlFor="fullNameInput" className="form-group-label">Full Name</label>
-                  {errors.fullName && <span className="error">Must contain first and last name</span>}
+                    <label htmlFor="fullNameInput" className="form-group-label">
+                      Full Name
+                    </label>
+                    {errors.fullName && (
+                      <span className="error">
+                        Must contain first and last name
+                      </span>
+                    )}
                     <input
                       id="fullNameInput"
                       className="form-control form-control-lg"
                       type="text"
+                      name="fullName"
                       value={fullName}
-                      onChange={this.changeFullName} />
+                      onChange={this.updateFields}
+                    />
                   </fieldset>
 
                   <fieldset className="form-group">
-                    <label htmlFor="usernameInput" className="form-group-label">Username</label>                  
-                    {errors.username && <span className="error">username must be at least five characters</span>}                  
+                    <label htmlFor="usernameInput" className="form-group-label">
+                      Username
+                    </label>
+                    {errors.username && (
+                      <span className="error">
+                        username must be at least five characters
+                      </span>
+                    )}
                     <input
                       id="usernameInput"
                       className="form-control form-control-lg"
+                      name="username"
                       type="text"
                       value={username}
-                      onChange={this.changeUsername} />
+                      onChange={this.updateFields}
+                    />
                   </fieldset>
 
                   <fieldset className="form-group">
-                  <label className="form-group-label" htmlFor="emailInput">Email</label>
-                  {errors.email && <span className="error">Make sure to enter a valid e-mail</span>}                  
+                    <label className="form-group-label" htmlFor="email">
+                      Email
+                    </label>
+                    {errors.email && (
+                      <span className="error">
+                        Make sure to enter a valid e-mail
+                      </span>
+                    )}
                     <input
-                    id="emailInput"
+                      id="emailInput"
+                      name="email"
                       className="form-control form-control-lg"
                       type="email"
                       value={email}
-                      onChange={this.changeEmail} />
+                      onChange={this.updateFields}
+                    />
                   </fieldset>
 
                   <fieldset className="form-group">
-                  <label className="form-group-label" htmlFor="passwordInput">Password</label>  
-                  {errors.password && <span className="error">Password must be at least eight characters</span>}                                                    
+                    <label className="form-group-label" htmlFor="passwordInput">
+                      Password
+                    </label>
+                    {errors.password && (
+                      <span className="error">
+                        Password must be at least eight characters
+                      </span>
+                    )}
                     <input
                       id="passwordInput"
+                      name="password"
                       className="form-control form-control-lg"
                       type="password"
                       value={password}
-                      onChange={this.changePassword} />
+                      onChange={this.updateFields}
+                    />
                   </fieldset>
 
                   <button
                     className="btn btn-lg btn-primary pull-xs-right"
                     type="submit"
-                    disabled={this.isDisabled()}>
+                    disabled={this.isDisabled()}
+                  >
                     Sign up
                   </button>
-
                 </fieldset>
               </form>
             </div>
-
           </div>
         </div>
       </div>
