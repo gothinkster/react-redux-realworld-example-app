@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import agent from '../agent';
 import { connect } from 'react-redux';
-import { ARTICLE_FAVORITED, ARTICLE_UNFAVORITED } from '../constants/actionTypes';
+import { ARTICLE_FAVORITED, ARTICLE_UNFAVORITED, ARTICLE_ADDVIEW } from '../constants/actionTypes';
 
 const FAVORITED_CLASS = 'btn btn-sm btn-primary';
 const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
@@ -15,11 +15,16 @@ const mapDispatchToProps = dispatch => ({
   unfavorite: slug => dispatch({
     type: ARTICLE_UNFAVORITED,
     payload: agent.Articles.unfavorite(slug)
+  }),
+  addview: () => dispatch({
+    type: ARTICLE_ADDVIEW,
+    payload: agent.Articles.addview()
   })
 });
 
 const ArticlePreview = props => {
   const article = props.article;
+  const views = props.views || 0;
   const favoriteButtonClass = article.favorited ?
     FAVORITED_CLASS :
     NOT_FAVORITED_CLASS;
@@ -52,11 +57,11 @@ const ArticlePreview = props => {
           </button>
         </div>
       </div>
-
+      <span className="viewsCounter">This article has {views} views</span>
       <Link to={`/article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>
         <p>{article.description}</p>
-        <span>Read more...</span>
+        <span>Read more...</span>        
         <ul className="tag-list">
           {
             article.tagList.map(tag => {
