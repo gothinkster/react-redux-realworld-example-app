@@ -3,3 +3,11 @@
   color: red;
   font-size: 0.75rem;
 }
+
+.toggleUL {
+  padding-top: 5px;
+}
+
+.toggleUL > li {
+  padding-left: 5px;
+}
