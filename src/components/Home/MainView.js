@@ -1,21 +1,23 @@
-import ArticleList from '../ArticleList';
-import React from 'react';
-import agent from '../../agent';
-import { connect } from 'react-redux';
-import { CHANGE_TAB } from '../../constants/actionTypes';
+import ArticleList from "../ArticleList";
+import React from "react";
+import agent from "../../agent";
+import { connect } from "react-redux";
+import { CHANGE_TAB } from "../../constants/actionTypes";
 
 const YourFeedTab = props => {
   if (props.token) {
     const clickHandler = ev => {
       ev.preventDefault();
-      props.onTabClick('feed', agent.Articles.feed, agent.Articles.feed());
-    }
+      props.onTabClick("feed", agent.Articles.feed, agent.Articles.feed());
+    };
 
     return (
       <li className="nav-item">
-        <a  href=""
-            className={ props.tab === 'feed' ? 'nav-link active' : 'nav-link' }
-            onClick={clickHandler}>
+        <a
+          href=""
+          className={props.tab === "feed" ? "nav-link active" : "nav-link"}
+          onClick={event => clickHandler(event)}
+        >
           Your Feed
         </a>
       </li>
@@ -27,14 +29,15 @@ const YourFeedTab = props => {
 const GlobalFeedTab = props => {
   const clickHandler = ev => {
     ev.preventDefault();
-    props.onTabClick('all', agent.Articles.all, agent.Articles.all());
+    props.onTabClick("all", agent.Articles.all, agent.Articles.all());
   };
   return (
     <li className="nav-item">
       <a
         href=""
-        className={ props.tab === 'all' ? 'nav-link active' : 'nav-link' }
-        onClick={clickHandler}>
+        className={props.tab === "all" ? "nav-link active" : "nav-link"}
+        onClick={event => clickHandler(event)}
+      >
         Global Feed
       </a>
     </li>
@@ -49,7 +52,7 @@ const TagFilterTab = props => {
   return (
     <li className="nav-item">
       <a href="" className="nav-link active">
-        <i className="ion-pound"></i> {props.tag}
+        <i className="ion-pound" /> {props.tag}
       </a>
     </li>
   );
@@ -62,7 +65,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onTabClick: (tab, pager, payload) => dispatch({ type: CHANGE_TAB, tab, pager, payload })
+  onTabClick: (tab, pager, payload) =>
+    dispatch({ type: CHANGE_TAB, tab, pager, payload })
 });
 
 const MainView = props => {
@@ -70,16 +74,15 @@ const MainView = props => {
     <div className="col-md-9">
       <div className="feed-toggle">
         <ul className="nav nav-pills outline-active">
-
           <YourFeedTab
             token={props.token}
             tab={props.tab}
-            onTabClick={props.onTabClick} />
+            onTabClick={props.onTabClick}
+          />
 
           <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
 
           <TagFilterTab tag={props.tag} />
-
         </ul>
       </div>
 
@@ -88,9 +91,13 @@ const MainView = props => {
         articles={props.articles}
         loading={props.loading}
         articlesCount={props.articlesCount}
-        currentPage={props.currentPage} />
+        currentPage={props.currentPage}
+      />
     </div>
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainView);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MainView);

@@ -26,8 +26,8 @@ class Login extends React.Component {
     super();
     this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
     this.changePassword = ev => this.props.onChangePassword(ev.target.value);
-    this.submitForm = (email, password) => ev => {
-      ev.preventDefault();
+    this.submitForm = (event, email, password) => {
+      event.preventDefault();
       this.props.onSubmit(email, password);
     };
   }
@@ -51,7 +51,7 @@ class Login extends React.Component {
 
               <ListErrors errors={this.props.errors} />
 
-              <form onSubmit={this.submitForm(email, password)}>
+              <form onSubmit={event => this.submitForm(event, email, password)}>
                 <fieldset>
                   <fieldset className="form-group">
                     <input

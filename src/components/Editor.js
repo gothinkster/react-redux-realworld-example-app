@@ -95,7 +95,7 @@ class Editor extends React.Component {
   }
 
   submitForm(event) {
-    const { url, title, summary, tags, snippets } = this.state;
+    const { url, title, summary, tags, type, snippets } = this.state;
     event.preventDefault();
 
     const article = {
@@ -103,6 +103,7 @@ class Editor extends React.Component {
       title,
       summary,
       tags,
+      type,
       snippets
     };
     SubmitArticle(article);
@@ -281,7 +282,7 @@ class Editor extends React.Component {
                     className="btn btn-lg pull-xs-right btn-primary"
                     type="button"
                     disabled={this.isDisabled()}
-                    onClick={this.submitForm}
+                    onClick={event => this.submitForm(event)}
                   >
                     Publish Article
                   </button>
