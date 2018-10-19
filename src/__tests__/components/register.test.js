@@ -31,11 +31,13 @@ describe("Renders Register component", () => {
 
     it("enables the Submit button", () => {
       wrapper.setState({
-        firstName: "Joe",
-        lastName: "Shmo",
-        username: "JoeShmo",
-        email: "Joe.Shmo@curly.com",
-        password: "weakPass1!"
+        fields: {
+          firstName: "Joe",
+          lastName: "Shmo",
+          username: "JoeShmo",
+          email: "Joe.Shmo@curly.com",
+          password: "weakPass1!"
+        }
       });
       expect(wrapper.find("button").get(0).props.disabled).toBe(false);
     });
