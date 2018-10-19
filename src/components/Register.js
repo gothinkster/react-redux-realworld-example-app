@@ -1,68 +1,92 @@
 import { Link } from "react-router-dom";
-import ListErrors from "./ListErrors";
 import React from "react";
 import agent from "../agent";
-import { connect } from "react-redux";
-import {
-  UPDATE_FIELD_AUTH,
-  REGISTER,
-  REGISTER_PAGE_UNLOADED
-} from "../constants/actionTypes";
-
-const mapStateToProps = state => ({ ...state.auth });
-
-const mapDispatchToProps = dispatch => ({
-  onChangeFirstName: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: "firstname", value }),
-  onChangeLastName: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: "lastname", value }),
-  onChangeEmail: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: "email", value }),
-  onChangePassword: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: "password", value }),
-  onChangeUsername: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: "username", value }),
-  onSubmit: (username, email, password) => {
-    const payload = agent.Auth.register(username, email, password);
-    dispatch({ type: REGISTER, payload });
-  },
-  onUnload: () => dispatch({ type: REGISTER_PAGE_UNLOADED })
-});
+import update from "immutability-helper";
 
 class Register extends React.Component {
   constructor() {
     super();
-    this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
-    this.changePassword = ev => this.props.onChangePassword(ev.target.value);
-    this.changeUsername = ev => this.props.onChangeUsername(ev.target.value);
 
-    this.submitForm = (username, email, password) => ev => {
-      ev.preventDefault();
-      this.props.onSubmit(username, email, password);
+    this.state = {
+      fields: {
+        firstName: "",
+        lastName: "",
+        username: "",
+        email: "",
+        password: ""
+      },
+      errors: {
+        firstName: false,
+        lastName: false,
+        username: false,
+        email: false,
+        password: false
+      }
     };
 
-    this.changeFullName = this.changeFullName.bind(this);
+    this.isDisabled = this.isDisabled.bind(this);
+    this.submitForm = this.submitForm.bind(this);
+    this.updateFields = this.updateFields.bind(this);
+    this.validateFields = this.validateFields.bind(this);
+    this.updateNameField = this.updateNameField.bind(this);
+    this.submitForm = this.submitForm.bind(this);
   }
 
-  componentWillUnmount() {
-    this.props.onUnload();
+  submitForm(event) {
+    const {
+      fields: { username, email, password }
+    } = this.state;
+    event.preventDefault();
+    agent.Auth.register(username, email, password);
   }
 
-  changeFullName(event) {
+  validateFields(key, value) {
+    const patterns = {
+      firstName: /^\D+$/,
+      lastName: /^\D+$/,
+      username: /^\w{5,}$/,
+      password: /^.{8,}$/,
+      email: /^[\w.]+@\w+.\w+$/
+    };
+    this.setState(prevState => ({
+      errors: update(prevState.errors, {
+        [key]: { $set: !patterns[key].test(value) }
+      })
+    }));
+  }
+
+  updateNameField(event) {
     const nameArr = event.target.value.split(" ", 2);
-    this.props.onChangeFirstName(nameArr[0]);
-    this.props.onChangeLastName(nameArr[1] || "");
+    this.setState(prevState => ({
+      fields: update(prevState.fields, {
+        firstName: { $set: nameArr[0] },
+        lastName: { $set: nameArr[1] }
+      })
+    }));
+    this.validateFields("firstName", nameArr[0]);
+    this.validateFields("lastName", nameArr[1] || "");
+  }
+
+  updateFields(event) {
+    const { name, value } = event.target;
+    this.setState(prevState => ({
+      fields: update(prevState.fields, { [name]: { $set: value } })
+    }));
+    this.validateFields(name, value);
+  }
+
+  isDisabled() {
+    const { fields, errors } = this.state;
+    for (var key in fields) {
+      if (errors[key] === true || fields[key].length === 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
   render() {
-    const {
-      email,
-      password,
-      username,
-      errors,
-      fullName,
-      inProgress
-    } = this.props;
+    const { email, password, username, errors, fullName } = this.state;
 
     return (
       <div className="auth-page">
@@ -74,20 +98,25 @@ class Register extends React.Component {
                 <Link to="/login">Have an account?</Link>
               </p>
 
-              <ListErrors errors={errors} />
-
               <form onSubmit={this.submitForm(username, email, password)}>
                 <fieldset>
                   <fieldset className="form-group">
                     <label htmlFor="fullNameInput" className="form-group-label">
                       Full Name
                     </label>
+                    {(errors.firstName === true ||
+                      errors.lastName === true) && (
+                      <span className="error">
+                        Must contain first and last name
+                      </span>
+                    )}
                     <input
                       id="fullNameInput"
                       className="form-control form-control-lg"
                       type="text"
+                      name="fullName"
                       value={fullName}
-                      onChange={this.changeFullName}
+                      onChange={this.updateNameField}
                     />
                   </fieldset>
 
@@ -95,25 +124,37 @@ class Register extends React.Component {
                     <label htmlFor="usernameInput" className="form-group-label">
                       Username
                     </label>
+                    {errors.username && (
+                      <span className="error">
+                        username must be at least five characters
+                      </span>
+                    )}
                     <input
                       id="usernameInput"
                       className="form-control form-control-lg"
+                      name="username"
                       type="text"
                       value={username}
-                      onChange={this.changeUsername}
+                      onChange={this.updateFields}
                     />
                   </fieldset>
 
                   <fieldset className="form-group">
-                    <label className="form-group-label" htmlFor="emailInput">
+                    <label className="form-group-label" htmlFor="email">
                       Email
                     </label>
+                    {errors.email && (
+                      <span className="error">
+                        Make sure to enter a valid e-mail
+                      </span>
+                    )}
                     <input
                       id="emailInput"
+                      name="email"
                       className="form-control form-control-lg"
                       type="email"
                       value={email}
-                      onChange={this.changeEmail}
+                      onChange={this.updateFields}
                     />
                   </fieldset>
 
@@ -121,19 +162,25 @@ class Register extends React.Component {
                     <label className="form-group-label" htmlFor="passwordInput">
                       Password
                     </label>
+                    {errors.password && (
+                      <span className="error">
+                        Password must be at least eight characters
+                      </span>
+                    )}
                     <input
                       id="passwordInput"
+                      name="password"
                       className="form-control form-control-lg"
                       type="password"
                       value={password}
-                      onChange={this.changePassword}
+                      onChange={this.updateFields}
                     />
                   </fieldset>
 
                   <button
                     className="btn btn-lg btn-primary pull-xs-right"
                     type="submit"
-                    disabled={inProgress}
+                    disabled={this.isDisabled()}
                   >
                     Sign up
                   </button>
@@ -147,7 +194,4 @@ class Register extends React.Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Register);
+export default Register;
