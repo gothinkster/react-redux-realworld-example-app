@@ -67,7 +67,6 @@ export class Filters extends React.Component {
 
   toggleFilters() {
     fetchAllTags();
-    console.log(this.state.filtersActive);
     this.setState(prevState => ({
       filtersActive: !prevState.filtersActive
     }));

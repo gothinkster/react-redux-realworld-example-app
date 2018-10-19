@@ -36,7 +36,12 @@ export const SubmitArticle = (article, username) => {
 };
 
 export const fetchAllTags = () => {
-  requests.get("/tags/all").then(result => {
-    console.log(result);
-  });
+  requests.get("/tags/all").then(
+    result => {
+      console.log(result);
+    },
+    error => {
+      console.log(error);
+    }
+  );
 };
