@@ -66,7 +66,26 @@ export class Filters extends React.Component {
   }
 
   toggleFilters() {
-    fetchAllTags();
+    const getCount = new Promise((resolve, reject) => {
+      resolve(getArticleCount());
+    });
+
+    getCount.then(result => {
+      this.setState({ articlesCount: result.count });
+    });
+
+    const getArticles = new Promise((resolve, reject) => {
+      resolve(fetchArticles(this.state.currentPage));
+    });
+
+    getArticles.then(result => {
+      this.setState({ articles: result.articles });
+    });
+
+    const getTags = new Promise(resolve => {
+      resolve(fetchAllTags());
+    });
+
     this.setState(prevState => ({
       filtersActive: !prevState.filtersActive
     }));
