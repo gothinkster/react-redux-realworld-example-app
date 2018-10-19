@@ -2,6 +2,13 @@ import { Link } from "react-router-dom";
 import React from "react";
 import agent from "../agent";
 import update from "immutability-helper";
+import {
+  firstNamePattern,
+  lastNamePattern,
+  usernamePattern,
+  passwordPattern,
+  emailPattern
+} from "../helpers/patterns";
 
 class Register extends React.Component {
   constructor() {
@@ -42,11 +49,11 @@ class Register extends React.Component {
 
   validateFields(key, value) {
     const patterns = {
-      firstName: /^\D+$/,
-      lastName: /^\D+$/,
-      username: /^\w{5,}$/,
-      password: /^.{8,}$/,
-      email: /^[\w.]+@\w+.\w+$/
+      firstName: firstNamePattern,
+      lastName: lastNamePattern,
+      username: usernamePattern,
+      password: passwordPattern,
+      email: emailPattern
     };
     this.setState(prevState => ({
       errors: update(prevState.errors, {
@@ -98,7 +105,7 @@ class Register extends React.Component {
                 <Link to="/login">Have an account?</Link>
               </p>
 
-              <form onSubmit={this.submitForm(username, email, password)}>
+              <form onSubmit={event => this.submitForm(event)}>
                 <fieldset>
                   <fieldset className="form-group">
                     <label htmlFor="fullNameInput" className="form-group-label">
