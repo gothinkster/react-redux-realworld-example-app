@@ -15,10 +15,10 @@ import {
   SETTINGS_PAGE_UNLOADED,
   LOGIN_PAGE_UNLOADED,
   REGISTER_PAGE_UNLOADED
-} from '../constants/actionTypes';
+} from "../constants/actionTypes";
 
 const defaultState = {
-  appName: 'Conduit',
+  appName: "Conduit",
   token: null,
   viewChangeCounter: 0
 };
@@ -35,26 +35,34 @@ export default (state = defaultState, action) => {
     case REDIRECT:
       return { ...state, redirectTo: null };
     case LOGOUT:
-      return { ...state, redirectTo: '/', token: null, currentUser: null };
+      return { ...state, redirectTo: "/", token: null, currentUser: null };
     case ARTICLE_SUBMITTED:
       const redirectUrl = `/article/${action.payload.article.slug}`;
       return { ...state, redirectTo: redirectUrl };
     case SETTINGS_SAVED:
       return {
         ...state,
+<<<<<<< HEAD
         redirectTo: action.payload.error ? null : '/',
+=======
+        redirectTo: action.payload.error ? null : "/",
+>>>>>>> d004279c29e45d92a139d098e5abca735ab51eb2
         currentUser: action.payload.error ? null : action.payload.user
       };
     case LOGIN:
     case REGISTER:
       return {
         ...state,
+<<<<<<< HEAD
         redirectTo: action.payload.error ? null : '/',
+=======
+        redirectTo: action.payload.error ? null : "/",
+>>>>>>> d004279c29e45d92a139d098e5abca735ab51eb2
         token: action.payload.error ? null : action.payload.user.token,
         currentUser: action.payload.error ? null : action.payload.user
       };
     case DELETE_ARTICLE:
-      return { ...state, redirectTo: '/' };
+      return { ...state, redirectTo: "/" };
     case ARTICLE_PAGE_UNLOADED:
     case EDITOR_PAGE_UNLOADED:
     case HOME_PAGE_UNLOADED:
