@@ -12,17 +12,12 @@ const requests = {
 };
 
 export const SubmitArticle = (article, username) => {
-  //initialize favoritesCount for article to zero
   article["favoritesCount"] = 0;
-  //define slug (single string, dash delimited, uuid applied(append uuid at back-end))
   article["slug"] = article.title.replace(" ", "-");
-  //generate timeStamp for article
   article["createdAt"] = new Date().toISOString();
-  //append author data
   article["author"] = {
     username
   };
-  //sort, convert to lowercase, then remove duplicate tags
   article["tags"] = article["tags"]
     .sort()
     .map(tag => tag.toLowerCase())

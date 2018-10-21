@@ -15,7 +15,8 @@ class Editor extends React.Component {
       tags: [],
       type: "Tutorial",
       snippetInput: "",
-      snippets: []
+      snippets: [],
+      options: ["Tutorial", "Op-Ed", "Stack Overflow"]
     };
 
     this.updateField = this.updateField.bind(this);
@@ -137,11 +138,13 @@ class Editor extends React.Component {
                       name="type"
                       className="form-control"
                       value={type}
-                      onChange={this.updateField}
+                      onChange={event => this.updateField(event)}
                     >
-                      <option>Tutorial</option>
-                      <option>Op-Ed</option>
-                      <option>Stack Overflow Post</option>
+                      <option value="Tutorial">Tutorial</option>
+                      <option value="Op-Ed">Op-Ed</option>
+                      <option value="Stack Overflow Post">
+                        Stack Overflow Post
+                      </option>
                     </select>
                   </fieldset>
 
@@ -155,7 +158,7 @@ class Editor extends React.Component {
                       type="text"
                       name="url"
                       value={url}
-                      onChange={this.updateField}
+                      onChange={event => this.updateField(event)}
                     />
                   </fieldset>
 
@@ -169,7 +172,7 @@ class Editor extends React.Component {
                       className="form-control form-control-lg"
                       type="text"
                       value={title}
-                      onChange={this.updateField}
+                      onChange={event => this.updateField(event)}
                     />
                   </fieldset>
 
@@ -187,7 +190,7 @@ class Editor extends React.Component {
                         className="form-control"
                         rows="8"
                         value={summary}
-                        onChange={this.updateField}
+                        onChange={event => this.updateField(event)}
                       />
                     </fieldset>
                   ) : null}
@@ -263,7 +266,7 @@ class Editor extends React.Component {
                           return (
                             <span
                               className="tag-default tag-pill"
-                              key={`tag${index}`}
+                              key={`${tag}${index}`}
                             >
                               <i
                                 className="ion-close-round"

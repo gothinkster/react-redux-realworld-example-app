@@ -42,22 +42,14 @@ export default (state = defaultState, action) => {
     case SETTINGS_SAVED:
       return {
         ...state,
-<<<<<<< HEAD
-        redirectTo: action.payload.error ? null : '/',
-=======
         redirectTo: action.payload.error ? null : "/",
->>>>>>> d004279c29e45d92a139d098e5abca735ab51eb2
         currentUser: action.payload.error ? null : action.payload.user
       };
     case LOGIN:
     case REGISTER:
       return {
         ...state,
-<<<<<<< HEAD
-        redirectTo: action.payload.error ? null : '/',
-=======
         redirectTo: action.payload.error ? null : "/",
->>>>>>> d004279c29e45d92a139d098e5abca735ab51eb2
         token: action.payload.error ? null : action.payload.user.token,
         currentUser: action.payload.error ? null : action.payload.user
       };

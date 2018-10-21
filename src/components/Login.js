@@ -59,7 +59,7 @@ class Login extends React.Component {
                       type="email"
                       placeholder="Email"
                       value={email}
-                      onChange={this.changeEmail}
+                      onChange={event => this.changeEmail(event)}
                     />
                   </fieldset>
 
@@ -69,7 +69,7 @@ class Login extends React.Component {
                       type="password"
                       placeholder="Password"
                       value={password}
-                      onChange={this.changePassword}
+                      onChange={event => this.changePassword(event)}
                     />
                   </fieldset>
 

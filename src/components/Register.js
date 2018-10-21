@@ -1,14 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 import agent from "../agent";
-import update from "immutability-helper";
-import {
-  firstNamePattern,
-  lastNamePattern,
-  usernamePattern,
-  passwordPattern,
-  emailPattern
-} from "../helpers/patterns";
+import patterns from "../helpers/patterns";
 
 class Register extends React.Component {
   constructor() {
@@ -18,23 +11,17 @@ class Register extends React.Component {
       fields: {
         firstName: "",
         lastName: "",
+        fullName: "",
         username: "",
         email: "",
         password: ""
-      },
-      errors: {
-        firstName: false,
-        lastName: false,
-        username: false,
-        email: false,
-        password: false
       }
     };
 
     this.isDisabled = this.isDisabled.bind(this);
     this.submitForm = this.submitForm.bind(this);
-    this.updateFields = this.updateFields.bind(this);
-    this.validateFields = this.validateFields.bind(this);
+    this.updateField = this.updateField.bind(this);
+    this.isInvalidField = this.isInvalidField.bind(this);
     this.updateNameField = this.updateNameField.bind(this);
     this.submitForm = this.submitForm.bind(this);
   }
@@ -47,64 +34,52 @@ class Register extends React.Component {
     agent.Auth.register(username, email, password);
   }
 
-  validateFields(key, value) {
-    const patterns = {
-      firstName: firstNamePattern,
-      lastName: lastNamePattern,
-      username: usernamePattern,
-      password: passwordPattern,
-      email: emailPattern
-    };
-    this.setState(prevState => ({
-      errors: update(prevState.errors, {
-        [key]: { $set: !patterns[key].test(value) }
-      })
-    }));
-  }
-
-  updateNameField(event) {
-    const nameArr = event.target.value.split(" ", 2);
-    this.setState(prevState => ({
-      fields: update(prevState.fields, {
-        firstName: { $set: nameArr[0] },
-        lastName: { $set: nameArr[1] }
-      })
-    }));
-    this.validateFields("firstName", nameArr[0]);
-    this.validateFields("lastName", nameArr[1] || "");
-  }
-
-  updateFields(event) {
-    const { name, value } = event.target;
-    this.setState(prevState => ({
-      fields: update(prevState.fields, { [name]: { $set: value } })
-    }));
-    this.validateFields(name, value);
-  }
-
-  isDisabled() {
-    const { fields, errors } = this.state;
-    for (var key in fields) {
-      if (errors[key] === true || fields[key].length === 0) {
-        return true;
-      }
+  isInvalidField(key) {
+    const { fields } = this.state;
+    const pattern = patterns[`${key}Pattern`];
+    if (fields[key].length > 0) {
+      return !pattern.test(fields[key]);
     }
     return false;
   }
 
+  updateNameField(event) {
+    const { value } = event.target;
+    const nameArr = value.split(" ", 2);
+    this.setState(prevState => ({
+      fields: {
+        ...prevState.fields,
+        fullName: value,
+        firstName: nameArr[0],
+        lastName: nameArr[1] || ""
+      }
+    }));
+  }
 
+  updateField(event) {
+    const { name, value } = event.target;
+    this.setState(prevState => ({
+      fields: { ...prevState.fields, [name]: value }
+    }));
+  }
 
-  changeFullName(event) {
-    const nameArr = event.target.value.split(" ", 2);
-    this.props.onChangeFirstName(nameArr[0]);    
-    this.props.onChangeLastName(nameArr[1] || "");
+  isDisabled() {
+    const { fields } = this.state;
+    let bool = false;
+    for (var key in fields) {
+      if (fields[key].length === 0 || this.isInvalidField(key)) {
+        bool = true;
+      }
+    }
+    return bool;
   }
 
   render() {
-    const { email, password, username, errors, fullName } = this.state;
+    const {
+      fields: { fullName, email, password, username }
+    } = this.state;
 
     return (
-
       <div className="auth-page">
         <div className="container page">
           <div className="row">
@@ -120,8 +95,7 @@ class Register extends React.Component {
                     <label htmlFor="fullNameInput" className="form-group-label">
                       Full Name
                     </label>
-                    {(errors.firstName === true ||
-                      errors.lastName === true) && (
+                    {this.isInvalidField("fullName") && (
                       <span className="error">
                         Must contain first and last name
                       </span>
@@ -132,7 +106,7 @@ class Register extends React.Component {
                       type="text"
                       name="fullName"
                       value={fullName}
-                      onChange={this.updateNameField}
+                      onChange={event => this.updateNameField(event)}
                     />
                   </fieldset>
 
@@ -140,7 +114,7 @@ class Register extends React.Component {
                     <label htmlFor="usernameInput" className="form-group-label">
                       Username
                     </label>
-                    {errors.username && (
+                    {this.isInvalidField("username") && (
                       <span className="error">
                         username must be at least five characters
                       </span>
@@ -151,7 +125,7 @@ class Register extends React.Component {
                       name="username"
                       type="text"
                       value={username}
-                      onChange={this.updateFields}
+                      onChange={this.updateField}
                     />
                   </fieldset>
 
@@ -159,7 +133,7 @@ class Register extends React.Component {
                     <label className="form-group-label" htmlFor="email">
                       Email
                     </label>
-                    {errors.email && (
+                    {this.isInvalidField("email") && (
                       <span className="error">
                         Make sure to enter a valid e-mail
                       </span>
@@ -170,7 +144,7 @@ class Register extends React.Component {
                       className="form-control form-control-lg"
                       type="email"
                       value={email}
-                      onChange={this.updateFields}
+                      onChange={this.updateField}
                     />
                   </fieldset>
 
@@ -178,7 +152,7 @@ class Register extends React.Component {
                     <label className="form-group-label" htmlFor="passwordInput">
                       Password
                     </label>
-                    {errors.password && (
+                    {this.isInvalidField("password") && (
                       <span className="error">
                         Password must be at least eight characters
                       </span>
@@ -189,7 +163,7 @@ class Register extends React.Component {
                       className="form-control form-control-lg"
                       type="password"
                       value={password}
-                      onChange={this.updateFields}
+                      onChange={this.updateField}
                     />
                   </fieldset>
 
