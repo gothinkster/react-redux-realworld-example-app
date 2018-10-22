@@ -1,5 +1,10 @@
-export const firstNamePattern = /^\D+$/;
-export const lastNamePattern = /^\D+$/;
-export const usernamePattern = /^\w{5,}$/;
-export const passwordPattern = /^.{8,}$/;
-export const emailPattern = /^[\w.]+@\w+.\w+$/;
+const patterns = {
+  firstNamePattern: /^\D+$/,
+  lastNamePattern: /^\D+$/,
+  fullNamePattern: /^\D+\s\D+$/,
+  usernamePattern: /^\w{5,}$/,
+  passwordPattern: /^.{8,}$/,
+  emailPattern: /^[\w.]+@\w+.\w+$/
+};
+
+export default patterns;
