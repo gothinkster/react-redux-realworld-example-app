@@ -13,7 +13,20 @@ const requests = {
     superagent.get(`${API_ROOT}${url}`, body).then(responseBody)
 };
 
-export const SubmitArticle = article => {
+export const SubmitArticle = (article, username) => {
+  article["favoritesCount"] = 0;
+  article["slug"] = article.title.replace(" ", "-");
+  article["createdAt"] = new Date().toISOString();
+  article["author"] = {
+    username
+  };
+  article["tags"] = article["tags"]
+    .sort()
+    .map(tag => tag.toLowerCase())
+    .filter((tag, index, arr) => {
+      return !index || tag !== arr[index - 1];
+    });
+
   requests.post("/article/submit", article);
 };
 
@@ -21,7 +34,17 @@ export const fetchArticles = pageNumber => {
   //return up to ten articles based on their index in the database
   return requests.get(`/articles/${pageNumber}`).then(
     result => {
-      console.log(result);
+      return result;
+    },
+    err => {
+      return err;
+    }
+  );
+};
+
+export const getArticle = uuid => {
+  return requests.get(`/article/${uuid}`).then(
+    result => {
       return result;
     },
     err => {
