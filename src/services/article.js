@@ -31,12 +31,12 @@ export const SubmitArticle = (article, username) => {
 };
 
 export const fetchAllTags = () => {
-  requests.get("/tags/all").then(
+  return requests.get("/tags/all").then(
     result => {
-      console.log(result);
+      return result;
     },
     error => {
-      console.log(error);
+      return error;
     }
   );
 };
