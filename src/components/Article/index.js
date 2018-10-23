@@ -23,12 +23,17 @@ class Article extends React.Component {
   constructor() {
     super();
     this.state = {
-      article: {}
+      article: {
+        author: {
+          username: ""
+        },
+        summary: "",
+        type: "",
+        snippets: ["a"]
+      }
     };
   }
   componentWillMount() {
-    console.log(window.location.href);
-
     /*
     this.props.onLoad(Promise.all([
       //agent.Articles.get(this.props.match.params.id),
@@ -50,7 +55,6 @@ class Article extends React.Component {
     );
 
     fetchArticle.then(result => {
-      console.log(result);
       this.setState({ article: result });
     });
   }
@@ -64,7 +68,7 @@ class Article extends React.Component {
     if (!article) {
       return null;
     }
-    console.log(article);
+
     return (
       <div>
         <div className="article-page">
@@ -78,6 +82,12 @@ class Article extends React.Component {
           <div>Link: {article.url}</div>
           <div>{article.type}</div>
           <div>{article.summary}</div>
+          <div>Submitted by {article.author.username}</div>
+          {article.snippets &&
+            article.snippets.length > 0 &&
+            article.snippets.map((snippet, index) => {
+              <div>snippet</div>;
+            })}
         </div>
       </div>
     );
