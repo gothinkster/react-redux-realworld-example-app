@@ -68,7 +68,7 @@ class Article extends React.Component {
     if (!article) {
       return null;
     }
-
+    console.log(typeof article.snippets[0]);
     return (
       <div>
         <div className="article-page">
@@ -79,15 +79,23 @@ class Article extends React.Component {
           </div>
         </div>
         <div className="container page">
-          <div>Link: {article.url}</div>
+          <div>
+            Link: <a href={article.url}>{article.url}</a>
+          </div>
           <div>{article.type}</div>
           <div>{article.summary}</div>
-          <div>Submitted by {article.author.username}</div>
+          <div className="author-container">
+            Submitted by {article.author.username}
+          </div>
           {article.snippets &&
-            article.snippets.length > 0 &&
-            article.snippets.map((snippet, index) => {
-              <div>snippet</div>;
-            })}
+            article.snippets.length > 0 && (
+              <div className="snippet-container">
+                {" "}
+                {article.snippets.map((snippet, index) => {
+                  return <span className="snippet-span">{snippet}</span>;
+                })}
+              </div>
+            )}
         </div>
       </div>
     );
