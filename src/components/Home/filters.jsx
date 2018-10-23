@@ -1,60 +1,5 @@
 import React from "react";
-import agent from "../../agent";
 import { fetchAllTags } from "../../services/article";
-
-export const YourFeedTab = props => {
-  if (props.token) {
-    const clickHandler = ev => {
-      ev.preventDefault();
-      props.onTabClick("feed", agent.Articles.feed, agent.Articles.feed());
-    };
-
-    return (
-      <li className="nav-item">
-        <a
-          href=""
-          className={props.tab === "feed" ? "nav-link active" : "nav-link"}
-          onClick={clickHandler}
-        >
-          Your Feed
-        </a>
-      </li>
-    );
-  }
-  return null;
-};
-
-export const GlobalFeedTab = props => {
-  const clickHandler = ev => {
-    ev.preventDefault();
-    props.onTabClick("all", agent.Articles.all, agent.Articles.all());
-  };
-  return (
-    <li className="nav-item">
-      <a
-        href=""
-        className={props.tab === "all" ? "nav-link active" : "nav-link"}
-        onClick={clickHandler}
-      >
-        Global Feed
-      </a>
-    </li>
-  );
-};
-
-export const TagFilterTab = props => {
-  if (!props.tag) {
-    return null;
-  }
-
-  return (
-    <li className="nav-item">
-      <a href="" className="nav-link active">
-        <i className="ion-pound" /> {props.tag}
-      </a>
-    </li>
-  );
-};
 
 export class Filters extends React.Component {
   constructor() {
@@ -100,18 +45,18 @@ export class Filters extends React.Component {
     return (
       <div>
         <button
-          className="btn btn-sm btn-primary"
+          className="btn btn-sm btn-primary blockBtn"
           type="button"
           onClick={this.toggleFilters}
         >
           Toggle Filters
         </button>
 
-        {filtersActive && (
-          <ul className="list-unstyled toggleUL">
+        {filtersActive ? (
+          <React.Fragment>
             {tags.map((tag, index) => {
               return (
-                <li key={`${tag}${index}`}>
+                <div key={`${tag}${index}`} className="filter-container">
                   <form className="form-inline">
                     <label className="checkbox" htmlFor={`${tag}Checkbox`}>
                       <input
@@ -124,11 +69,11 @@ export class Filters extends React.Component {
                       {tag.name}
                     </label>
                   </form>
-                </li>
+                </div>
               );
             })}
-          </ul>
-        )}
+          </React.Fragment>
+        ) : null}
       </div>
     );
   }

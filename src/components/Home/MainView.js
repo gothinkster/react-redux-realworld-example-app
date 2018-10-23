@@ -2,7 +2,7 @@ import ArticleList from "../ArticleList";
 import React from "react";
 import { connect } from "react-redux";
 import { CHANGE_TAB } from "../../constants/actionTypes";
-import { YourFeedTab, GlobalFeedTab, TagFilterTab, Filters } from "./filters";
+import { Filters } from "./filters";
 
 const mapStateToProps = state => ({
   ...state.articleList,
@@ -18,23 +18,7 @@ const mapDispatchToProps = dispatch => ({
 const MainView = props => {
   return (
     <div className="col-md-9">
-      <div>
-        <Filters />
-      </div>
-      <div className="feed-toggle">
-        <ul className="nav nav-pills outline-active">
-          <YourFeedTab
-            token={props.token}
-            tab={props.tab}
-            onTabClick={props.onTabClick}
-          />
-
-          <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
-
-          <TagFilterTab tag={props.tag} />
-        </ul>
-      </div>
-      <div />
+      <Filters />
       <ArticleList
         pager={props.pager}
         articles={props.articles}
