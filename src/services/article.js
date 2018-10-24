@@ -30,6 +30,38 @@ export const SubmitArticle = (article, username) => {
   requests.post("/article/submit", article);
 };
 
+export const fetchArticles = pageNumber => {
+  return requests.get(`/articles/${pageNumber}`).then(
+    result => {
+      return result;
+    },
+    error => {
+      return error;
+    }
+  );
+};
+
+export const getArticle = uuid => {
+  return requests.get(`/article/${uuid}`).then(
+    result => {
+      return result;
+    },
+    error => {
+      return error;
+    }
+  );
+};
+
+export const getArticleCount = () => {
+  return requests.get("/article/count").then(
+    result => {
+      return result;
+    },
+    error => {
+      return error;
+    }
+  );
+};
 export const fetchAllTags = () => {
   return requests.get("/tags/all").then(
     result => {
