@@ -25,14 +25,7 @@ class Article extends React.Component {
     this.state = {
       loading: true,
       errorLoading: false,
-      article: {
-        author: {
-          username: ""
-        },
-        summary: "",
-        type: "",
-        snippets: [""]
-      }
+      article: {}
     };
   }
 
@@ -43,9 +36,7 @@ class Article extends React.Component {
             .match(/\/\d+$/)[0]
             .slice(1, window.location.href.match(/\/\d+$/)[0].length)
         : null;
-    console.log(uuid);
-    console.log(typeof uuid);
-    if (uuid !== "null") {
+    if (uuid !== null) {
       const fetchArticle = new Promise(resolve => {
         resolve(getArticle(uuid));
       });
@@ -86,17 +77,18 @@ class Article extends React.Component {
                   <p className="author-container">
                     Submitted by {article.author.username}
                   </p>
-                  {article.snippets &&
-                    article.snippets.length > 0 && (
-                      <p className="snippet-container">
-                        {" "}
-                        {article.snippets.map((snippet, index) => {
-                          return (
-                            <span className="snippet-span">{snippet}</span>
-                          );
-                        })}
-                      </p>
-                    )}
+                  {article.snippets && (
+                    <p className="snippet-container">
+                      {" "}
+                      {article.snippets.map((snippet, index) => {
+                        return (
+                          <span className="snippet-span" key={index}>
+                            {snippet}
+                          </span>
+                        );
+                      })}
+                    </p>
+                  )}
                 </React.Fragment>
               )}
           </div>

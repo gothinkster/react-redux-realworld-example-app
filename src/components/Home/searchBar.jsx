@@ -25,7 +25,7 @@ class SearchBar extends React.Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <input
           type="text"
           name="searchInput"
@@ -35,7 +35,7 @@ class SearchBar extends React.Component {
           placeholder="Enter Search parameters"
         />
         <input type="button" onClick={this.search} value="search" />
-      </div>
+      </React.Fragment>
     );
   }
 }
