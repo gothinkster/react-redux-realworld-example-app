@@ -3,6 +3,7 @@ import React from "react";
 import agent from "../../agent";
 import { connect } from "react-redux";
 import { CHANGE_TAB } from "../../constants/actionTypes";
+import SearchBar from "./searchBar";
 
 const YourFeedTab = props => {
   if (props.token) {
@@ -72,6 +73,7 @@ const mapDispatchToProps = dispatch => ({
 const MainView = props => {
   return (
     <div className="col-md-9">
+      <SearchBar />
       <div className="feed-toggle">
         <ul className="nav nav-pills outline-active">
           <YourFeedTab

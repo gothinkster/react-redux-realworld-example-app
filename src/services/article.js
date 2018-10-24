@@ -27,3 +27,11 @@ export const SubmitArticle = (article, username) => {
 
   requests.post("/article/submit", article);
 };
+
+export const searchArticles = searchInput => {
+  const searchTerms = searchInput.split(" ");
+  if (searchTerms !== null) {
+    return requests.post("/search", searchTerms);
+  }
+  return "Please enter a search term";
+};
