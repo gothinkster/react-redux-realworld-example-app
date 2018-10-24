@@ -210,7 +210,7 @@ class Editor extends React.Component {
                         value={snippetInput}
                         rows={4}
                         onChange={this.updateField}
-                        onKeyUp={this.watchForEnter}
+                        onKeyUp={event => this.watchForEnter(event)}
                       />
                       <div>
                         {snippets.length > 0 &&

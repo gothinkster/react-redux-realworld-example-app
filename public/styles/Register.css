@@ -1,5 +1,12 @@
 .error {
-  float: right;
   color: #ff0000;
   font-size: 0.75rem;
+}
+
+.float-right {
+  float: right;
+}
+
+br {
+  line-height: 1.5;
 }

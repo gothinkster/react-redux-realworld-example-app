@@ -30,8 +30,24 @@ export const SubmitArticle = (article, username) => {
 
 export const searchArticles = searchInput => {
   const searchTerms = searchInput.split(" ");
-  if (searchTerms !== null) {
-    return requests.post("/search", searchTerms);
+  for (var i = 0; i < searchTerms.length; i++) {
+    if (searchTerms[i].charAt(0) === '"' && i + 1 < searchTerms.length) {
+      let foundClosingTag = false;
+      let j = i + 1;
+      do {
+        if (searchTerms[j].charAt(searchTerms[j].length - 1) === '"') {
+          searchTerms[i] += ` ${searchTerms[j].substr(
+            0,
+            searchTerms[j].length - 1
+          )}`;
+          foundClosingTag = true;
+        } else {
+          searchTerms[i] += ` ${searchTerms[j]}`;
+        }
+        delete searchTerms[j];
+        j++;
+      } while (!foundClosingTag);
+    }
   }
-  return "Please enter a search term";
+  return requests.post("/search", searchTerms);
 };
