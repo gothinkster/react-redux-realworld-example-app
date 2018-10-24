@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import ArticleList from "../ArticleList";
-import agent from "../../agent";
 import { getArticleCount, fetchArticles } from "../../services/article";
 
 import { CHANGE_TAB } from "../../constants/actionTypes";
@@ -63,12 +62,7 @@ class MainView extends React.Component {
     const { articles, articlesCount } = this.state;
     return (
       <div className="col-md-9">
-        <div className="feed-toggle">
-          <ul className="nav nav-pills outline-active">
-            <TagFilterTab tag={tag} />
-          </ul>
-        </div>
-
+        <Filters />
         <ArticleList
           pager={pager}
           articles={articles}

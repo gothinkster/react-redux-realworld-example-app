@@ -31,15 +31,13 @@ export const SubmitArticle = (article, username) => {
 };
 
 export const fetchArticles = pageNumber => {
-  return new Promise(
-    requests.get(`/articles/${pageNumber}`).then(
-      result => {
-        return result;
-      },
-      error => {
-        return error;
-      }
-    )
+  return requests.get(`/articles/${pageNumber}`).then(
+    result => {
+      return result;
+    },
+    error => {
+      return error;
+    }
   );
 };
 
