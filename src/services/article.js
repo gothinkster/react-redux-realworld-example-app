@@ -64,3 +64,13 @@ export const getArticleCount = () => {
     }
   );
 };
+export const fetchAllTags = () => {
+  return requests.get("/tags/all").then(
+    result => {
+      return result;
+    },
+    error => {
+      return error;
+    }
+  );
+};
