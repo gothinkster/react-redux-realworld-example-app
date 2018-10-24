@@ -43,7 +43,7 @@ export class Filters extends React.Component {
   render() {
     const { filtersActive, tags } = this.state;
     return (
-      <div>
+      <React.Fragment>
         <button
           className="btn btn-sm btn-primary blockBtn"
           type="button"
@@ -74,7 +74,7 @@ export class Filters extends React.Component {
             })}
           </React.Fragment>
         ) : null}
-      </div>
+      </React.Fragment>
     );
   }
 }
