@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import ArticleList from "../ArticleList";
 import agent from "../../agent";
-import { getArticleCount, fetchArticles } from "../services/article";
+import { getArticleCount, fetchArticles } from "../../services/article";
 
 import { CHANGE_TAB } from "../../constants/actionTypes";
 

@@ -31,14 +31,15 @@ export const SubmitArticle = (article, username) => {
 };
 
 export const fetchArticles = pageNumber => {
-  //return up to ten articles based on their index in the database
-  return requests.get(`/articles/${pageNumber}`).then(
-    result => {
-      return result;
-    },
-    err => {
-      return err;
-    }
+  return new Promise(
+    requests.get(`/articles/${pageNumber}`).then(
+      result => {
+        return result;
+      },
+      error => {
+        return error;
+      }
+    )
   );
 };
 
@@ -47,20 +48,19 @@ export const getArticle = uuid => {
     result => {
       return result;
     },
-    err => {
-      return err;
+    error => {
+      return error;
     }
   );
 };
 
 export const getArticleCount = () => {
-  //return the number of articles in the database
   return requests.get("/article/count").then(
     result => {
       return result;
     },
-    err => {
-      return err;
+    error => {
+      return error;
     }
   );
 };
