@@ -33,27 +33,49 @@ export const SubmitArticle = (article, username) => {
 export const loadArticles = currentPage => {};
 
 export const searchArticles = searchInput => {
-  const searchTerms = searchInput.split(" ");
+  const removeOpeningQuote = term => {
+    return term.substr(1, term.length - 1);
+  };
+
+  const removeClosingQuote = term => {
+    return term.substr(0, term.length - 2);
+  };
+
+  let searchTerms = searchInput.split(" ");
   for (let i = 0; i < searchTerms.length; i++) {
-    if (searchTerms[i].charAt(0) === '"' && i + 1 < searchTerms.length) {
-      let foundClosingTag = false;
-      let j = i + 1;
-      do {
-        if (searchTerms[j].charAt(searchTerms[j].length - 1) === '"') {
-          searchTerms[i] += ` ${searchTerms[j].substr(
-            0,
-            searchTerms[j].length - 1
-          )}`;
-          foundClosingTag = true;
-        } else {
-          searchTerms[i] += ` ${searchTerms[j]}`;
-        }
-        delete searchTerms[j];
-        j++;
-      } while (!foundClosingTag);
+    if (searchTerms[i] && searchTerms[i].charAt(0) === '"') {
+      searchTerms[i] = removeOpeningQuote(searchTerms[i]);
+      if (searchTerms[i].charAt(searchTerms[i].length - 1) === '"') {
+        searchTerms[i] = removeClosingQuote(searchTerms[i]);
+      } else if (i + 1 < searchTerms.length) {
+        let foundClosingTag = false;
+        let j = i + 1;
+        do {
+          if (searchTerms[j].charAt(searchTerms[j].length - 1) === '"') {
+            searchTerms[i] += ` ${removeClosingQuote(searchTerms[j])}`;
+            foundClosingTag = true;
+          } else {
+            searchTerms[i] += ` ${searchTerms[j]}`;
+          }
+          delete searchTerms[j];
+          j++;
+        } while (!foundClosingTag);
+      }
     }
   }
-  return requests.post("/search", searchTerms);
+
+  searchTerms = searchTerms.filter(searchTerm => {
+    return searchTerm !== undefined;
+  });
+
+  return requests.post("/search", searchTerms).then(
+    result => {
+      return result;
+    },
+    error => {
+      return error;
+    }
+  );
 };
 
 export const fetchArticles = pageNumber => {

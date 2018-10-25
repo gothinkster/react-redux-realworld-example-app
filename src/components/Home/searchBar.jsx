@@ -1,6 +1,11 @@
 import React from "react";
-
+import { connect } from "react-redux";
 import { searchArticles } from "../../services/article";
+import { LOAD } from "../../constants/actionTypes";
+
+const mapDispatchToProps = dispatch => ({
+  load: articles => dispatch({ type: LOAD, payload: articles })
+});
 
 class SearchBar extends React.Component {
   constructor() {
@@ -19,19 +24,17 @@ class SearchBar extends React.Component {
   watchForEnter(event) {
     event.preventDefault();
     if (event.keyCode === 13) {
-      console.log(event.target.value);
       this.checkForErrors(event.target.value);
     }
   }
 
-  search() {
-    const { searchInput } = this.state;
+  search(searchInput) {
     const mySearch = new Promise(resolve => {
       resolve(searchArticles(searchInput));
     });
 
     mySearch.then(results => {
-      console.log(results);
+      this.props.load(results);
     });
   }
 
@@ -40,13 +43,16 @@ class SearchBar extends React.Component {
     this.setState({ [name]: value });
   }
 
-  checkForErrors(value) {
-    console.log(value);
-    if (value.length > 0) {
-      if (value.match(/"/g) !== null && value.match(/"/g).length % 2 !== 0) {
+  checkForErrors() {
+    const { searchInput } = this.state;
+    if (searchInput.length > 0) {
+      if (
+        searchInput.match(/"/g) !== null &&
+        searchInput.match(/"/g).length % 2 !== 0
+      ) {
         this.setState({ error: "Quote must be used as a pair" });
       } else {
-        this.search();
+        this.search(searchInput);
       }
     } else {
       this.setState({ error: "Cannot enter blank search term" });
@@ -87,4 +93,7 @@ class SearchBar extends React.Component {
   }
 }
 
-export default SearchBar;
+export default connect(
+  null,
+  mapDispatchToProps
+)(SearchBar);

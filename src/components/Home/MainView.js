@@ -41,14 +41,9 @@ class MainView extends React.Component {
       }
     );
 
-    const getArticles = new Promise(
-      resolve => {
-        resolve(fetchArticles(currentPage));
-      },
-      reject => {
-        console.log(reject);
-      }
-    );
+    const getArticles = new Promise(resolve => {
+      resolve(fetchArticles(currentPage));
+    });
 
     getCount.then(result => {
       this.setState({ articlesCount: result.count });
