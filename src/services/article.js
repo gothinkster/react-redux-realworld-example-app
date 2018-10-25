@@ -30,6 +30,8 @@ export const SubmitArticle = (article, username) => {
   requests.post("/article/submit", article);
 };
 
+export const loadArticles = currentPage => {};
+
 export const searchArticles = searchInput => {
   const searchTerms = searchInput.split(" ");
   for (let i = 0; i < searchTerms.length; i++) {
