@@ -3,6 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { CHANGE_TAB } from "../../constants/actionTypes";
 import { Filters } from "./filters";
+import SearchBar from "./searchBar";
 
 const mapStateToProps = state => ({
   ...state.articleList,
@@ -18,14 +19,21 @@ const mapDispatchToProps = dispatch => ({
 const MainView = props => {
   return (
     <div className="col-md-9">
-      <Filters />
-      <ArticleList
-        pager={props.pager}
-        articles={props.articles}
-        loading={props.loading}
-        articlesCount={props.articlesCount}
-        currentPage={props.currentPage}
-      />
+      <div className="row">
+        <SearchBar />
+      </div>
+      <div className="row">
+        <Filters />
+      </div>
+      <div className="row">
+        <ArticleList
+          pager={props.pager}
+          articles={props.articles}
+          loading={props.loading}
+          articlesCount={props.articlesCount}
+          currentPage={props.currentPage}
+        />
+      </div>
     </div>
   );
 };
