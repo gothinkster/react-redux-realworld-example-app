@@ -32,14 +32,9 @@ class MainView extends React.Component {
 
   componentDidMount() {
     const { currentPage } = this.props;
-    const getCount = new Promise(
-      resolve => {
-        resolve(getArticleCount());
-      },
-      reject => {
-        console.log(reject);
-      }
-    );
+    const getCount = new Promise(resolve => {
+      resolve(getArticleCount());
+    });
 
     const getArticles = new Promise(resolve => {
       resolve(fetchArticles(currentPage));
@@ -51,7 +46,6 @@ class MainView extends React.Component {
 
     getArticles.then(result => {
       const { articles } = result;
-      console.log(result.articles);
       this.props.load(articles);
     });
   }

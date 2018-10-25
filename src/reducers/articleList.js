@@ -17,7 +17,6 @@ import {
 export default (state = {}, action) => {
   switch (action.type) {
     case LOAD:
-      console.log(action);
       return {
         ...state,
         articles: action.payload
