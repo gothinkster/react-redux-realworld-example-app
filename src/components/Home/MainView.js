@@ -63,20 +63,10 @@ class MainView extends React.Component {
     const { articles, articlesCount } = this.state;
     return (
       <div className="col-md-9">
+        <SearchBar />
+        <Filters />
         <div className="row">
-          <SearchBar />
-        </div>
-        <div className="row">
-          <Filters />
-        </div>
-        <div className="row">
-          <ArticleList
-            pager={props.pager}
-            articles={props.articles}
-            loading={props.loading}
-            articlesCount={props.articlesCount}
-            currentPage={props.currentPage}
-          />
+          <ArticleList articles={articles} articlesCount={articlesCount} />
         </div>
       </div>
     );

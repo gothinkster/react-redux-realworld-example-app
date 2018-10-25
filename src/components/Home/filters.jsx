@@ -44,13 +44,15 @@ export class Filters extends React.Component {
     const { filtersActive, tags } = this.state;
     return (
       <React.Fragment>
-        <button
-          className="btn btn-sm btn-primary blockBtn"
-          type="button"
-          onClick={this.toggleFilters}
-        >
-          Toggle Filters
-        </button>
+        <div className="row mt-5">
+          <button
+            className="btn btn-sm btn-primary blockBtn"
+            type="button"
+            onClick={this.toggleFilters}
+          >
+            Toggle Filters
+          </button>
+        </div>
 
         {filtersActive ? (
           <React.Fragment>

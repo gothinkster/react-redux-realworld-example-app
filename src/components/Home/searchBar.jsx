@@ -47,31 +47,30 @@ class SearchBar extends React.Component {
   render() {
     const { searchInput, error } = this.state;
     return (
-      <React.Fragment>
+      <div className="row">
         {error.length > 0 ? <div className="error">{error}</div> : <br />}
-        <div className="row">
-          <div className="col">
-            <input
-              type="text"
-              name="searchInput"
-              className="form-control form-control-sm"
-              value={searchInput}
-              onChange={event => this.inputField(event)}
-              onKeyUp={event => this.watchForEnter(event)}
-              placeholder="Enter Search parameters"
-              autoFocus
-            />
-          </div>
-          <div className="col">
-            <input
-              type="button"
-              className="btn btn-sm btn-primary pull-xs-right ml-5"
-              onClick={this.checkForErrors}
-              value="search"
-            />
-          </div>
+
+        <div className="col">
+          <input
+            type="text"
+            name="searchInput"
+            className="form-control form-control-sm"
+            value={searchInput}
+            onChange={event => this.inputField(event)}
+            onKeyUp={event => this.watchForEnter(event)}
+            placeholder="Enter Search parameters"
+            autoFocus
+          />
         </div>
-      </React.Fragment>
+        <div className="col">
+          <input
+            type="button"
+            className="btn btn-sm btn-primary pull-xs-right ml-5"
+            onClick={this.checkForErrors}
+            value="search"
+          />
+        </div>
+      </div>
     );
   }
 }
