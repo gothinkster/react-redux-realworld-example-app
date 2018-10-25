@@ -69,15 +69,10 @@ const ArticlePreview = props => {
       <span className="viewsCounter">This article has {views} views</span>
       <Link to={`/article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>
-        <p>{article.description}</p>
-        <span>Read more...</span>
         <ul className="tag-list">
-          {article.tagList.map((tag, index) => {
+          {article.tags.map(tag => {
             return (
-              <li
-                className="tag-default tag-pill tag-outline"
-                key={`${tag}${index}`}
-              >
+              <li className="tag-default tag-pill tag-outline" key={`${tag}`}>
                 {tag}
               </li>
             );

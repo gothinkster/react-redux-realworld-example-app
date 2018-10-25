@@ -20,7 +20,7 @@ export const SubmitArticle = (article, username) => {
   article["author"] = {
     username
   };
-  article["tags"] = article["tags"]
+  article.tags = article.tags
     .sort()
     .map(tag => tag.toLowerCase())
     .filter((tag, index, arr) => {
@@ -32,7 +32,7 @@ export const SubmitArticle = (article, username) => {
 
 export const searchArticles = searchInput => {
   const searchTerms = searchInput.split(" ");
-  for (var i = 0; i < searchTerms.length; i++) {
+  for (let i = 0; i < searchTerms.length; i++) {
     if (searchTerms[i].charAt(0) === '"' && i + 1 < searchTerms.length) {
       let foundClosingTag = false;
       let j = i + 1;
@@ -54,6 +54,38 @@ export const searchArticles = searchInput => {
   return requests.post("/search", searchTerms);
 };
 
+export const fetchArticles = pageNumber => {
+  return requests.get(`/articles/${pageNumber}`).then(
+    result => {
+      return result;
+    },
+    error => {
+      return error;
+    }
+  );
+};
+
+export const getArticle = uuid => {
+  return requests.get(`/article/${uuid}`).then(
+    result => {
+      return result;
+    },
+    error => {
+      return error;
+    }
+  );
+};
+
+export const getArticleCount = () => {
+  return requests.get("/article/count").then(
+    result => {
+      return result;
+    },
+    error => {
+      return error;
+    }
+  );
+};
 export const fetchAllTags = () => {
   return requests.get("/tags/all").then(
     result => {
