@@ -8,7 +8,9 @@ const responseBody = res => res.body;
 
 const requests = {
   post: (url, body) =>
-    superagent.post(`${API_ROOT}${url}`, body).then(responseBody)
+    superagent.post(`${API_ROOT}${url}`, body).then(responseBody),
+  get: (url, body) =>
+    superagent.get(`${API_ROOT}${url}`, body).then(responseBody)
 };
 
 export const SubmitArticle = (article, username) => {
@@ -50,5 +52,15 @@ export const searchArticles = searchInput => {
     }
   }
   return requests.post("/search", searchTerms);
-  0;
+};
+
+export const fetchAllTags = () => {
+  return requests.get("/tags/all").then(
+    result => {
+      return result;
+    },
+    error => {
+      return error;
+    }
+  );
 };
