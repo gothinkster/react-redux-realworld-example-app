@@ -50,4 +50,5 @@ export const searchArticles = searchInput => {
     }
   }
   return requests.post("/search", searchTerms);
+  0;
 };
