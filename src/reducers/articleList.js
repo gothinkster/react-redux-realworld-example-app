@@ -10,8 +10,7 @@ import {
   PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_LOADED,
   PROFILE_FAVORITES_PAGE_UNLOADED,
-  LOAD,
-  SEARCH
+  LOAD
 } from "../constants/actionTypes";
 
 export default (state = {}, action) => {
@@ -20,11 +19,6 @@ export default (state = {}, action) => {
       return {
         ...state,
         articles: action.payload
-      };
-
-    case SEARCH:
-      return {
-        ...state
       };
 
     case ARTICLE_FAVORITED:

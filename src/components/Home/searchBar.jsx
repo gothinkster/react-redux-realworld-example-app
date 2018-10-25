@@ -80,8 +80,7 @@ class SearchBar extends React.Component {
             />
           </div>
           <div className="col">
-            <input
-              type="button"
+            <button
               className="btn btn-sm btn-primary pull-xs-right ml-5"
               onClick={this.checkForErrors}
               value="search"
