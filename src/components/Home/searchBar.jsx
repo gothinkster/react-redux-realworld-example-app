@@ -83,8 +83,9 @@ class SearchBar extends React.Component {
             <button
               className="btn btn-sm btn-primary pull-xs-right ml-5"
               onClick={this.checkForErrors}
-              value="search"
-            />
+            >
+              Search
+            </button>
           </div>
         </div>
       </React.Fragment>
