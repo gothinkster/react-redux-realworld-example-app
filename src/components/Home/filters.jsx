@@ -18,13 +18,15 @@ export class Filters extends React.Component {
     });
 
     getTags.then(result => {
-      const tags = result.tags.map(item => {
-        return {
-          name: item,
-          selected: true
-        };
-      });
-      this.setState({ tags });
+      if (result.tags) {
+        const tags = result.tags.map(item => {
+          return {
+            name: item,
+            selected: true
+          };
+        });
+        this.setState({ tags });
+      }
     });
   }
 
