@@ -38,3 +38,4 @@ export const PROFILE_FAVORITES_PAGE_LOADED = "PROFILE_FAVORITES_PAGE_LOADED";
 export const ARTICLE_ADDVIEW = "ARTICLE_ADDVIEW";
 export const LOAD = "LOAD";
 export const LOAD_TAGS = "LOAD_TAGS";
+export const CHECK_TAG = "CHECK_TAG";

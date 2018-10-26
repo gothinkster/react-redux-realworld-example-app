@@ -9,9 +9,9 @@ import SearchBar from "./searchBar";
 
 const mapStateToProps = state => ({
   ...state.articleList,
-  tags: state.home.tags,
   token: state.common.token,
-  articles: state.articleList.articles
+  articles: state.articleList.articles,
+  tags: state.articleList.tags
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -28,6 +28,8 @@ class MainView extends React.Component {
       articlesCount: 0,
       articles: []
     };
+
+    this.filterArticles = this.filterArticles.bind(this);
   }
 
   componentDidMount() {
@@ -50,14 +52,48 @@ class MainView extends React.Component {
     });
   }
 
+  filterArticles() {
+    const { articles, tags } = this.props;
+
+    if (articles !== undefined && tags !== undefined) {
+      return articles.filter(article => {
+        for (var filterTag of tags) {
+          if (filterTag.selected) {
+            for (var tag of article.tags) {
+            }
+          }
+          console.log(filterTag);
+          return article;
+        }
+      });
+
+      /*
+      return articles.filter((article) => {        
+          for (var filterTag of tags) {
+            for (var articleTag of article.tags) {
+              if (filterTag === articleTag) {
+                return article;
+              }
+            }
+          }
+        }
+      )
+          */
+    } else {
+      return [];
+    }
+  }
+
   render() {
-    const { articles } = this.props;
     const { articlesCount } = this.state;
     return (
       <div className="col-md-12">
         <SearchBar />
         <Filters />
-        <ArticleList articles={articles} articlesCount={articlesCount} />
+        <ArticleList
+          articles={this.filterArticles()}
+          articlesCount={articlesCount}
+        />
       </div>
     );
   }
@@ -70,7 +106,8 @@ MainView.propTypes = {
   onTabClick: PropTypes.func.isRequired,
   tag: PropTypes.string,
   pager: PropTypes.func,
-  currentPage: PropTypes.number
+  currentPage: PropTypes.number,
+  tags: PropTypes.array
 };
 
 export default connect(

@@ -10,7 +10,9 @@ import {
   PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_LOADED,
   PROFILE_FAVORITES_PAGE_UNLOADED,
-  LOAD
+  LOAD,
+  LOAD_TAGS,
+  CHECK_TAG
 } from "../constants/actionTypes";
 
 export default (state = {}, action) => {
@@ -87,6 +89,21 @@ export default (state = {}, action) => {
     case PROFILE_PAGE_UNLOADED:
     case PROFILE_FAVORITES_PAGE_UNLOADED:
       return {};
+
+    case LOAD_TAGS:
+      return {
+        ...state,
+        tags: action.payload
+      };
+
+    case CHECK_TAG:
+      let { tags } = state;
+      tags[action.payload.index].selected = action.payload.value;
+
+      return {
+        ...state,
+        tags
+      };
     default:
       return state;
   }

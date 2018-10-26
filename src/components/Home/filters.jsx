@@ -1,14 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import { fetchAllTags } from "../../services/article";
-import { LOAD_TAGS } from "../../constants/actionTypes";
+import { LOAD_TAGS, CHECK_TAG } from "../../constants/actionTypes";
 
 const mapStateToProps = state => ({
-  tags: state.tags
+  tags: state.articleList.tags
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadTags: payload => dispatch({ type: LOAD_TAGS, payload })
+  loadTags: payload => dispatch({ type: LOAD_TAGS, payload }),
+  checkTag: payload => dispatch({ type: CHECK_TAG, payload })
 });
 
 class Filters extends React.Component {
@@ -32,20 +33,19 @@ class Filters extends React.Component {
         const tags = result.tags.map(item => {
           return {
             name: item,
-            selected: true
+            selected: false
           };
         });
         this.props.loadTags(tags);
-
-        //this.setState({ tags });
       }
     });
   }
 
   toggleFilter(event, index) {
-    const { tags } = this.state;
+    const { tags } = this.props;
     tags[index].selected = event.target.checked;
-    this.setState({ tags });
+    this.props.checkTag({ index, value: event.target.checked });
+    this.forceUpdate();
   }
 
   toggleFilters() {
@@ -55,8 +55,7 @@ class Filters extends React.Component {
   }
 
   render() {
-    const { tags } = this.props.tags;
-    console.log(tags);
+    const { tags } = this.props;
     const { filtersActive } = this.state;
     return (
       <React.Fragment>
