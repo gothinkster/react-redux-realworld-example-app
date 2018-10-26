@@ -13,7 +13,7 @@ const ArticleList = props => {
   }
 
   return (
-    <div>
+    <React.Fragment>
       {articles.map(article => {
         return <ArticlePreview article={article} key={article.uuid} />;
       })}
@@ -23,7 +23,7 @@ const ArticleList = props => {
         articlesCount={articlesCount}
         currentPage={currentPage}
       />
-    </div>
+    </React.Fragment>
   );
 };
 

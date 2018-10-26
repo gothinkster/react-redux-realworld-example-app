@@ -54,12 +54,10 @@ class MainView extends React.Component {
     const { articles } = this.props;
     const { articlesCount } = this.state;
     return (
-      <div className="col-md-9">
+      <div className="col-md-12">
         <SearchBar />
         <Filters />
-        <div className="row">
-          <ArticleList articles={articles} articlesCount={articlesCount} />
-        </div>
+        <ArticleList articles={articles} articlesCount={articlesCount} />
       </div>
     );
   }
