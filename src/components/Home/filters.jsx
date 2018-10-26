@@ -1,7 +1,17 @@
 import React from "react";
+import { connect } from "react-redux";
 import { fetchAllTags } from "../../services/article";
+import { LOAD_TAGS } from "../../constants/actionTypes";
 
-export class Filters extends React.Component {
+const mapStateToProps = state => ({
+  tags: state.tags
+});
+
+const mapDispatchToProps = dispatch => ({
+  loadTags: payload => dispatch({ type: LOAD_TAGS, payload })
+});
+
+class Filters extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -25,7 +35,9 @@ export class Filters extends React.Component {
             selected: true
           };
         });
-        this.setState({ tags });
+        this.props.loadTags(tags);
+
+        //this.setState({ tags });
       }
     });
   }
@@ -43,7 +55,9 @@ export class Filters extends React.Component {
   }
 
   render() {
-    const { filtersActive, tags } = this.state;
+    const { tags } = this.props.tags;
+    console.log(tags);
+    const { filtersActive } = this.state;
     return (
       <React.Fragment>
         <div className="row mt-5">
@@ -82,3 +96,8 @@ export class Filters extends React.Component {
     );
   }
 }
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Filters);

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import ArticleList from "../ArticleList";
 import { getArticleCount, fetchArticles } from "../../services/article";
 import { CHANGE_TAB, LOAD } from "../../constants/actionTypes";
-import { Filters } from "./filters";
+import Filters from "./filters";
 import SearchBar from "./searchBar";
 
 const mapStateToProps = state => ({
