@@ -15,7 +15,7 @@ const requests = {
 
 export const SubmitArticle = (article, username) => {
   article["favoritesCount"] = 0;
-  article["slug"] = article.title.replace(" ", "-");
+  article["slug"] = article.title.replace(/\s/g, "-");
   article["createdAt"] = new Date().toISOString();
   article["author"] = {
     username
@@ -33,40 +33,36 @@ export const SubmitArticle = (article, username) => {
 export const loadArticles = currentPage => {};
 
 export const searchArticles = searchInput => {
-  const removeOpeningQuote = term => {
-    return term.substr(1, term.length - 1);
+  const findQuote = (term, pos) => {
+    return term && term.charAt(pos) === '"';
   };
 
-  const removeClosingQuote = term => {
-    return term.substr(0, term.length - 2);
+  const concatTerms = (term1, term2) => {
+    return `${term1} ${term2}`;
+  };
+
+  const removeQuotes = term => {
+    let ret = term;
+    ret = term.split("");
+    ret.shift();
+    ret.pop();
+    ret = ret.join("");
+    return ret;
   };
 
   let searchTerms = searchInput.split(" ");
+
   for (let i = 0; i < searchTerms.length; i++) {
-    if (searchTerms[i] && searchTerms[i].charAt(0) === '"') {
-      searchTerms[i] = removeOpeningQuote(searchTerms[i]);
-      if (searchTerms[i].charAt(searchTerms[i].length - 1) === '"') {
-        searchTerms[i] = removeClosingQuote(searchTerms[i]);
-      } else if (i + 1 < searchTerms.length) {
-        let foundClosingTag = false;
-        let j = i + 1;
-        do {
-          if (searchTerms[j].charAt(searchTerms[j].length - 1) === '"') {
-            searchTerms[i] += ` ${removeClosingQuote(searchTerms[j])}`;
-            foundClosingTag = true;
-          } else {
-            searchTerms[i] += ` ${searchTerms[j]}`;
-          }
-          delete searchTerms[j];
-          j++;
-        } while (!foundClosingTag);
+    if (findQuote(searchTerms[i], 0)) {
+      if (findQuote(searchTerms[i], searchTerms[i].length - 1)) {
+        searchTerms[i] = removeQuotes(searchTerms[i]);
+      } else {
+        searchTerms[i] = concatTerms(searchTerms[i], searchTerms[i + 1]);
+        searchTerms.splice(i + 1, 1);
+        i--;
       }
     }
   }
-
-  searchTerms = searchTerms.filter(searchTerm => {
-    return searchTerm !== undefined;
-  });
 
   return requests.post("/search", searchTerms).then(
     result => {
@@ -78,7 +74,7 @@ export const searchArticles = searchInput => {
   );
 };
 
-export const fetchArticles = pageNumber => {
+export const fetchArticles = (pageNumber = 1) => {
   return requests.get(`/articles/${pageNumber}`).then(
     result => {
       return result;

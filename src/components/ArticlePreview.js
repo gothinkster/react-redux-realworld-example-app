@@ -74,7 +74,10 @@ const ArticlePreview = props => {
           {article.tags &&
             article.tags.map(tag => {
               return (
-                <li className="tag-default tag-pill tag-outline" key={`${tag}`}>
+                <li
+                  className="tag-default tag-pill tag-outline"
+                  key={`${tag}-${article.slug}`}
+                >
                   {tag}
                 </li>
               );

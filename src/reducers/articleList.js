@@ -18,7 +18,7 @@ export default (state = {}, action) => {
     case LOAD:
       return {
         ...state,
-        articles: action.payload
+        articles: [...action.payload]
       };
 
     case ARTICLE_FAVORITED:
