@@ -1,59 +1,11 @@
-import ArticleList from '../ArticleList';
-import React from 'react';
-import agent from '../../agent';
-import { connect } from 'react-redux';
-import { CHANGE_TAB } from '../../constants/actionTypes';
+import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import ArticleList from "../ArticleList";
+import { getArticleCount, fetchArticles } from "../../services/article";
 
-const YourFeedTab = props => {
-  if (props.token) {
-    const clickHandler = ev => {
-      ev.preventDefault();
-      props.onTabClick('feed', agent.Articles.feed, agent.Articles.feed());
-    }
-
-    return (
-      <li className="nav-item">
-        <a  href=""
-            className={ props.tab === 'feed' ? 'nav-link active' : 'nav-link' }
-            onClick={clickHandler}>
-          Your Feed
-        </a>
-      </li>
-    );
-  }
-  return null;
-};
-
-const GlobalFeedTab = props => {
-  const clickHandler = ev => {
-    ev.preventDefault();
-    props.onTabClick('all', agent.Articles.all, agent.Articles.all());
-  };
-  return (
-    <li className="nav-item">
-      <a
-        href=""
-        className={ props.tab === 'all' ? 'nav-link active' : 'nav-link' }
-        onClick={clickHandler}>
-        Global Feed
-      </a>
-    </li>
-  );
-};
-
-const TagFilterTab = props => {
-  if (!props.tag) {
-    return null;
-  }
-
-  return (
-    <li className="nav-item">
-      <a href="" className="nav-link active">
-        <i className="ion-pound"></i> {props.tag}
-      </a>
-    </li>
-  );
-};
+import { CHANGE_TAB } from "../../constants/actionTypes";
+import { Filters } from "./filters";
 
 const mapStateToProps = state => ({
   ...state.articleList,
@@ -62,35 +14,76 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onTabClick: (tab, pager, payload) => dispatch({ type: CHANGE_TAB, tab, pager, payload })
+  onTabClick: (tab, pager, payload) =>
+    dispatch({ type: CHANGE_TAB, tab, pager, payload })
 });
 
-const MainView = props => {
-  return (
-    <div className="col-md-9">
-      <div className="feed-toggle">
-        <ul className="nav nav-pills outline-active">
+class MainView extends React.Component {
+  constructor() {
+    super();
 
-          <YourFeedTab
-            token={props.token}
-            tab={props.tab}
-            onTabClick={props.onTabClick} />
+    this.state = {
+      articlesCount: 0,
+      articles: []
+    };
+  }
 
-          <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
+  componentDidMount() {
+    const { currentPage } = this.props;
+    const getCount = new Promise(
+      resolve => {
+        resolve(getArticleCount());
+      },
+      reject => {
+        console.log(reject);
+      }
+    );
 
-          <TagFilterTab tag={props.tag} />
+    const getArticles = new Promise(
+      resolve => {
+        resolve(fetchArticles(currentPage));
+      },
+      reject => {
+        console.log(reject);
+      }
+    );
 
-        </ul>
+    getCount.then(result => {
+      this.setState({ articlesCount: result.count });
+    });
+
+    getArticles.then(result => {
+      this.setState({ articles: result.articles });
+    });
+  }
+
+  render() {
+    const { tag, pager, currentPage } = this.props;
+    const { articles, articlesCount } = this.state;
+    return (
+      <div className="col-md-9">
+        <Filters />
+        <ArticleList
+          pager={pager}
+          articles={articles}
+          articlesCount={articlesCount}
+          currentPage={currentPage}
+        />
       </div>
+    );
+  }
+}
 
-      <ArticleList
-        pager={props.pager}
-        articles={props.articles}
-        loading={props.loading}
-        articlesCount={props.articlesCount}
-        currentPage={props.currentPage} />
-    </div>
-  );
+MainView.propTypes = {
+  token: PropTypes.string,
+  tab: PropTypes.string,
+  onTabClick: PropTypes.func.isRequired,
+  tag: PropTypes.string,
+  pager: PropTypes.func,
+  currentPage: PropTypes.number
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainView);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MainView);

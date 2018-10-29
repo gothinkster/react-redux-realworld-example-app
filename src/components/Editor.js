@@ -1,6 +1,7 @@
-import ListErrors from './ListErrors';
-import React from 'react';
-import SubmitArticle from "./services/article";
+import React from "react";
+import ListErrors from "./ListErrors";
+import { SubmitArticle } from "../services/article";
+import { connect } from "react-redux";
 
 class Editor extends React.Component {
   constructor() {
@@ -14,8 +15,9 @@ class Editor extends React.Component {
       tags: [],
       type: "Tutorial",
       snippetInput: "",
-      snippets: []
-    };    
+      snippets: [],
+      options: ["Tutorial", "Op-Ed", "Stack Overflow"]
+    };
 
     this.updateField = this.updateField.bind(this);
     this.watchForEnter = this.watchForEnter.bind(this);
@@ -27,8 +29,8 @@ class Editor extends React.Component {
   }
 
   updateField(event) {
-    this.setState({[event.target.name]: event.target.value});
-  }  
+    this.setState({ [event.target.name]: event.target.value });
+  }
 
   resetFields() {
     this.setState({
@@ -46,36 +48,46 @@ class Editor extends React.Component {
   watchForEnter(event) {
     event.preventDefault();
     if (event.keyCode === 13) {
-      switch(event.target.name) {
-        case "tagInput" :
-          this.setState(prevState => ({tags: [...prevState.tags, prevState.tagInput], tagInput: ""}));          
-        break;
-        case "snippetInput" :
-          this.setState(prevState => ({snippets: [...prevState.snippets, prevState.snippetInput], snippetInput: ""}));          
-        break;
+      switch (event.target.name) {
+        case "tagInput":
+          this.setState(prevState => ({
+            tags: [...prevState.tags, prevState.tagInput],
+            tagInput: ""
+          }));
+          break;
 
-        default: 
-        break;
-      }     
+        case "snippetInput":
+          this.setState(prevState => ({
+            snippets: [...prevState.snippets, prevState.snippetInput],
+            snippetInput: ""
+          }));
+          break;
+
+        default:
+      }
     }
-  };
+  }
 
-  removeTagHandler(event, index) { 
-    event.persist();   
+  removeTagHandler(event, index) {
+    event.persist();
     const arr = this.state[event.target.getAttribute("name")] || [];
     arr.splice(index, 1);
-    this.setState({[event.target.name] : arr});
-  };
+    this.setState({ [event.target.name]: arr });
+  }
 
   isDisabled() {
-    const {url, title, summary, tags, type, snippets} = this.state;
-    if (type !== "Stack Overflow Post" && (url.length === 0 || title.length === 0 || summary.length === 0 || tags.length === 0)) {
-      return true;
-    }
-    else if (type === "Stack Overflow Post" && (url.length === 0 || title.length === 0 || snippets.length === 0 || tags.length === 0)) {
-      return true;
-    }
-    return false;
+    const { url, title, summary, tags, type, snippets } = this.state;
+    const postTypeValidValue =
+      type === "Stack Overflow Post" ? snippets : summary;
+    const arr = [url, title, tags, postTypeValidValue];
+    let bool = false;
+    arr.map(value => {
+      if (value.length === 0) {
+        bool = true;
+        return;
+      }
+    });
+    return bool;
   }
 
   insertLineBreaks(text) {
@@ -84,7 +96,7 @@ class Editor extends React.Component {
   }
 
   submitForm(event) {
-    const {url, title, summary, tags, snippets} = this.state;
+    const { url, title, summary, tags, type, snippets } = this.state;
     event.preventDefault();
 
     const article = {
@@ -92,112 +104,152 @@ class Editor extends React.Component {
       title,
       summary,
       tags,
+      type,
       snippets
-    };    
+    };
     SubmitArticle(article);
     this.resetFields();
-  };
+  }
 
   render() {
-    const {url, title, summary, tagInput, tags, type, snippetInput, snippets} = this.state;
+    const {
+      url,
+      title,
+      summary,
+      tagInput,
+      tags,
+      type,
+      snippetInput,
+      snippets
+    } = this.state;
     return (
       <div className="editor-page">
         <div className="container page">
           <div className="row">
             <div className="col-md-10 offset-md-1 col-xs-12">
-
-              <ListErrors errors={this.props.errors}></ListErrors>
+              <ListErrors errors={this.props.errors} />
 
               <form>
                 <fieldset>
-
-                  <fieldset className="form-group" style={{maxWidth: 250}}>
-                  <label htmlFor="typeSelect">Article Type</label>
-                    <select id="typeSelect" 
-                      name="type"   
-                      className="form-control" 
-                      value={type} 
-                      onChange={this.updateField} >
-                      <option>Tutorial</option>
-                      <option>Op-Ed</option>
-                      <option>Stack Overflow Post</option>                                        
+                  <fieldset className="form-group" style={{ maxWidth: 250 }}>
+                    <label htmlFor="typeSelect">Article Type</label>
+                    <select
+                      id="typeSelect"
+                      name="type"
+                      className="form-control"
+                      value={type}
+                      onChange={event => this.updateField(event)}
+                    >
+                      <option value="Tutorial">Tutorial</option>
+                      <option value="Op-Ed">Op-Ed</option>
+                      <option value="Stack Overflow Post">
+                        Stack Overflow Post
+                      </option>
                     </select>
                   </fieldset>
 
                   <fieldset className="form-group">
-                    <label htmlFor="urlInput" className="form-control-label">URL</label>                  
+                    <label htmlFor="urlInput" className="form-control-label">
+                      URL
+                    </label>
                     <input
                       id="urlInput"
                       className="form-control"
                       type="text"
                       name="url"
                       value={url}
-                      onChange={this.updateField} />
-                  </fieldset>                  
+                      onChange={event => this.updateField(event)}
+                    />
+                  </fieldset>
 
                   <fieldset className="form-group">
-                    <label htmlFor="titleInput" className="form-control-label">Title</label>
+                    <label htmlFor="titleInput" className="form-control-label">
+                      Title
+                    </label>
                     <input
                       id="titleInput"
                       name="title"
                       className="form-control form-control-lg"
                       type="text"
                       value={title}
-                      onChange={this.updateField} />
+                      onChange={event => this.updateField(event)}
+                    />
                   </fieldset>
 
                   {type !== "Stack Overflow Post" ? (
-                  <fieldset className="form-group">
-                    <label htmlFor="summaryInput" className="form-control-label">Summary</label>                  
-                    <textarea
-                      id="summaryInput"
-                      name="summary"
-                      className="form-control"
-                      rows="8"
-                      value={summary}
-                      onChange={this.updateField}>
-                    </textarea>
-                  </fieldset>
-                  ) : null }                  
+                    <fieldset className="form-group">
+                      <label
+                        htmlFor="summaryInput"
+                        className="form-control-label"
+                      >
+                        Summary
+                      </label>
+                      <textarea
+                        id="summaryInput"
+                        name="summary"
+                        className="form-control"
+                        rows="8"
+                        value={summary}
+                        onChange={event => this.updateField(event)}
+                      />
+                    </fieldset>
+                  ) : null}
 
                   {type === "Stack Overflow Post" ? (
-                  <fieldset className="form-group">
-                  <label htmlFor="snippetInput" className="form-control-label">Snippet</label>                  
-                  <textarea
-                    id="snippetInput"
-                    name="snippetInput"
-                    className="form-control"
-                    value={snippetInput}
-                    rows={4}
-                    onChange={this.updateField}
-                    onKeyUp={this.watchForEnter} />                                      
-                    <div>
-                        {snippets.length > 0 && (snippets.map((snippet, index) => {
-                          return (
-                            <div className="snippet-container" key={`snippet${index}`}>
-                              <i  className="ion-close-round"
+                    <fieldset className="form-group">
+                      <label
+                        htmlFor="snippetInput"
+                        className="form-control-label"
+                      >
+                        Snippet
+                      </label>
+                      <textarea
+                        id="snippetInput"
+                        name="snippetInput"
+                        className="form-control"
+                        value={snippetInput}
+                        rows={4}
+                        onChange={this.updateField}
+                        onKeyUp={this.watchForEnter}
+                      />
+                      <div>
+                        {snippets.length > 0 &&
+                          snippets.map((snippet, index) => {
+                            return (
+                              <div
+                                className="snippet-container"
+                                key={`snippet${index}`}
+                              >
+                                <i
+                                  className="ion-close-round"
                                   name="snippets"
-                                  onClick={event => this.removeTagHandler(event, index)}>
-                              </i>
-                              {this.insertLineBreaks(snippet).map((snippetLine, i) => {
-                                return (
-                                  <span className="snippet-span" key={`snippetLine${i}`}>
-                                    {snippetLine}
-                                  </span>
-                                )
-                              })}
-
-                            </div>
-                          );
-                        })
-                        )}
-                    </div>                    
-                  </fieldset>                  
-                  ) : null }
-
+                                  onClick={event =>
+                                    this.removeTagHandler(event, index)
+                                  }
+                                />
+                                {this.insertLineBreaks(snippet).map(
+                                  (snippetLine, i) => {
+                                    return (
+                                      <span
+                                        className="snippet-span"
+                                        key={`snippetLine${i}`}
+                                      >
+                                        {snippetLine}
+                                      </span>
+                                    );
+                                  }
+                                )}
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </fieldset>
+                  ) : null}
 
                   <fieldset className="form-group">
-                    <label htmlFor="tagsInput" className="form-control-label">Tags</label>                  
+                    <label htmlFor="tagsInput" className="form-control-label">
+                      Tags
+                    </label>
                     <input
                       id="tagsInput"
                       name="tagInput"
@@ -205,34 +257,40 @@ class Editor extends React.Component {
                       type="text"
                       value={tagInput}
                       onChange={this.updateField}
-                      onKeyUp={this.watchForEnter} />                  
+                      onKeyUp={this.watchForEnter}
+                    />
 
                     <div className="tag-list">
-                        {tags.length > 0 && (tags.map((tag, index) => {
+                      {tags.length > 0 &&
+                        tags.map((tag, index) => {
                           return (
-                            <span className="tag-default tag-pill" key={`tag${index}`}>
-                              <i  className="ion-close-round"
-                                  name="tags"
-                                  onClick={event => this.removeTagHandler(event, index)}>
-                              </i>
+                            <span
+                              className="tag-default tag-pill"
+                              key={`${tag}${index}`}
+                            >
+                              <i
+                                className="ion-close-round"
+                                name="tags"
+                                onClick={event =>
+                                  this.removeTagHandler(event, index)
+                                }
+                              />
                               {tag}
                             </span>
                           );
-                        })
-                        )}
-                    </div>                        
+                        })}
+                    </div>
                   </fieldset>
                   <button
                     className="btn btn-lg pull-xs-right btn-primary"
                     type="button"
                     disabled={this.isDisabled()}
-                    onClick={this.submitForm}>
+                    onClick={event => this.submitForm(event)}
+                  >
                     Publish Article
                   </button>
-
                 </fieldset>
               </form>
-
             </div>
           </div>
         </div>
@@ -241,4 +299,10 @@ class Editor extends React.Component {
   }
 }
 
-export default Editor;
+const mapStateToProps = state => {
+  return {
+    currentUser: state.common.currentUser
+  };
+};
+
+export default connect(mapStateToProps)(Editor);
