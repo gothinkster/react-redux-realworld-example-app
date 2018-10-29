@@ -61,8 +61,7 @@ const LoggedInView = props => {
         </li>
         <li className="nav-item">
           <button
-            style={{ marginLeft: 5 }}
-            className="btn btn-outline-danger"
+            className="btn btn-md btn-primary blockBtn"
             onClick={props.onClickLogout}
           >
             Logout
