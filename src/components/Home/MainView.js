@@ -55,11 +55,20 @@ class MainView extends React.Component {
   filterArticles() {
     const { articles, tags } = this.props;
 
+    let filteredArticles = articles.filter(article => {
+      let list = [];
+      for (tag of tags) {
+      }
+      return list;
+    });
+
     if (articles !== undefined && tags !== undefined) {
       return articles.filter(article => {
         for (var filterTag of tags) {
           if (filterTag.selected) {
             for (var tag of article.tags) {
+              if (tag === filterTag.value) {
+              }
             }
           }
           console.log(filterTag);
