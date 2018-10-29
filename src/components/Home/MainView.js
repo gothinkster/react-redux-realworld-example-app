@@ -11,6 +11,7 @@ import { Filters } from "./filters";
 const mapStateToProps = state => ({
   ...state.articleList,
   tags: state.home.tags,
+  typeFilter: state.articleList.typeFilter,
   token: state.common.token
 });
 
@@ -27,6 +28,8 @@ class MainView extends React.Component {
       articlesCount: 0,
       articles: []
     };
+
+    this.filterByType = this.filterByType.bind(this);
   }
 
   componentDidMount() {
@@ -58,16 +61,37 @@ class MainView extends React.Component {
     });
   }
 
+  filterByType() {
+    const { articles } = this.state;
+    const { typeFilter } = this.props;
+
+    if (typeFilter === "All") {
+      return articles;
+    }
+
+    if (typeFilter === "Stack Overflow") {
+      return articles.filter(article => {
+        return article.type === "Stack Overflow Post";
+      });
+    }
+
+    if (typeFilter === "Tutorial") {
+      return articles.filter(article => {
+        return article.type !== "Stack Overflow Post";
+      });
+    }
+  }
+
   render() {
     const { tag, pager, currentPage } = this.props;
-    const { articles, articlesCount } = this.state;
+    const { articlesCount } = this.state;
     return (
       <div className="col-md-9">
         <TypeFilter />
         <Filters />
         <ArticleList
           pager={pager}
-          articles={articles}
+          articles={this.filterByType()}
           articlesCount={articlesCount}
           currentPage={currentPage}
         />
@@ -82,7 +106,8 @@ MainView.propTypes = {
   onTabClick: PropTypes.func.isRequired,
   tag: PropTypes.string,
   pager: PropTypes.func,
-  currentPage: PropTypes.number
+  currentPage: PropTypes.number,
+  typeFilter: PropTypes.string
 };
 
 export default connect(

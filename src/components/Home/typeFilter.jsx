@@ -62,7 +62,7 @@ class TypeFilter extends React.Component {
   }
 }
 
-TypeFilter.PropTypes = {
+TypeFilter.propTypes = {
   updateTypeFilter: PropTypes.func.isRequired
 };
 
