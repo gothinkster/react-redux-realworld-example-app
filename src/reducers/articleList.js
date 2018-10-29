@@ -9,8 +9,9 @@ import {
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_LOADED,
-  PROFILE_FAVORITES_PAGE_UNLOADED
-} from '../constants/actionTypes';
+  PROFILE_FAVORITES_PAGE_UNLOADED,
+  ARTICLE_ADDVIEW
+} from "../constants/actionTypes";
 
 export default (state = {}, action) => {
   switch (action.type) {

@@ -72,3 +72,8 @@ export const fetchAllTags = () => {
     }
   );
 };
+
+export const addView = articleSlug => {
+  console.log(articleSlug);
+  requests.post("/article/addView", { slug: articleSlug });
+};
