@@ -66,9 +66,12 @@ const ArticlePreview = props => {
           </button>
         </div>
       </div>
-      <span className="viewsCounter">This article has {views} views</span>
+      <div>
+        <span className="viewsCounter">This article has {views} views</span>
+      </div>
       <Link to={`/article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>
+        <span>{article.type}</span>
         <ul className="tag-list">
           {article.tags.map(tag => {
             return (
