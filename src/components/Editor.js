@@ -237,6 +237,7 @@ class Editor extends React.Component {
                                     this.removeTagHandler(event, index)
                                   }
                                 />
+                                <br />
                                 {this.insertLineBreaks(snippet).map(
                                   (snippetLine, i) => {
                                     return (
