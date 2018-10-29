@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import React from "react";
 import agent from "../agent";
 import patterns from "../helpers/patterns";
+import { registerUser } from "../services/auth";
 
 class Register extends React.Component {
   constructor() {
@@ -28,10 +29,10 @@ class Register extends React.Component {
 
   submitForm(event) {
     const {
-      fields: { username, email, password }
+      fields: { firstName, lastName, username, email, password }
     } = this.state;
     event.preventDefault();
-    agent.Auth.register(username, email, password);
+    registerUser({ username, email, firstName, lastName, password });
   }
 
   isInvalidField(key) {
