@@ -10,8 +10,8 @@ import SearchBar from "./searchBar";
 const mapStateToProps = state => ({
   ...state.articleList,
   token: state.common.token,
-  articles: state.articleList.articles,
-  tags: state.articleList.tags
+  articles: state.articleList.articles || [],
+  tags: state.articleList.tags || []
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -29,7 +29,7 @@ class MainView extends React.Component {
       articles: []
     };
 
-    this.filterArticles = this.filterArticles.bind(this);
+    this.filterArticlesByTag = this.filterArticlesByTag.bind(this);
   }
 
   componentDidMount() {
@@ -52,44 +52,25 @@ class MainView extends React.Component {
     });
   }
 
-  filterArticles() {
-    const { articles, tags } = this.props;
-
-    let filteredArticles = articles.filter(article => {
-      let list = [];
-      for (tag of tags) {
+  checkTags(article, tags) {
+    for (let tag of tags) {
+      for (let articleTag of article.tags) {
+        if (tag.selected && tag.name === articleTag) {
+          return true;
+        }
       }
-      return list;
-    });
+    }
+    return false;
+  }
 
-    if (articles !== undefined && tags !== undefined) {
+  filterArticlesByTag() {
+    const { articles, tags } = this.props;
+    if (tags.length) {
       return articles.filter(article => {
-        for (var filterTag of tags) {
-          if (filterTag.selected) {
-            for (var tag of article.tags) {
-              if (tag === filterTag.value) {
-              }
-            }
-          }
-          console.log(filterTag);
-          return article;
-        }
+        return this.checkTags(article, tags) === true;
       });
-
-      /*
-      return articles.filter((article) => {        
-          for (var filterTag of tags) {
-            for (var articleTag of article.tags) {
-              if (filterTag === articleTag) {
-                return article;
-              }
-            }
-          }
-        }
-      )
-          */
     } else {
-      return [];
+      return articles;
     }
   }
 
@@ -100,7 +81,7 @@ class MainView extends React.Component {
         <SearchBar />
         <Filters />
         <ArticleList
-          articles={this.filterArticles()}
+          articles={this.filterArticlesByTag()}
           articlesCount={articlesCount}
         />
       </div>

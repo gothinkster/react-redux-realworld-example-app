@@ -16,8 +16,7 @@ class Filters extends React.Component {
   constructor() {
     super();
     this.state = {
-      filtersActive: false,
-      tags: []
+      filtersActive: false
     };
     this.toggleFilters = this.toggleFilters.bind(this);
     this.toggleFilter = this.toggleFilter.bind(this);
@@ -33,7 +32,7 @@ class Filters extends React.Component {
         const tags = result.tags.map(item => {
           return {
             name: item,
-            selected: false
+            selected: true
           };
         });
         this.props.loadTags(tags);
@@ -41,11 +40,9 @@ class Filters extends React.Component {
     });
   }
 
-  toggleFilter(event, index) {
-    const { tags } = this.props;
-    tags[index].selected = event.target.checked;
-    this.props.checkTag({ index, value: event.target.checked });
-    this.forceUpdate();
+  toggleFilter(event) {
+    const { name, checked } = event.target;
+    this.props.checkTag({ name, selected: checked });
   }
 
   toggleFilters() {
@@ -57,6 +54,7 @@ class Filters extends React.Component {
   render() {
     const { tags } = this.props;
     const { filtersActive } = this.state;
+
     return (
       <React.Fragment>
         <div className="row mt-5">
@@ -78,7 +76,7 @@ class Filters extends React.Component {
                     <label className="checkbox" htmlFor={`${tag}Checkbox`}>
                       <input
                         type="checkbox"
-                        name={`${tag}Checkbox`}
+                        name={`${tag.name}`}
                         checked={tag.selected}
                         onChange={event => this.toggleFilter(event, index)}
                       />

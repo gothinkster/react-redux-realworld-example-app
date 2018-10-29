@@ -14,6 +14,7 @@ import {
   LOAD_TAGS,
   CHECK_TAG
 } from "../constants/actionTypes";
+import { bindActionCreators } from "redux";
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -97,13 +98,19 @@ export default (state = {}, action) => {
       };
 
     case CHECK_TAG:
-      let { tags } = state;
-      tags[action.payload.index].selected = action.payload.value;
-
       return {
         ...state,
-        tags
+        tags: state.tags.map(tag => {
+          if (tag.name === action.payload.name) {
+            return {
+              name: action.payload.name,
+              selected: action.payload.selected
+            };
+          }
+          return tag;
+        })
       };
+
     default:
       return state;
   }
