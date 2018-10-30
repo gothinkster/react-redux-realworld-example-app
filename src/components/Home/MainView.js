@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import ArticleList from "../ArticleList";
+import TypeFilter from "./typeFilter";
 import { getArticleCount, fetchArticles } from "../../services/article";
 import { Filters } from "./filters";
 import SearchBar from "./searchBar";
@@ -9,6 +10,9 @@ import { LOAD } from "../../constants/actionTypes";
 
 const mapStateToProps = state => ({
   ...state.articleList,
+  tags: state.home.tags,
+  typeFilter: state.articleList.typeFilter,
+  token: state.common.token,
   articles: state.articleList.articles
 });
 
@@ -21,9 +25,10 @@ class MainView extends React.Component {
     super();
 
     this.state = {
-      articlesCount: 0,
-      articles: []
+      articlesCount: 0
     };
+
+    this.filterByType = this.filterByType.bind(this);
   }
 
   componentDidMount() {
@@ -45,14 +50,40 @@ class MainView extends React.Component {
     });
   }
 
+  filterByType() {
+    const { articles, typeFilter } = this.props;
+
+    if (typeFilter === "All") {
+      return articles;
+    }
+
+    if (typeFilter === "Stack Overflow") {
+      return articles.filter(article => {
+        return article.type === "Stack Overflow Post";
+      });
+    }
+
+    if (typeFilter === "Tutorial") {
+      return articles.filter(article => {
+        return article.type !== "Stack Overflow Post";
+      });
+    }
+  }
+
   render() {
-    const { articles } = this.props;
+    const { pager, currentPage } = this.props;
     const { articlesCount } = this.state;
     return (
       <div className="col-md-12">
+        <TypeFilter />
         <SearchBar />
         <Filters />
-        <ArticleList articles={articles} articlesCount={articlesCount} />
+        <ArticleList
+          pager={pager}
+          articles={this.filterByType()}
+          articlesCount={articlesCount}
+          currentPage={currentPage}
+        />
       </div>
     );
   }
@@ -62,6 +93,9 @@ MainView.propTypes = {
   articles: PropTypes.array,
   token: PropTypes.string,
   tag: PropTypes.string,
+  pager: PropTypes.func,
+  currentPage: PropTypes.number,
+  typeFilter: PropTypes.string,
   load: PropTypes.func
 };
 

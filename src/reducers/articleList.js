@@ -10,6 +10,7 @@ import {
   PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_LOADED,
   PROFILE_FAVORITES_PAGE_UNLOADED,
+  UPDATE_TYPE_FILTER,
   LOAD
 } from "../constants/actionTypes";
 
@@ -87,6 +88,13 @@ export default (state = {}, action) => {
     case PROFILE_PAGE_UNLOADED:
     case PROFILE_FAVORITES_PAGE_UNLOADED:
       return {};
+
+    case UPDATE_TYPE_FILTER:
+      return {
+        ...state,
+        typeFilter: action.payload
+      };
+
     default:
       return state;
   }
