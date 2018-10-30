@@ -69,12 +69,18 @@ class Article extends React.Component {
                   <p>
                     Link: <a href={article.url}>{article.url}</a>
                   </p>
-                  <p>{article.type}</p>
+                  <p>
+                    <label>Type:</label>
+                    <span>
+                      &nbsp;
+                      {article.type}
+                    </span>
+                  </p>
                   <p>{article.summary}</p>
                   <p className="author-container">
                     Submitted by {article.author.username}
                   </p>
-                  {article.snippets && (
+                  {article.snippets.length ? (
                     <p className="snippet-container">
                       {" "}
                       {article.snippets.map((snippet, index) => {
@@ -85,7 +91,7 @@ class Article extends React.Component {
                         );
                       })}
                     </p>
-                  )}
+                  ) : null}
                 </React.Fragment>
               )}
           </div>

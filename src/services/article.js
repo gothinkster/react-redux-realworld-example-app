@@ -74,6 +74,17 @@ export const searchArticles = searchInput => {
   );
 };
 
+export const searchArticlesByTags = tags => {
+  return requests.post("/search/tags", tags).then(
+    result => {
+      return result;
+    },
+    error => {
+      return error;
+    }
+  );
+};
+
 export const fetchArticles = (pageNumber = 1) => {
   return requests.get(`/articles/${pageNumber}`).then(
     result => {
