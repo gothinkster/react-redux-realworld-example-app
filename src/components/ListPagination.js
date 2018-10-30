@@ -8,7 +8,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const ListPagination = props => {
-  if (props.articlesCount <= 10) {
+  const { articlesCount, onSetPage, pager, currentPage } = props;
+  if (articlesCount <= 10) {
     return null;
   }
 
@@ -18,10 +19,10 @@ const ListPagination = props => {
   }
 
   const setPage = page => {
-    if (props.pager) {
-      props.onSetPage(page, props.pager(page));
+    if (pager) {
+      onSetPage(page, pager(page));
     } else {
-      props.onSetPage(page, agent.Articles.all(page));
+      onSetPage(page, agent.Articles.all(page));
     }
   };
 
@@ -29,7 +30,7 @@ const ListPagination = props => {
     <nav>
       <ul className="pagination">
         {range.map(v => {
-          const isCurrent = v === props.currentPage;
+          const isCurrent = v === currentPage;
           const onClick = ev => {
             ev.preventDefault();
             setPage(v);
