@@ -1,14 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import { LOGOUT } from "../constants/actionTypes";
-
 
 const LoggedOutView = props => {
   if (!props.currentUser) {
     return (
       <ul className="nav navbar-nav pull-xs-right">
-
         <li className="nav-item">
           <Link to="/" className="nav-link">
             Home
@@ -26,7 +24,6 @@ const LoggedOutView = props => {
             Sign up
           </Link>
         </li>
-
       </ul>
     );
   }
@@ -36,8 +33,7 @@ const LoggedOutView = props => {
 const LoggedInView = props => {
   if (props.currentUser) {
     return (
-      <ul className="nav navbar-nav pull-lrg-right">
-
+      <ul className="nav navbar-nav pull-xs-right">
         <li className="nav-item">
           <Link to="/" className="nav-link">
             Home
@@ -46,32 +42,31 @@ const LoggedInView = props => {
 
         <li className="nav-item">
           <Link to="/editor" className="nav-link">
-            <i className="ion-compose"></i>&nbsp;New Post
+            <i className="ion-compose" />
+            &nbsp;New Post
           </Link>
         </li>
 
         <li className="nav-item">
           <Link to="/settings" className="nav-link">
-            <i className="ion-gear-a"></i>&nbsp;Settings
+            <i className="ion-gear-a" />
+            &nbsp;Settings
           </Link>
         </li>
 
         <li className="nav-item">
-          <Link
-            to={`/@${props.currentUser.username}`}
-            className="nav-link">
+          <Link to={`/@${props.currentUser.username}`} className="nav-link">
             {props.currentUser.username}
           </Link>
         </li>
-        <li>
-        <button
-                style={{marginLeft : 5}}
-                className="btn btn-outline-danger"
-                onClick={props.onClickLogout}>
-                Logout
-              </button>          
+        <li className="nav-item">
+          <button
+            className="btn btn-md btn-primary blockBtn"
+            onClick={props.onClickLogout}
+          >
+            Logout
+          </button>
         </li>
-
       </ul>
     );
   }
@@ -80,20 +75,20 @@ const LoggedInView = props => {
 };
 
 class Header extends React.Component {
-
   render() {
     return (
       <nav className="navbar navbar-light">
         <div className="container">
-
           <Link to="/" className="navbar-brand">
             {this.props.appName.toLowerCase()}
           </Link>
 
           <LoggedOutView currentUser={this.props.currentUser} />
 
-          <LoggedInView currentUser={this.props.currentUser}
-                        onClickLogout={this.props.onClickLogout} />
+          <LoggedInView
+            currentUser={this.props.currentUser}
+            onClickLogout={this.props.onClickLogout}
+          />
         </div>
       </nav>
     );
@@ -104,4 +99,7 @@ const mapDispatchToProps = dispatch => ({
   onClickLogout: () => dispatch({ type: LOGOUT })
 });
 
-export default connect(null, mapDispatchToProps)(Header);
+export default connect(
+  null,
+  mapDispatchToProps
+)(Header);

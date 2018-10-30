@@ -12,9 +12,9 @@ import {
   PROFILE_FAVORITES_PAGE_UNLOADED,
   LOAD,
   LOAD_TAGS,
-  CHECK_TAG
+  CHECK_TAG,
+  UPDATE_TYPE_FILTER
 } from "../constants/actionTypes";
-import { bindActionCreators } from "redux";
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -109,6 +109,11 @@ export default (state = {}, action) => {
           }
           return tag;
         })
+      };
+    case UPDATE_TYPE_FILTER:
+      return {
+        ...state,
+        typeFilter: action.payload
       };
 
     default:
