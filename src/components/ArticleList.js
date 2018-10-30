@@ -15,7 +15,7 @@ const ArticleList = props => {
   const pageArticles = articles.slice(currentPage, currentPage + 5);
 
   return (
-    <div>
+    <React.Fragment>
       {pageArticles.map(article => {
         return <ArticlePreview article={article} key={article.slug} />;
       })}
@@ -25,7 +25,7 @@ const ArticleList = props => {
         articlesCount={articles.length}
         currentPage={currentPage}
       />
-    </div>
+    </React.Fragment>
   );
 };
 
