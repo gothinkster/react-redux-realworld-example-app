@@ -18,13 +18,15 @@ export class Filters extends React.Component {
     });
 
     getTags.then(result => {
-      const tags = result.tags.map(item => {
-        return {
-          name: item,
-          selected: true
-        };
-      });
-      this.setState({ tags });
+      if (result.tags) {
+        const tags = result.tags.map(item => {
+          return {
+            name: item,
+            selected: true
+          };
+        });
+        this.setState({ tags });
+      }
     });
   }
 
@@ -44,13 +46,15 @@ export class Filters extends React.Component {
     const { filtersActive, tags } = this.state;
     return (
       <React.Fragment>
-        <button
-          className="btn btn-sm btn-primary blockBtn"
-          type="button"
-          onClick={this.toggleFilters}
-        >
-          Toggle Filters
-        </button>
+        <div className="row mt-5">
+          <button
+            className="btn btn-sm btn-primary blockBtn"
+            type="button"
+            onClick={this.toggleFilters}
+          >
+            Toggle Filters
+          </button>
+        </div>
 
         {filtersActive ? (
           <React.Fragment>
