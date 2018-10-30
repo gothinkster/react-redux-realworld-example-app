@@ -3,20 +3,16 @@ import ListPagination from "./ListPagination";
 import React from "react";
 
 const ArticleList = props => {
-  if (!props.articles) {
+  const { articles, currentPage, pager } = props;
+  if (!articles) {
     return <div className="article-preview">Loading...</div>;
   }
 
-  if (props.articles.length === 0) {
+  if (!articles.length) {
     return <div className="article-preview">No articles are here... yet.</div>;
   }
 
-  console.log(props.currentPage);
-
-  const pageArticles = props.articles.slice(
-    props.currentPage,
-    props.currentPage + 5
-  );
+  const pageArticles = articles.slice(currentPage, currentPage + 5);
 
   return (
     <div>
@@ -25,9 +21,9 @@ const ArticleList = props => {
       })}
 
       <ListPagination
-        pager={props.pager}
-        articlesCount={props.articles.length}
-        currentPage={props.currentPage}
+        pager={pager}
+        articlesCount={articles.length}
+        currentPage={currentPage}
       />
     </div>
   );
