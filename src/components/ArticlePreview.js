@@ -33,7 +33,9 @@ const ArticlePreview = props => {
     createdAt,
     title,
     tags,
-    favoritesCount
+    favoritesCount,
+    favorite,
+    unfavorite
   } = props.article;
 
   const favoriteButtonClass = favorited ? FAVORITED_CLASS : NOT_FAVORITED_CLASS;
@@ -41,9 +43,9 @@ const ArticlePreview = props => {
   const handleClick = ev => {
     ev.preventDefault();
     if (favorited) {
-      props.unfavorite(slug);
+      unfavorite(slug);
     } else {
-      props.favorite(slug);
+      favorite(slug);
     }
   };
 
