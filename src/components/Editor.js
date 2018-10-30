@@ -19,8 +19,15 @@ class Editor extends React.Component {
       options: ["Tutorial", "Op-Ed", "Stack Overflow"]
     };
 
+    this.keyCodes = {
+      enter: 13,
+      tab: 9,
+      comma: 188
+    };
+
     this.updateField = this.updateField.bind(this);
-    this.watchForEnter = this.watchForEnter.bind(this);
+    this.onHandleSnippetKeyPress = this.onHandleSnippetKeyPress.bind(this);
+    this.onHandleTagKeyPress = this.onHandleTagKeyPress.bind(this);
     this.removeTagHandler = this.removeTagHandler.bind(this);
     this.isDisabled = this.isDisabled.bind(this);
     this.submitForm = this.submitForm.bind(this);
@@ -45,26 +52,29 @@ class Editor extends React.Component {
     });
   }
 
-  watchForEnter(event) {
-    event.preventDefault();
-    if (event.keyCode === 13) {
-      switch (event.target.name) {
-        case "tagInput":
-          this.setState(prevState => ({
-            tags: [...prevState.tags, prevState.tagInput],
-            tagInput: ""
-          }));
-          break;
+  onHandleTagKeyPress(event) {
+    const { tags, tagInput } = this.state;
+    const { enter, tab, comma } = this.keyCodes;
 
-        case "snippetInput":
-          this.setState(prevState => ({
-            snippets: [...prevState.snippets, prevState.snippetInput],
-            snippetInput: ""
-          }));
-          break;
+    if (
+      tagInput.length &&
+      (event.which === enter || event.which === tab || event.which === comma)
+    ) {
+      this.setState({
+        tags: [...tags, tagInput],
+        tagInput: ""
+      });
+    }
+  }
 
-        default:
-      }
+  onHandleSnippetKeyPress(event) {
+    const { snippets, snippetInput } = this.state;
+    const { enter } = this.keyCodes;
+    if (event.which === enter) {
+      this.setState({
+        snippets: [...snippets, snippetInput],
+        snippetInput: ""
+      });
     }
   }
 
@@ -210,7 +220,7 @@ class Editor extends React.Component {
                         value={snippetInput}
                         rows={4}
                         onChange={event => this.updateField(event)}
-                        onKeyUp={event => this.watchForEnter(event)}
+                        onKeyUp={event => this.onHandleSnippetKeyPress(event)}
                       />
                       <div>
                         {snippets.length > 0 &&
@@ -227,6 +237,7 @@ class Editor extends React.Component {
                                     this.removeTagHandler(event, index)
                                   }
                                 />
+                                <br />
                                 {this.insertLineBreaks(snippet).map(
                                   (snippetLine, i) => {
                                     return (
@@ -257,7 +268,7 @@ class Editor extends React.Component {
                       type="text"
                       value={tagInput}
                       onChange={event => this.updateField(event)}
-                      onKeyUp={this.watchForEnter}
+                      onKeyUp={event => this.onHandleTagKeyPress(event)}
                     />
 
                     <div className="tag-list">
