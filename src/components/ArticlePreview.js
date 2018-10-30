@@ -35,7 +35,8 @@ const ArticlePreview = props => {
     tags,
     favoritesCount,
     favorite,
-    unfavorite
+    unfavorite,
+    type
   } = props.article;
 
   const favoriteButtonClass = favorited ? FAVORITED_CLASS : NOT_FAVORITED_CLASS;
@@ -72,13 +73,14 @@ const ArticlePreview = props => {
           </button>
         </div>
       </div>
-      <span className="viewsCounter">This article has {views} views</span>
+      <span className="viewsCounter">This article has {views || 0} views</span>
       <Link
         to={`/article/${slug}`}
         onClick={onHandleLinkClick}
         className="preview-link"
       >
         <h1>{title}</h1>
+        <span className="date">{type}</span>
         <ul className="tag-list">
           {tags.map(tag => {
             return (
