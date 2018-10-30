@@ -47,9 +47,7 @@ const ArticlePreview = props => {
     }
   };
 
-  const onHandleLinkClick = (event, slug) => {
-    event.persist();
-    console.log(slug);
+  const onHandleLinkClick = () => {
     addView(slug);
   };
 
@@ -75,7 +73,7 @@ const ArticlePreview = props => {
       <span className="viewsCounter">This article has {views} views</span>
       <Link
         to={`/article/${slug}`}
-        onClick={event => onHandleLinkClick(event, slug)}
+        onClick={onHandleLinkClick}
         className="preview-link"
       >
         <h1>{title}</h1>
