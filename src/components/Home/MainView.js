@@ -4,16 +4,16 @@ import { connect } from "react-redux";
 import ArticleList from "../ArticleList";
 import TypeFilter from "./typeFilter";
 import { getArticleCount, fetchArticles } from "../../services/article";
-import { Filters } from "./filters";
+import Filters from "./filters";
 import SearchBar from "./searchBar";
 import { LOAD } from "../../constants/actionTypes";
 
 const mapStateToProps = state => ({
   ...state.articleList,
-  tags: state.home.tags,
+  tags: state.articleList.tags || [],
   typeFilter: state.articleList.typeFilter,
   token: state.common.token,
-  articles: state.articleList.articles
+  articles: state.articleList.articles || []
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -28,6 +28,7 @@ class MainView extends React.Component {
       articlesCount: 0
     };
 
+    this.filterArticlesByTag = this.filterArticlesByTag.bind(this);
     this.filterByType = this.filterByType.bind(this);
   }
 
@@ -50,8 +51,30 @@ class MainView extends React.Component {
     });
   }
 
-  filterByType() {
-    const { articles, typeFilter } = this.props;
+  checkTags(article, tags) {
+    for (let tag of tags) {
+      for (let articleTag of article.tags) {
+        if (tag.selected && tag.name === articleTag) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  filterArticlesByTag(articles) {
+    const { tags } = this.props;
+    if (tags.length) {
+      return articles.filter(article => {
+        return this.checkTags(article, tags) === true;
+      });
+    } else {
+      return articles;
+    }
+  }
+
+  filterByType(articles) {
+    const { typeFilter } = this.props;
 
     if (typeFilter === "All") {
       return articles;
@@ -70,6 +93,11 @@ class MainView extends React.Component {
     }
   }
 
+  filterArticles() {
+    const { articles } = this.props;
+    return this.filterArticlesByTag(this.filterByType(articles));
+  }
+
   render() {
     const { pager, currentPage } = this.props;
     const { articlesCount } = this.state;
@@ -80,7 +108,7 @@ class MainView extends React.Component {
         <Filters />
         <ArticleList
           pager={pager}
-          articles={this.filterByType()}
+          articles={this.filterArticles()}
           articlesCount={articlesCount}
           currentPage={currentPage}
         />

@@ -10,8 +10,10 @@ import {
   PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_LOADED,
   PROFILE_FAVORITES_PAGE_UNLOADED,
-  UPDATE_TYPE_FILTER,
-  LOAD
+  LOAD,
+  LOAD_TAGS,
+  CHECK_TAG,
+  UPDATE_TYPE_FILTER
 } from "../constants/actionTypes";
 
 export default (state = {}, action) => {
@@ -89,6 +91,25 @@ export default (state = {}, action) => {
     case PROFILE_FAVORITES_PAGE_UNLOADED:
       return {};
 
+    case LOAD_TAGS:
+      return {
+        ...state,
+        tags: action.payload
+      };
+
+    case CHECK_TAG:
+      return {
+        ...state,
+        tags: state.tags.map(tag => {
+          if (tag.name === action.payload.name) {
+            return {
+              name: action.payload.name,
+              selected: action.payload.selected
+            };
+          }
+          return tag;
+        })
+      };
     case UPDATE_TYPE_FILTER:
       return {
         ...state,
