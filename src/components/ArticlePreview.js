@@ -31,6 +31,7 @@ const mapDispatchToProps = dispatch => ({
 
 const ArticlePreview = props => {
   const article = props.article;
+  const author = article.author || { username: "" };
   const views = props.views || 0;
   const favoriteButtonClass = article.favorited
     ? FAVORITED_CLASS
@@ -49,8 +50,8 @@ const ArticlePreview = props => {
     <div className="article-preview">
       <div className="article-meta">
         <div className="info">
-          <Link className="author" to={`/@${article.author.username}`}>
-            {article.author.username}
+          <Link className="author" to={`/@${author.username}`}>
+            {author.username}
           </Link>
           <span className="date">
             {new Date(article.createdAt).toDateString()}
@@ -70,13 +71,17 @@ const ArticlePreview = props => {
       <Link to={`/article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>
         <ul className="tag-list">
-          {article.tags.map(tag => {
-            return (
-              <li className="tag-default tag-pill tag-outline" key={`${tag}`}>
-                {tag}
-              </li>
-            );
-          })}
+          {article.tags &&
+            article.tags.map(tag => {
+              return (
+                <li
+                  className="tag-default tag-pill tag-outline"
+                  key={`${tag}-${article.slug}`}
+                >
+                  {tag}
+                </li>
+              );
+            })}
         </ul>
       </Link>
     </div>

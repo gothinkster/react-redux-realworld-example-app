@@ -10,11 +10,18 @@ import {
   PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_LOADED,
   PROFILE_FAVORITES_PAGE_UNLOADED,
-  UPDATE_TYPE_FILTER
+  UPDATE_TYPE_FILTER,
+  LOAD
 } from "../constants/actionTypes";
 
 export default (state = {}, action) => {
   switch (action.type) {
+    case LOAD:
+      return {
+        ...state,
+        articles: [...action.payload]
+      };
+
     case ARTICLE_FAVORITED:
     case ARTICLE_UNFAVORITED:
       return {

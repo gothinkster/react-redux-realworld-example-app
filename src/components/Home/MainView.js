@@ -4,20 +4,20 @@ import { connect } from "react-redux";
 import ArticleList from "../ArticleList";
 import TypeFilter from "./typeFilter";
 import { getArticleCount, fetchArticles } from "../../services/article";
-
-import { CHANGE_TAB } from "../../constants/actionTypes";
 import { Filters } from "./filters";
+import SearchBar from "./searchBar";
+import { LOAD } from "../../constants/actionTypes";
 
 const mapStateToProps = state => ({
   ...state.articleList,
   tags: state.home.tags,
   typeFilter: state.articleList.typeFilter,
-  token: state.common.token
+  token: state.common.token,
+  articles: state.articleList.articles
 });
 
 const mapDispatchToProps = dispatch => ({
-  onTabClick: (tab, pager, payload) =>
-    dispatch({ type: CHANGE_TAB, tab, pager, payload })
+  load: payload => dispatch({ type: LOAD, payload })
 });
 
 class MainView extends React.Component {
@@ -25,45 +25,33 @@ class MainView extends React.Component {
     super();
 
     this.state = {
-      articlesCount: 0,
-      articles: []
+      articlesCount: 0
     };
 
     this.filterByType = this.filterByType.bind(this);
   }
 
   componentDidMount() {
-    const { currentPage } = this.props;
-    const getCount = new Promise(
-      resolve => {
-        resolve(getArticleCount());
-      },
-      reject => {
-        console.log(reject);
-      }
-    );
+    const getCount = new Promise(resolve => {
+      resolve(getArticleCount());
+    });
 
-    const getArticles = new Promise(
-      resolve => {
-        resolve(fetchArticles(currentPage));
-      },
-      reject => {
-        console.log(reject);
-      }
-    );
+    const getArticles = new Promise(resolve => {
+      resolve(fetchArticles());
+    });
 
     getCount.then(result => {
       this.setState({ articlesCount: result.count });
     });
 
     getArticles.then(result => {
-      this.setState({ articles: result.articles });
+      const { articles } = result;
+      this.props.load(articles);
     });
   }
 
   filterByType() {
-    const { articles } = this.state;
-    const { typeFilter } = this.props;
+    const { articles, typeFilter } = this.props;
 
     if (typeFilter === "All") {
       return articles;
@@ -83,11 +71,12 @@ class MainView extends React.Component {
   }
 
   render() {
-    const { tag, pager, currentPage } = this.props;
+    const { pager, currentPage } = this.props;
     const { articlesCount } = this.state;
     return (
-      <div className="col-md-9">
+      <div className="col-md-12">
         <TypeFilter />
+        <SearchBar />
         <Filters />
         <ArticleList
           pager={pager}
@@ -101,13 +90,13 @@ class MainView extends React.Component {
 }
 
 MainView.propTypes = {
+  articles: PropTypes.array,
   token: PropTypes.string,
-  tab: PropTypes.string,
-  onTabClick: PropTypes.func.isRequired,
   tag: PropTypes.string,
   pager: PropTypes.func,
   currentPage: PropTypes.number,
-  typeFilter: PropTypes.string
+  typeFilter: PropTypes.string,
+  load: PropTypes.func
 };
 
 export default connect(
