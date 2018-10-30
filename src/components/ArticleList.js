@@ -8,7 +8,7 @@ const ArticleList = props => {
     return <div className="article-preview">Loading...</div>;
   }
 
-  if (articles.length === 0) {
+  if (!articles.length) {
     return <div className="article-preview">No articles are here... yet.</div>;
   }
 

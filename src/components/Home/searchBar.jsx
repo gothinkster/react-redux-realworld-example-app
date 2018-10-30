@@ -45,7 +45,7 @@ class SearchBar extends React.Component {
 
   checkForErrors() {
     const { searchInput } = this.state;
-    if (searchInput.length > 0) {
+    if (searchInput.length) {
       if (
         searchInput.match(/"/g) !== null &&
         searchInput.match(/"/g).length % 2 !== 0
