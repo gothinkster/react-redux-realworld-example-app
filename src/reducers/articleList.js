@@ -21,7 +21,8 @@ export default (state = {}, action) => {
     case LOAD:
       return {
         ...state,
-        articles: [...action.payload]
+        articles: [...action.payload],
+        currentPage: 0
       };
 
     case ARTICLE_FAVORITED:
@@ -42,9 +43,7 @@ export default (state = {}, action) => {
     case SET_PAGE:
       return {
         ...state,
-        articles: action.payload.articles,
-        articlesCount: action.payload.articlesCount,
-        currentPage: action.page
+        currentPage: action.payload
       };
     case APPLY_TAG_FILTER:
       return {

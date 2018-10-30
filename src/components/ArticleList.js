@@ -3,7 +3,7 @@ import ArticlePreview from "./ArticlePreview";
 import ListPagination from "./ListPagination";
 
 const ArticleList = props => {
-  const { articles, pager, articlesCount, currentPage } = props;
+  const { articles, pager, currentPage } = props;
   if (!articles) {
     return <div className="article-preview">Loading...</div>;
   }
@@ -11,16 +11,19 @@ const ArticleList = props => {
   if (!articles.length) {
     return <div className="article-preview">No articles are here... yet.</div>;
   }
+  console.log(articles.length);
+  const pageArticles = articles.slice(currentPage, currentPage + 5);
 
   return (
     <React.Fragment>
-      {articles.map(article => {
-        return <ArticlePreview article={article} key={article.uuid} />;
+      {pageArticles.map(article => {
+        return <ArticlePreview article={article} key={article.slug} />;
       })}
 
       <ListPagination
         pager={pager}
-        articlesCount={articlesCount}
+        articles={articles}
+        articlesCount={articles.length}
         currentPage={currentPage}
       />
     </React.Fragment>
