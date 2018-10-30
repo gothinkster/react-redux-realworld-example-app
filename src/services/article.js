@@ -127,3 +127,7 @@ export const fetchAllTags = () => {
     }
   );
 };
+
+export const addView = articleSlug => {
+  requests.post("/article/addView", { slug: articleSlug });
+};

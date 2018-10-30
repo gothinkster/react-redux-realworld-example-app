@@ -43,7 +43,7 @@ class SearchBar extends React.Component {
     this.setState({ [name]: value });
   }
 
-  checkForErrors(event) {
+  checkForErrors() {
     const { searchInput } = this.state;
 
     if (!searchInput) {
@@ -81,7 +81,7 @@ class SearchBar extends React.Component {
           <div className="col">
             <button
               className="btn btn-sm btn-primary pull-xs-right ml-5"
-              onClick={event => this.checkForErrors(event)}
+              onClick={this.checkForErrors}
             >
               Search
             </button>

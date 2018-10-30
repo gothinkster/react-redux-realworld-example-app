@@ -80,7 +80,7 @@ class Article extends React.Component {
                   <p className="author-container">
                     Submitted by {article.author.username}
                   </p>
-                  {article.snippets && (
+                  {article.snippets.length ? (
                     <p className="snippet-container">
                       {" "}
                       {article.snippets.map((snippet, index) => {
@@ -91,7 +91,7 @@ class Article extends React.Component {
                         );
                       })}
                     </p>
-                  )}
+                  ) : null}
                 </React.Fragment>
               )}
           </div>
