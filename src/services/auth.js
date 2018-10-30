@@ -16,7 +16,7 @@ const requests = {
 };
 
 const authenticateUser = (email, password) => {
-  requests.post("/user/authenticate", { email, password }).then(
+  return requests.post("/user/authenticate", { email, password }).then(
     result => {
       return result;
     },

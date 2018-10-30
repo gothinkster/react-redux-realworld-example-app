@@ -28,11 +28,25 @@ class Register extends React.Component {
   }
 
   submitForm(event) {
+    console.log("received button press");
     const {
       fields: { firstName, lastName, username, email, password }
     } = this.state;
     event.preventDefault();
-    registerUser({ username, email, firstName, lastName, password });
+    const registrationResults = new Promise(resolve => {
+      resolve(registerUser({ username, email, firstName, lastName, password }));
+    });
+
+    registrationResults.then(
+      result => {
+        console.log(result);
+        let msg = result === true ? "Success!" : "Fail!";
+        alert(msg);
+      },
+      err => {
+        alert(err);
+      }
+    );
   }
 
   isInvalidField(key) {
