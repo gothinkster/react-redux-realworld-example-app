@@ -1,12 +1,22 @@
 import React from "react";
+import { connect } from "react-redux";
 import { fetchAllTags } from "../../services/article";
+import { LOAD_TAGS, CHECK_TAG } from "../../constants/actionTypes";
 
-export class Filters extends React.Component {
+const mapStateToProps = state => ({
+  tags: state.articleList.tags
+});
+
+const mapDispatchToProps = dispatch => ({
+  loadTags: payload => dispatch({ type: LOAD_TAGS, payload }),
+  checkTag: payload => dispatch({ type: CHECK_TAG, payload })
+});
+
+class Filters extends React.Component {
   constructor() {
     super();
     this.state = {
-      filtersActive: false,
-      tags: []
+      filtersActive: false
     };
     this.toggleFilters = this.toggleFilters.bind(this);
     this.toggleFilter = this.toggleFilter.bind(this);
@@ -18,20 +28,21 @@ export class Filters extends React.Component {
     });
 
     getTags.then(result => {
-      const tags = result.tags.map(item => {
-        return {
-          name: item,
-          selected: true
-        };
-      });
-      this.setState({ tags });
+      if (result.tags) {
+        const tags = result.tags.map(item => {
+          return {
+            name: item,
+            selected: true
+          };
+        });
+        this.props.loadTags(tags);
+      }
     });
   }
 
-  toggleFilter(event, index) {
-    const { tags } = this.state;
-    tags[index].selected = event.target.checked;
-    this.setState({ tags });
+  toggleFilter(event) {
+    const { name, checked } = event.target;
+    this.props.checkTag({ name, selected: checked });
   }
 
   toggleFilters() {
@@ -41,16 +52,20 @@ export class Filters extends React.Component {
   }
 
   render() {
-    const { filtersActive, tags } = this.state;
+    const { tags } = this.props;
+    const { filtersActive } = this.state;
+
     return (
       <React.Fragment>
-        <button
-          className="btn btn-sm btn-primary blockBtn"
-          type="button"
-          onClick={this.toggleFilters}
-        >
-          Toggle Filters
-        </button>
+        <div className="row mt-5">
+          <button
+            className="btn btn-sm btn-primary blockBtn"
+            type="button"
+            onClick={this.toggleFilters}
+          >
+            Toggle Filters
+          </button>
+        </div>
 
         {filtersActive ? (
           <React.Fragment>
@@ -61,7 +76,7 @@ export class Filters extends React.Component {
                     <label className="checkbox" htmlFor={`${tag}Checkbox`}>
                       <input
                         type="checkbox"
-                        name={`${tag}Checkbox`}
+                        name={`${tag.name}`}
                         checked={tag.selected}
                         onChange={event => this.toggleFilter(event, index)}
                       />
@@ -78,3 +93,8 @@ export class Filters extends React.Component {
     );
   }
 }
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Filters);

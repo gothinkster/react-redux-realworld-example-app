@@ -9,11 +9,22 @@ import {
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_LOADED,
-  PROFILE_FAVORITES_PAGE_UNLOADED
-} from '../constants/actionTypes';
+  PROFILE_FAVORITES_PAGE_UNLOADED,
+  LOAD,
+  LOAD_TAGS,
+  CHECK_TAG,
+  UPDATE_TYPE_FILTER
+} from "../constants/actionTypes";
 
 export default (state = {}, action) => {
   switch (action.type) {
+    case LOAD:
+      return {
+        ...state,
+        articles: [...action.payload],
+        currentPage: 0
+      };
+
     case ARTICLE_FAVORITED:
     case ARTICLE_UNFAVORITED:
       return {
@@ -34,7 +45,7 @@ export default (state = {}, action) => {
         ...state,
         articles: action.payload.articles,
         articlesCount: action.payload.articlesCount,
-        currentPage: action.page
+        currentPage: action.currentPage
       };
     case APPLY_TAG_FILTER:
       return {
@@ -80,6 +91,32 @@ export default (state = {}, action) => {
     case PROFILE_PAGE_UNLOADED:
     case PROFILE_FAVORITES_PAGE_UNLOADED:
       return {};
+
+    case LOAD_TAGS:
+      return {
+        ...state,
+        tags: action.payload
+      };
+
+    case CHECK_TAG:
+      return {
+        ...state,
+        tags: state.tags.map(tag => {
+          if (tag.name === action.payload.name) {
+            return {
+              name: action.payload.name,
+              selected: action.payload.selected
+            };
+          }
+          return tag;
+        })
+      };
+    case UPDATE_TYPE_FILTER:
+      return {
+        ...state,
+        typeFilter: action.payload
+      };
+
     default:
       return state;
   }

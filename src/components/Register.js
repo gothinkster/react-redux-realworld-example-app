@@ -96,7 +96,7 @@ class Register extends React.Component {
                       Full Name
                     </label>
                     {this.isInvalidField("fullName") && (
-                      <span className="error">
+                      <span className="error float-right">
                         Must contain first and last name
                       </span>
                     )}
@@ -115,7 +115,7 @@ class Register extends React.Component {
                       Username
                     </label>
                     {this.isInvalidField("username") && (
-                      <span className="error">
+                      <span className="error float-right">
                         username must be at least five characters
                       </span>
                     )}
@@ -134,7 +134,7 @@ class Register extends React.Component {
                       Email
                     </label>
                     {this.isInvalidField("email") && (
-                      <span className="error">
+                      <span className="error float-right">
                         Make sure to enter a valid e-mail
                       </span>
                     )}
@@ -153,7 +153,7 @@ class Register extends React.Component {
                       Password
                     </label>
                     {this.isInvalidField("password") && (
-                      <span className="error">
+                      <span className="error float-right">
                         Password must be at least eight characters
                       </span>
                     )}

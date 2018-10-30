@@ -8,8 +8,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const ListPagination = props => {
-  const { articlesCount, onSetPage, pager, currentPage } = props;
-  if (articlesCount <= 10) {
+  const { articlesCount, onSetPage, pager, currentPage, articles } = props;
+  if (articlesCount <= 5) {
     return null;
   }
 
@@ -19,13 +19,16 @@ const ListPagination = props => {
   }
 
   const setPage = page => {
+    onSetPage(page, 0);
+    /*
     if (pager) {
       console.log("PAGER");
       onSetPage(page, pager(page));
     } else {
       console.log("ARTICLES");
-      onSetPage(page, agent.Articles.all(page));
+      onSetPage(page, articles);
     }
+    */
   };
 
   return (
