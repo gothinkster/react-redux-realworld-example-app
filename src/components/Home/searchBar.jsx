@@ -43,20 +43,21 @@ class SearchBar extends React.Component {
     this.setState({ [name]: value });
   }
 
-  checkForErrors() {
+  checkForErrors(event) {
     const { searchInput } = this.state;
-    if (searchInput.length) {
-      if (
-        searchInput.match(/"/g) !== null &&
-        searchInput.match(/"/g).length % 2 !== 0
-      ) {
-        this.setState({ error: "Quote must be used as a pair" });
-      } else {
-        this.search(searchInput);
-      }
-    } else {
-      this.setState({ error: "Cannot enter blank search term" });
+
+    if (!searchInput) {
+      return this.setState({ error: "Cannot enter blank search term" });
     }
+
+    if (
+      searchInput.match(/"/g) !== null &&
+      searchInput.match(/"/g).length % 2 !== 0
+    ) {
+      return this.setState({ error: "Quote must be used as a pair" });
+    }
+
+    this.search(searchInput);
   }
 
   render() {
@@ -64,10 +65,8 @@ class SearchBar extends React.Component {
     return (
       <React.Fragment>
         <div className="row">
-          {error.length > 0 ? <div className="error">{error}</div> : <br />}
-        </div>
-        <div className="row">
-          <div className="col">
+          <div id="searchInput" className="col">
+            <label htmlFor="searchInput">Search</label>
             <input
               type="text"
               name="searchInput"
@@ -82,10 +81,13 @@ class SearchBar extends React.Component {
           <div className="col">
             <button
               className="btn btn-sm btn-primary pull-xs-right ml-5"
-              onClick={this.checkForErrors}
+              onClick={event => this.checkForErrors(event)}
             >
               Search
             </button>
+          </div>
+          <div className="col">
+            {error.length ? <span className="col error">{error}</span> : <br />}
           </div>
         </div>
       </React.Fragment>

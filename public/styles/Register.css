@@ -1,3 +1,12 @@
+#searchInput > label {
+  float: left;
+  width: 25%;
+}
+
+#searchInput > input {
+  width: 75%;
+}
+
 .error {
   color: #ff0000;
   font-size: 0.75rem;
