@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { SET_PAGE } from "../constants/actionTypes";
 
 const mapDispatchToProps = dispatch => ({
-  onSetPage: (page, payload) => dispatch({ type: SET_PAGE, page, payload })
+  onSetPage: payload => dispatch({ type: SET_PAGE, payload })
 });
 
 const ListPagination = props => {
@@ -19,16 +19,7 @@ const ListPagination = props => {
   }
 
   const setPage = page => {
-    onSetPage(page, 0);
-    /*
-    if (pager) {
-      console.log("PAGER");
-      onSetPage(page, pager(page));
-    } else {
-      console.log("ARTICLES");
-      onSetPage(page, articles);
-    }
-    */
+    onSetPage(page);
   };
 
   return (

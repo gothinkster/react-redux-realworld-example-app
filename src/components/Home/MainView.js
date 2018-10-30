@@ -77,7 +77,6 @@ class MainView extends React.Component {
     const { typeFilter } = this.props;
 
     if (typeFilter === "All") {
-      console.log("ALL");
       return articles;
     }
 

@@ -43,9 +43,7 @@ export default (state = {}, action) => {
     case SET_PAGE:
       return {
         ...state,
-        articles: action.payload.articles,
-        articlesCount: action.payload.articlesCount,
-        currentPage: action.currentPage
+        currentPage: action.payload
       };
     case APPLY_TAG_FILTER:
       return {
