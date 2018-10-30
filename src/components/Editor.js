@@ -209,8 +209,8 @@ class Editor extends React.Component {
                         className="form-control"
                         value={snippetInput}
                         rows={4}
-                        onChange={this.updateField}
-                        onKeyUp={this.watchForEnter}
+                        onChange={event => this.updateField(event)}
+                        onKeyUp={event => this.watchForEnter(event)}
                       />
                       <div>
                         {snippets.length > 0 &&
@@ -256,7 +256,7 @@ class Editor extends React.Component {
                       className="form-control"
                       type="text"
                       value={tagInput}
-                      onChange={this.updateField}
+                      onChange={event => this.updateField(event)}
                       onKeyUp={this.watchForEnter}
                     />
 
