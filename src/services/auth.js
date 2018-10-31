@@ -1,6 +1,9 @@
 import { requests } from "../helpers/requests";
 
 const authenticateUser = (email, password) => {
+  console.log("fired authenticate user");
+  return requests.post("/user/authenticate", { email, password });
+  /*
   return requests.post("/user/authenticate", { email, password }).then(
     result => {
       console.log(result);
@@ -11,6 +14,7 @@ const authenticateUser = (email, password) => {
       return { error: true };
     }
   );
+  */
 };
 
 export const registerUser = userData => {

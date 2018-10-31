@@ -16,23 +16,37 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: UPDATE_FIELD_AUTH, key: "email", value }),
   onChangePassword: value =>
     dispatch({ type: UPDATE_FIELD_AUTH, key: "password", value }),
-  onSubmit: (payload = { errors: true }) => dispatch({ type: LOGIN, payload }), //authenticateUser(email, password) }),
+  onSubmit: payload => dispatch({ type: LOGIN, payload }), //authenticateUser(email, password) }),
   onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED })
 });
 
 class Login extends React.Component {
   constructor() {
     super();
+
     this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
     this.changePassword = ev => this.props.onChangePassword(ev.target.value);
+    this.submitform = this.submitForm.bind(this);
+    /*
     this.submitForm = (event, email, password) => {
-      this.props.onSubmit({ error: true });
+      //this.props.onSubmit({ error: true });
       event.preventDefault();
       authenticateUser(email, password).then(result => {
+        console.log(result);
         //this.props.onSubmit(result);
-        this.props.onSubmit();
+        //this.props.onSubmit();
       });
     };
+    */
+  }
+
+  submitForm(event) {
+    event.preventDefault();
+    const { email, password } = this.props;
+    this.props.onSubmit({ error: true });
+    authenticateUser(email, password).then(result => {
+      console.log(result);
+    });
   }
 
   componentWillUnmount() {
