@@ -24,10 +24,6 @@ class MainView extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      articlesCount: 0
-    };
-
     this.filterArticlesByTag = this.filterArticlesByTag.bind(this);
     this.filterByType = this.filterByType.bind(this);
   }
@@ -47,7 +43,9 @@ class MainView extends React.Component {
 
     getArticles.then(result => {
       const { articles } = result;
-      this.props.load(articles);
+      if (result.length) {
+        this.props.load(articles);
+      }
     });
   }
 
@@ -95,12 +93,11 @@ class MainView extends React.Component {
 
   filterArticles() {
     const { articles } = this.props;
-    return this.filterArticlesByTag(this.filterByType(articles));
+    return this.filterByType(this.filterArticlesByTag(articles));
   }
 
   render() {
     const { pager, currentPage } = this.props;
-    const { articlesCount } = this.state;
     return (
       <div className="col-md-12">
         <TypeFilter />
@@ -109,7 +106,6 @@ class MainView extends React.Component {
         <ArticleList
           pager={pager}
           articles={this.filterArticles()}
-          articlesCount={articlesCount}
           currentPage={currentPage}
         />
       </div>
@@ -120,7 +116,7 @@ class MainView extends React.Component {
 MainView.propTypes = {
   articles: PropTypes.array,
   token: PropTypes.string,
-  tag: PropTypes.string,
+  tags: PropTypes.array,
   pager: PropTypes.func,
   currentPage: PropTypes.number,
   typeFilter: PropTypes.string,
