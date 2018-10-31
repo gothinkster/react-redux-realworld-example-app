@@ -1,20 +1,7 @@
 import { requests } from "../helpers/requests";
 
 const authenticateUser = (email, password) => {
-  console.log("fired authenticate user");
   return requests.post("/user/authenticate", { email, password });
-  /*
-  return requests.post("/user/authenticate", { email, password }).then(
-    result => {
-      console.log(result);
-      return result;
-    },
-    error => {
-      console.log("received error");
-      return { error: true };
-    }
-  );
-  */
 };
 
 export const registerUser = userData => {

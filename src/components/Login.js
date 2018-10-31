@@ -23,30 +23,23 @@ const mapDispatchToProps = dispatch => ({
 class Login extends React.Component {
   constructor() {
     super();
-
     this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
     this.changePassword = ev => this.props.onChangePassword(ev.target.value);
     this.submitform = this.submitForm.bind(this);
-    /*
-    this.submitForm = (event, email, password) => {
-      //this.props.onSubmit({ error: true });
-      event.preventDefault();
-      authenticateUser(email, password).then(result => {
-        console.log(result);
-        //this.props.onSubmit(result);
-        //this.props.onSubmit();
-      });
-    };
-    */
   }
 
   submitForm(event) {
     event.preventDefault();
     const { email, password } = this.props;
-    this.props.onSubmit({ error: true });
-    authenticateUser(email, password).then(result => {
-      console.log(result);
-    });
+
+    authenticateUser(email, password).then(
+      result => {
+        this.props.onSubmit({ user: result });
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
   componentWillUnmount() {
