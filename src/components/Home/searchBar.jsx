@@ -29,11 +29,7 @@ class SearchBar extends React.Component {
   }
 
   search(searchInput) {
-    const mySearch = new Promise(resolve => {
-      resolve(searchArticles(searchInput));
-    });
-
-    mySearch.then(results => {
+    searchArticles(searchInput).then(results => {
       this.props.load(results);
     });
   }

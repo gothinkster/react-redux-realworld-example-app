@@ -21,7 +21,7 @@ export default (state = {}, action) => {
     case LOAD:
       return {
         ...state,
-        articles: [...action.payload],
+        articles: action.payload,
         currentPage: 0
       };
 

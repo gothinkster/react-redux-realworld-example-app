@@ -1,23 +1,10 @@
-import superagentPromise from "superagent-promise";
-import _superagent from "superagent";
-
-const superagent = superagentPromise(_superagent, global.Promise);
-
-const API_ROOT = "http://127.0.0.1:8081";
-const responseBody = res => res.body;
-
-const requests = {
-  post: (url, body) =>
-    superagent.post(`${API_ROOT}${url}`, body).then(responseBody),
-  get: (url, body) =>
-    superagent.get(`${API_ROOT}${url}`, body).then(responseBody)
-};
+import { requests } from "../helpers/requests";
 
 export const SubmitArticle = (article, username) => {
-  article["favoritesCount"] = 0;
-  article["slug"] = article.title.replace(/\s/g, "-");
-  article["createdAt"] = new Date().toISOString();
-  article["author"] = {
+  article.favoritesCount = 0;
+  article.slug = article.title.replace(/\s/g, "-");
+  article.createdAt = new Date().toISOString();
+  article.author = {
     username
   };
   article.tags = article.tags
@@ -29,8 +16,6 @@ export const SubmitArticle = (article, username) => {
 
   requests.post("/article/submit", article);
 };
-
-export const loadArticles = currentPage => {};
 
 export const searchArticles = searchInput => {
   const findQuote = (term, pos) => {
@@ -86,48 +71,17 @@ export const searchArticlesByTags = tags => {
 };
 
 export const fetchArticles = (pageNumber = 1) => {
-  return requests.get(`/articles/${pageNumber}`).then(
-    result => {
-      return result;
-    },
-    error => {
-      return error;
-    }
-  );
+  return requests.get(`/articles/${pageNumber}`);
 };
 
 export const getArticle = uuid => {
-  return requests.get(`/article/${uuid}`).then(
-    result => {
-      return result;
-    },
-    error => {
-      return error;
-    }
-  );
+  return requests.get(`/article/${uuid}`);
 };
 
-export const getArticleCount = () => {
-  return requests.get("/article/count").then(
-    result => {
-      return result;
-    },
-    error => {
-      return error;
-    }
-  );
-};
 export const fetchAllTags = () => {
-  return requests.get("/tags/all").then(
-    result => {
-      return result;
-    },
-    error => {
-      return error;
-    }
-  );
+  return requests.get("/tags/all");
 };
 
-export const addView = articleSlug => {
-  requests.post("/article/addView", { slug: articleSlug });
+export const addView = slug => {
+  requests.post("/article/addView", { slug });
 };

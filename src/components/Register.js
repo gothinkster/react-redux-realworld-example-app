@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import React from "react";
-import agent from "../agent";
 import patterns from "../helpers/patterns";
 import { registerUser } from "../services/auth";
 
@@ -19,6 +18,8 @@ class Register extends React.Component {
       }
     };
 
+    this.initialState = this.state;
+
     this.isDisabled = this.isDisabled.bind(this);
     this.submitForm = this.submitForm.bind(this);
     this.updateField = this.updateField.bind(this);
@@ -27,26 +28,33 @@ class Register extends React.Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
-  submitForm(event) {
-    console.log("received button press");
+  async submitForm(event) {
+    event.preventDefault();
+
     const {
       fields: { firstName, lastName, username, email, password }
     } = this.state;
-    event.preventDefault();
-    const registrationResults = new Promise(resolve => {
-      resolve(registerUser({ username, email, firstName, lastName, password }));
-    });
 
-    registrationResults.then(
+    const msg = await registerUser({
+      username,
+      email,
+      firstName,
+      lastName,
+      password
+    }).then(
       result => {
-        console.log(result);
-        let msg = result === true ? "Success!" : "Fail!";
-        alert(msg);
+        return result.success === true
+          ? "Success!"
+          : "That user already exists";
       },
-      err => {
-        alert(err);
+      error => {
+        return `Please contact an administrator - ${error}`;
       }
     );
+
+    alert(msg);
+
+    this.setState(this.initialState);
   }
 
   isInvalidField(key) {

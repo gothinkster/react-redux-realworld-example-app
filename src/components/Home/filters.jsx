@@ -23,11 +23,11 @@ class Filters extends React.Component {
   }
 
   componentDidMount() {
-    const getTags = new Promise(resolve => {
-      resolve(fetchAllTags());
-    });
+    this.fetchTags();
+  }
 
-    getTags.then(result => {
+  fetchTags() {
+    fetchAllTags().then(result => {
       if (result.tags) {
         const tags = result.tags.map(item => {
           return {

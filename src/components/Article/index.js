@@ -24,30 +24,32 @@ class Article extends React.Component {
       errorLoading: false,
       article: {}
     };
+
+    this.fetchArticle = this.fetchArticle.bind(this);
   }
 
   componentDidMount() {
-    const uuid =
-      window.location.href.match(/\/\d+$/) !== null
-        ? window.location.href
-            .match(/\/\d+$/)[0]
-            .slice(1, window.location.href.match(/\/\d+$/)[0].length)
-        : null;
-    if (uuid !== null) {
-      const fetchArticle = new Promise(resolve => {
-        resolve(getArticle(uuid));
-      });
+    const uuid = this.getUUID();
+    this.fetchArticle(uuid);
+  }
 
-      fetchArticle.then(result => {
-        if (result.hasOwnProperty("uuid")) {
-          this.setState({ article: result, loading: false });
-        } else {
-          this.setState({ loading: false, errorLoading: true });
-        }
-      });
-    } else {
-      this.setState({ loading: false, errorLoading: true });
-    }
+  getUUID() {
+    return window.location.href.match(/\/\d+$/) !== null
+      ? window.location.href
+          .match(/\/\d+$/)[0]
+          .slice(1, window.location.href.match(/\/\d+$/)[0].length)
+      : null;
+  }
+
+  async fetchArticle(uuid) {
+    const result = await getArticle(uuid).then(result => {
+      if (result.hasOwnProperty("uuid")) {
+        return { article: result, loading: false };
+      } else {
+        return { loading: false, errorLoading: true };
+      }
+    });
+    this.setState(result);
   }
 
   render() {

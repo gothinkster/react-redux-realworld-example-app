@@ -17,7 +17,7 @@ const mapDispatchToProps = dispatch => ({
   onChangePassword: value =>
     dispatch({ type: UPDATE_FIELD_AUTH, key: "password", value }),
   onSubmit: (email, password) =>
-    dispatch({ type: LOGIN, payload: authenticateUser(email, password) }),
+    dispatch({ type: LOGIN, payload: { error: true } }), //authenticateUser(email, password) }),
   onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED })
 });
 
@@ -28,6 +28,7 @@ class Login extends React.Component {
     this.changePassword = ev => this.props.onChangePassword(ev.target.value);
     this.submitForm = (event, email, password) => {
       event.preventDefault();
+      //console.log(authenticateUser(email,password));
       this.props.onSubmit(email, password);
     };
   }

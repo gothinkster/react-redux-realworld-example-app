@@ -3,17 +3,17 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import ArticleList from "../ArticleList";
 import TypeFilter from "./typeFilter";
-import { getArticleCount, fetchArticles } from "../../services/article";
+import { fetchArticles } from "../../services/article";
 import Filters from "./filters";
 import SearchBar from "./searchBar";
 import { LOAD } from "../../constants/actionTypes";
 
 const mapStateToProps = state => ({
   ...state.articleList,
-  tags: state.articleList.tags || [],
+  tags: state.articleList.tags,
   typeFilter: state.articleList.typeFilter,
   token: state.common.token,
-  articles: state.articleList.articles || []
+  articles: state.articleList.articles
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -29,21 +29,13 @@ class MainView extends React.Component {
   }
 
   componentDidMount() {
-    const getCount = new Promise(resolve => {
-      resolve(getArticleCount());
-    });
+    this.getAllArticles();
+  }
 
-    const getArticles = new Promise(resolve => {
-      resolve(fetchArticles());
-    });
-
-    getCount.then(result => {
-      this.setState({ articlesCount: result.count });
-    });
-
-    getArticles.then(result => {
+  getAllArticles() {
+    fetchArticles().then(result => {
       const { articles } = result;
-      if (result.length) {
+      if (result) {
         this.props.load(articles);
       }
     });
@@ -121,6 +113,11 @@ MainView.propTypes = {
   currentPage: PropTypes.number,
   typeFilter: PropTypes.string,
   load: PropTypes.func
+};
+
+MainView.defaultProps = {
+  tags: [],
+  articles: []
 };
 
 export default connect(
