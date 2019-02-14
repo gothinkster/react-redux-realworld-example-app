@@ -1,0 +1,32 @@
+{
+  "jake": {
+    "username": "jake",
+    "bio": "I work at statefarm",
+    "image": "https://i.stack.imgur.com/xHWG8.jpg",
+    "following": false
+  },
+  "nietzsche": {
+    "username": "nietzsche",
+    "bio": "Contradict strong faith victorious merciful",
+    "image": "http://nietzsche-ipsum.com/nietzsche.jpg",
+    "following": false
+  },
+  "jesus.mcdonalid47": {
+    "username": "jesus.mcdonalid47",
+    "bio": "Web 2.0 startup names, just for the heck of it",
+    "image": "https://randomuser.me/api/portraits/men/92.jpg",
+    "following": false
+  },
+  "bender": {
+    "username": "bender",
+    "bio": "I'm sorry, guys. I never meant to hurt you. Just to destroy everything you ever believed in",
+    "image": "http://www.unboundworlds.com/wp-content/uploads/2012/03/bender2.jpg",
+    "following": false
+  },
+  "monty.python": {
+    "username": "monty.python",
+    "bio": "You can't expect to wield supreme power just 'cause some watery tart threw a sword at you!",
+    "image": "https://images-na.ssl-images-amazon.com/images/I/710PzQnaomL._SY445_.jpg",
+    "following": false
+  }
+}

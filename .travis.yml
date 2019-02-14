@@ -1,11 +1,14 @@
 language: node_js
 node_js:
-  - "10"
+  - 10
 env:
   matrix:
   - REACT=16.3
-sudo: false
+cache:
+  directories:
+    - ~/.npm
+    - ~/.cache
+install:
+  - npm ci
 script:
   - npm test
-after_success:
-  - npm run coverage
