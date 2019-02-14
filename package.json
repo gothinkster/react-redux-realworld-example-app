@@ -35,7 +35,7 @@
     "cy:verify": "cypress verify",
     "cy:version": "cypress version",
     "cy:run": "cypress run",
-    "cy:run:record": "cypress run --record --key first_test",
+    "cy:run:record": "cypress run --record",
     "cy:open": "cypress open",
     "print-env": "print-env"
   }

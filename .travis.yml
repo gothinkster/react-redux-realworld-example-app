@@ -18,7 +18,7 @@ defaults: &defaults
     #   ## print all Travis environment variables for debugging
     - $(npm bin)/print-env TRAVIS
     - npm start -- --silent &
-    - npm run cy:run -- --record --parallel --group $STAGE_NAME
+    - npm run cy:run -- --record --key first_test
     # after all tests finish running we need
     # to kill all background jobs (like "npm start &")
     - kill $(jobs -p) || true
