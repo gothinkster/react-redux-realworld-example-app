@@ -30,6 +30,11 @@
     "test:e2e": "cypress run",
     "test:unit": "cross-env PORT=4100 react-scripts test --env=jsdom",
     "test": "npm-run-all -s test:unit -p -r start test:e2e",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cy:verify": "cypress verify",
+    "cy:version": "cypress version",
+    "cy:run": "cypress run",
+    "cy:run:record": "cypress run --record",
+    "cy:open": "cypress open"
   }
 }
