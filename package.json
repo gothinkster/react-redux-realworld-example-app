@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "@bahmutov/print-env": "1.1.0",
     "cross-env": "^5.2.0",
     "cypress": "^3.0.2",
     "npm-run-all": "^4.1.2",
@@ -34,7 +35,8 @@
     "cy:verify": "cypress verify",
     "cy:version": "cypress version",
     "cy:run": "cypress run",
-    "cy:run:record": "cypress run --record",
-    "cy:open": "cypress open"
+    "cy:run:record": "cypress run --record --key first_test",
+    "cy:open": "cypress open",
+    "print-env": "print-env"
   }
 }
