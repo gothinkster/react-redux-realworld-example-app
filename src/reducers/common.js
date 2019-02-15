@@ -18,7 +18,7 @@ import {
 } from '../constants/actionTypes';
 
 const defaultState = {
-  appName: 'Conduit',
+  appName: 'ShoppingJS',
   token: null,
   viewChangeCounter: 0
 };
