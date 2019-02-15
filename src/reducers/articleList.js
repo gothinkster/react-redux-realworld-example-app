@@ -1,6 +1,6 @@
 import {
-  ARTICLE_FAVORITED,
-  ARTICLE_UNFAVORITED,
+  ARTICLE_WISHLISTED,
+  ARTICLE_UNWISHLISTED,
   SET_PAGE,
   APPLY_TAG_FILTER,
   HOME_PAGE_LOADED,
@@ -8,22 +8,22 @@ import {
   CHANGE_TAB,
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED,
-  PROFILE_FAVORITES_PAGE_LOADED,
-  PROFILE_FAVORITES_PAGE_UNLOADED
+  PROFILE_WISHLISTS_PAGE_LOADED,
+  PROFILE_WISHLISTS_PAGE_UNLOADED
 } from '../constants/actionTypes';
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case ARTICLE_FAVORITED:
-    case ARTICLE_UNFAVORITED:
+    case ARTICLE_WISHLISTED:
+    case ARTICLE_UNWISHLISTED:
       return {
         ...state,
         articles: state.articles.map(article => {
           if (article.slug === action.payload.article.slug) {
             return {
               ...article,
-              favorited: action.payload.article.favorited,
-              favoritesCount: action.payload.article.favoritesCount
+              whishlisted: action.payload.article.whishlisted,
+              wishlistsCount: action.payload.article.wishlistsCount
             };
           }
           return article;
@@ -69,7 +69,7 @@ export default (state = {}, action) => {
         tag: null
       };
     case PROFILE_PAGE_LOADED:
-    case PROFILE_FAVORITES_PAGE_LOADED:
+    case PROFILE_WISHLISTS_PAGE_LOADED:
       return {
         ...state,
         pager: action.pager,
@@ -78,7 +78,7 @@ export default (state = {}, action) => {
         currentPage: 0
       };
     case PROFILE_PAGE_UNLOADED:
-    case PROFILE_FAVORITES_PAGE_UNLOADED:
+    case PROFILE_WISHLISTS_PAGE_UNLOADED:
       return {};
     default:
       return state;

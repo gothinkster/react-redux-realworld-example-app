@@ -2,34 +2,34 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import agent from '../agent';
 import { connect } from 'react-redux';
-import { ARTICLE_FAVORITED, ARTICLE_UNFAVORITED } from '../constants/actionTypes';
+import { ARTICLE_WISHLISTED, ARTICLE_UNWISHLISTED } from '../constants/actionTypes';
 
-const FAVORITED_CLASS = 'btn btn-sm btn-primary';
-const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
+const WISHLISTED_CLASS = 'btn btn-sm btn-primary';
+const NOT_WISHLISTED_CLASS = 'btn btn-sm btn-outline-primary';
 
 const mapDispatchToProps = dispatch => ({
-  favorite: slug => dispatch({
-    type: ARTICLE_FAVORITED,
-    payload: agent.Articles.favorite(slug)
+  wishlist: slug => dispatch({
+    type: ARTICLE_WISHLISTED,
+    payload: agent.Articles.wishlist(slug)
   }),
-  unfavorite: slug => dispatch({
-    type: ARTICLE_UNFAVORITED,
-    payload: agent.Articles.unfavorite(slug)
+  unwishlist: slug => dispatch({
+    type: ARTICLE_UNWISHLISTED,
+    payload: agent.Articles.unwishlist(slug)
   })
 });
 
 const ArticlePreview = props => {
   const article = props.article;
-  const favoriteButtonClass = article.favorited ?
-    FAVORITED_CLASS :
-    NOT_FAVORITED_CLASS;
+  const wishlistButtonClass = article.whishlisted ?
+    WISHLISTED_CLASS :
+    NOT_WISHLISTED_CLASS;
 
   const handleClick = ev => {
     ev.preventDefault();
-    if (article.favorited) {
-      props.unfavorite(article.slug);
+    if (article.whishlisted) {
+      props.unwishlist(article.slug);
     } else {
-      props.favorite(article.slug);
+      props.wishlist(article.slug);
     }
   };
 
@@ -50,8 +50,8 @@ const ArticlePreview = props => {
         </div>
 
         <div className="pull-xs-right">
-          <button className={favoriteButtonClass} onClick={handleClick}>
-            <i className="ion-heart"></i> {article.favoritesCount}
+          <button className={wishlistButtonClass} onClick={handleClick}>
+            <i className="ion-heart"></i> {article.wishlistsCount}
           </button>
         </div>
       </div>

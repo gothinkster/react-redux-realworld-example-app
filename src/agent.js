@@ -3,7 +3,7 @@ import _superagent from 'superagent';
 
 const superagent = superagentPromise(_superagent, global.Promise);
 
-const API_ROOT = 'https://conduit.productionready.io/api';
+const API_ROOT = 'http://localhost:3000/api';
 
 const encode = encodeURIComponent;
 const responseBody = res => res.body;
@@ -11,7 +11,7 @@ const responseBody = res => res.body;
 let token = null;
 const tokenPlugin = req => {
   if (token) {
-    req.set('authorization', `Token ${token}`);
+    req.set('Authorization', `Bearer ${token}`);
   }
 }
 
@@ -52,16 +52,16 @@ const Articles = {
     requests.get(`/articles?tag=${encode(tag)}&${limit(10, page)}`),
   del: slug =>
     requests.del(`/articles/${slug}`),
-  favorite: slug =>
-    requests.post(`/articles/${slug}/favorite`),
-  favoritedBy: (author, page) =>
-    requests.get(`/articles?favorited=${encode(author)}&${limit(5, page)}`),
+  wishlist: slug =>
+    requests.post(`/articles/${slug}/wishlist`),
+  whishlistedBy: (author, page) =>
+    requests.get(`/articles?whishlisted=${encode(author)}&${limit(5, page)}`),
   feed: () =>
     requests.get('/articles/feed?limit=10&offset=0'),
   get: slug =>
     requests.get(`/articles/${slug}`),
-  unfavorite: slug =>
-    requests.del(`/articles/${slug}/favorite`),
+  unwishlist: slug =>
+    requests.del(`/articles/${slug}/wishlist`),
   update: article =>
     requests.put(`/articles/${article.slug}`, { article: omitSlug(article) }),
   create: article =>
@@ -78,12 +78,8 @@ const Comments = {
 };
 
 const Profile = {
-  follow: username =>
-    requests.post(`/profiles/${username}/follow`),
   get: username =>
-    requests.get(`/profiles/${username}`),
-  unfollow: username =>
-    requests.del(`/profiles/${username}/follow`)
+    requests.get(`/profiles/${username}`)
 };
 
 export default {
