@@ -18,8 +18,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: ARTICLE_PAGE_UNLOADED })
 });
 
-class Article extends React.Component {
-  componentWillMount() {
+class Article extends React.PureComponent {
+  componentDidMount() {
     this.props.onLoad(Promise.all([
       agent.Articles.get(this.props.match.params.id),
       agent.Comments.forArticle(this.props.match.params.id)

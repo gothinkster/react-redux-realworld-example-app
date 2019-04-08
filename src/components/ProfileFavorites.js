@@ -16,7 +16,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class ProfileFavorites extends Profile {
-  componentWillMount() {
+  componentDidMount() {
     this.props.onLoad(page => agent.Articles.favoritedBy(this.props.match.params.username, page), Promise.all([
       agent.Profile.get(this.props.match.params.username),
       agent.Articles.favoritedBy(this.props.match.params.username)

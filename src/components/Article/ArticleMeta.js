@@ -1,6 +1,6 @@
 import ArticleActions from './ArticleActions';
 import { Link } from 'react-router-dom';
-import React from 'react';
+import React, {memo} from 'react';
 
 const ArticleMeta = props => {
   const article = props.article;
@@ -24,4 +24,4 @@ const ArticleMeta = props => {
   );
 };
 
-export default ArticleMeta;
+export default memo(ArticleMeta);

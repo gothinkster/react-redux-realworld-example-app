@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const LoggedOutView = props => {
+const LoggedOutView = React.memo(props => {
   if (!props.currentUser) {
     return (
       <ul className="nav navbar-nav pull-xs-right">
@@ -28,9 +28,9 @@ const LoggedOutView = props => {
     );
   }
   return null;
-};
+});
 
-const LoggedInView = props => {
+const LoggedInView = React.memo(props => {
   if (props.currentUser) {
     return (
       <ul className="nav navbar-nav pull-xs-right">
@@ -67,9 +67,9 @@ const LoggedInView = props => {
   }
 
   return null;
-};
+});
 
-class Header extends React.Component {
+class Header extends React.PureComponent {
   render() {
     return (
       <nav className="navbar navbar-light">

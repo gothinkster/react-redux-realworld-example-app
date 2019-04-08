@@ -38,4 +38,4 @@ const ArticleActions = props => {
   );
 };
 
-export default connect(() => ({}), mapDispatchToProps)(ArticleActions);
+export default connect(() => ({}), mapDispatchToProps)(React.memo(ArticleActions));

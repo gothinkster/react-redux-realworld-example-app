@@ -8,7 +8,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: ADD_COMMENT, payload })
 });
 
-class CommentInput extends React.Component {
+class CommentInput extends React.PureComponent {
   constructor() {
     super();
     this.state = {
@@ -55,4 +55,4 @@ class CommentInput extends React.Component {
   }
 }
 
-export default connect(() => ({}), mapDispatchToProps)(CommentInput);
+export default connect(() => ({}), mapDispatchToProps)(React.memo(CommentInput));

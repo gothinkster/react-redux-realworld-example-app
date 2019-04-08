@@ -1,7 +1,7 @@
 import React from 'react';
 import agent from '../../agent';
 
-const Tags = props => {
+const Tags = React.memo(props => {
   const tags = props.tags;
   if (tags) {
     return (
@@ -31,6 +31,6 @@ const Tags = props => {
       <div>Loading Tags...</div>
     );
   }
-};
+});
 
 export default Tags;

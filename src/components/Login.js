@@ -22,7 +22,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: LOGIN_PAGE_UNLOADED })
 });
 
-class Login extends React.Component {
+class Login extends React.PureComponent {
   constructor() {
     super();
     this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);

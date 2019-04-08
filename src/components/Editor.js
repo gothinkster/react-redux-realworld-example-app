@@ -30,7 +30,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: UPDATE_FIELD_EDITOR, key, value })
 });
 
-class Editor extends React.Component {
+class Editor extends React.PureComponent {
   constructor() {
     super();
 
@@ -80,7 +80,7 @@ class Editor extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.match.params.slug) {
       return this.props.onLoad(agent.Articles.get(this.props.match.params.slug));
     }

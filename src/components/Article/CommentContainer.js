@@ -37,4 +37,4 @@ const CommentContainer = props => {
   }
 };
 
-export default CommentContainer;
+export default React.memo(CommentContainer);

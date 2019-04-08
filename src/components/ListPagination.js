@@ -8,7 +8,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: SET_PAGE, page, payload })
 });
 
-const ListPagination = props => {
+const ListPagination = React.memo(props => {
   if (props.articlesCount <= 10) {
     return null;
   }
@@ -53,6 +53,6 @@ const ListPagination = props => {
       </ul>
     </nav>
   );
-};
+});
 
 export default connect(() => ({}), mapDispatchToProps)(ListPagination);

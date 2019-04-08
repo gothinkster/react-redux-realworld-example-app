@@ -13,7 +13,7 @@ import ProfileFavorites from '../components/ProfileFavorites';
 import Register from '../components/Register';
 import Settings from '../components/Settings';
 import { store } from '../store';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 
 const mapStateToProps = state => {
   return {
@@ -30,7 +30,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: REDIRECT })
 });
 
-class App extends React.Component {
+class App extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps.redirectTo) {
       // this.context.router.replace(nextProps.redirectTo);
@@ -39,7 +39,7 @@ class App extends React.Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const token = window.localStorage.getItem('jwt');
     if (token) {
       agent.setToken(token);

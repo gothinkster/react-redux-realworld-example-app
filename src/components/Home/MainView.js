@@ -4,7 +4,7 @@ import agent from '../../agent';
 import { connect } from 'react-redux';
 import { CHANGE_TAB } from '../../constants/actionTypes';
 
-const YourFeedTab = props => {
+const YourFeedTab = React.memo(props => {
   if (props.token) {
     const clickHandler = ev => {
       ev.preventDefault();
@@ -22,9 +22,9 @@ const YourFeedTab = props => {
     );
   }
   return null;
-};
+});
 
-const GlobalFeedTab = props => {
+const GlobalFeedTab = React.memo(props => {
   const clickHandler = ev => {
     ev.preventDefault();
     props.onTabClick('all', agent.Articles.all, agent.Articles.all());
@@ -39,9 +39,9 @@ const GlobalFeedTab = props => {
       </a>
     </li>
   );
-};
+});
 
-const TagFilterTab = props => {
+const TagFilterTab = React.memo(props => {
   if (!props.tag) {
     return null;
   }
@@ -53,7 +53,7 @@ const TagFilterTab = props => {
       </a>
     </li>
   );
-};
+});
 
 const mapStateToProps = state => ({
   ...state.articleList,
@@ -65,7 +65,7 @@ const mapDispatchToProps = dispatch => ({
   onTabClick: (tab, pager, payload) => dispatch({ type: CHANGE_TAB, tab, pager, payload })
 });
 
-const MainView = props => {
+const MainView = React.memo(props => {
   return (
     <div className="col-md-9">
       <div className="feed-toggle">
@@ -91,6 +91,6 @@ const MainView = props => {
         currentPage={props.currentPage} />
     </div>
   );
-};
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainView);
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(MainView));

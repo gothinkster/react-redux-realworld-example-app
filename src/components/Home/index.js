@@ -27,8 +27,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch({  type: HOME_PAGE_UNLOADED })
 });
 
-class Home extends React.Component {
-  componentWillMount() {
+class Home extends React.PureComponent {
+  componentDidMount() {
     const tab = this.props.token ? 'feed' : 'all';
     const articlesPromise = this.props.token ?
       agent.Articles.feed :

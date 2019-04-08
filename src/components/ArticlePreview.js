@@ -18,7 +18,7 @@ const mapDispatchToProps = dispatch => ({
   })
 });
 
-const ArticlePreview = props => {
+const ArticlePreview = React.memo(props => {
   const article = props.article;
   const favoriteButtonClass = article.favorited ?
     FAVORITED_CLASS :
@@ -74,6 +74,6 @@ const ArticlePreview = props => {
       </Link>
     </div>
   );
-}
+})
 
 export default connect(() => ({}), mapDispatchToProps)(ArticlePreview);

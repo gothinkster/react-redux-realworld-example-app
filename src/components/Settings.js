@@ -8,7 +8,7 @@ import {
   LOGOUT
 } from '../constants/actionTypes';
 
-class SettingsForm extends React.Component {
+class SettingsForm extends React.PureComponent {
   constructor() {
     super();
 
@@ -38,7 +38,7 @@ class SettingsForm extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.currentUser) {
       Object.assign(this.state, {
         image: this.props.currentUser.image || '',
@@ -136,7 +136,7 @@ const mapDispatchToProps = dispatch => ({
   onUnload: () => dispatch({ type: SETTINGS_PAGE_UNLOADED })
 });
 
-class Settings extends React.Component {
+class Settings extends React.PureComponent {
   render() {
     return (
       <div className="settings-page">
