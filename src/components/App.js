@@ -1,19 +1,20 @@
-import agent from '../agent';
-import Header from './Header';
-import React from 'react';
-import { connect } from 'react-redux';
-import { APP_LOAD, REDIRECT } from '../constants/actionTypes';
-import { Route, Switch } from 'react-router-dom';
-import Article from '../components/Article';
-import Editor from '../components/Editor';
-import Home from '../components/Home';
-import Login from '../components/Login';
-import Profile from '../components/Profile';
-import ProfileFavorites from '../components/ProfileFavorites';
-import Register from '../components/Register';
-import Settings from '../components/Settings';
-import { store } from '../store';
-import { push } from 'connected-react-router';
+import agent from '../agent'
+import Header from './Header'
+import React, { lazy, Suspense } from 'react'
+import { connect } from 'react-redux'
+import { APP_LOAD, REDIRECT } from '../constants/actionTypes'
+import { Route, Switch } from 'react-router-dom'
+import { store } from '../store'
+import { push } from 'connected-react-router'
+// const Home = lazy(() => import('../components/Home'/* webpackChunkName: "Home", webpackPreload: true  */))
+import Home from '../components/Home'
+const Article = lazy(() => import('../components/Article' /* webpackChunkName: "Article", webpackPrefetch: true  */))
+const Editor = lazy(() => import('../components/Editor'/* webpackChunkName: "Editor", webpackPrefetch: true  */))
+const Login = lazy(() => import('../components/Login'/* webpackChunkName: "Login", webpackPrefetch: true  */))
+const Profile = lazy(() => import('../components/Profile'/* webpackChunkName: "Profile", webpackPrefetch: true  */))
+const ProfileFavorites = lazy(() => import('../components/ProfileFavorites'/* webpackChunkName: "ProfileFavorites", webpackPrefetch: true  */))
+const Register = lazy(() => import('../components/Register'/* webpackChunkName: "Register", webpackPrefetch: true  */))
+const Settings = lazy(() => import('../components/Settings'/* webpackChunkName: "Settings", webpackPrefetch: true  */))
 
 const mapStateToProps = state => {
   return {
@@ -21,53 +22,56 @@ const mapStateToProps = state => {
     appName: state.common.appName,
     currentUser: state.common.currentUser,
     redirectTo: state.common.redirectTo
-  }};
+  }
+}
 
 const mapDispatchToProps = dispatch => ({
   onLoad: (payload, token) =>
     dispatch({ type: APP_LOAD, payload, token, skipTracking: true }),
   onRedirect: () =>
     dispatch({ type: REDIRECT })
-});
+})
 
 class App extends React.PureComponent {
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (nextProps.redirectTo) {
       // this.context.router.replace(nextProps.redirectTo);
-      store.dispatch(push(nextProps.redirectTo));
-      this.props.onRedirect();
+      store.dispatch(push(nextProps.redirectTo))
+      this.props.onRedirect()
     }
   }
 
-  componentDidMount() {
-    const token = window.localStorage.getItem('jwt');
+  componentDidMount () {
+    const token = window.localStorage.getItem('jwt')
     if (token) {
-      agent.setToken(token);
+      agent.setToken(token)
     }
 
-    this.props.onLoad(token ? agent.Auth.current() : null, token);
+    this.props.onLoad(token ? agent.Auth.current() : null, token)
   }
 
-  render() {
+  render () {
     if (this.props.appLoaded) {
       return (
         <div>
           <Header
             appName={this.props.appName}
             currentUser={this.props.currentUser} />
-            <Switch>
-            <Route exact path="/" component={Home}/>
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            <Route path="/editor/:slug" component={Editor} />
-            <Route path="/editor" component={Editor} />
-            <Route path="/article/:id" component={Article} />
-            <Route path="/settings" component={Settings} />
-            <Route path="/@:username/favorites" component={ProfileFavorites} />
-            <Route path="/@:username" component={Profile} />
-            </Switch>
+            <Suspense fallback={<p>Loading...</p>}>
+              <Switch>
+                <Route exact path='/' component={Home} />
+                <Route path='/login' component={Login} />
+                <Route path='/register' component={Register} />
+                <Route path='/editor/:slug' component={Editor} />
+                <Route path='/editor' component={Editor} />
+                <Route path='/article/:id' component={Article} />
+                <Route path='/settings' component={Settings} />
+                <Route path='/@:username/favorites' component={ProfileFavorites} />
+                <Route path='/@:username' component={Profile} />
+              </Switch>
+            </Suspense>
         </div>
-      );
+      )
     }
     return (
       <div>
@@ -75,7 +79,7 @@ class App extends React.PureComponent {
           appName={this.props.appName}
           currentUser={this.props.currentUser} />
       </div>
-    );
+    )
   }
 }
 
@@ -83,4 +87,4 @@ class App extends React.PureComponent {
 //   router: PropTypes.object.isRequired
 // };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App)
