@@ -38,29 +38,9 @@ class SettingsForm extends React.PureComponent {
     };
   }
 
-  componentDidMount() {
-    if (this.props.currentUser) {
-      Object.assign(this.state, {
-        image: this.props.currentUser.image || '',
-        username: this.props.currentUser.username,
-        bio: this.props.currentUser.bio,
-        email: this.props.currentUser.email
-      });
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.currentUser) {
-      this.setState(Object.assign({}, this.state, {
-        image: nextProps.currentUser.image || '',
-        username: nextProps.currentUser.username,
-        bio: nextProps.currentUser.bio,
-        email: nextProps.currentUser.email
-      }));
-    }
-  }
-
   render() {
+    const { image, username, bio, email } = this.props.currentUser
+
     return (
       <form onSubmit={this.submitForm}>
         <fieldset>
@@ -70,7 +50,7 @@ class SettingsForm extends React.PureComponent {
               className="form-control"
               type="text"
               placeholder="URL of profile picture"
-              value={this.state.image}
+              value={image}
               onChange={this.updateState('image')} />
           </fieldset>
 
@@ -79,7 +59,7 @@ class SettingsForm extends React.PureComponent {
               className="form-control form-control-lg"
               type="text"
               placeholder="Username"
-              value={this.state.username}
+              value={username}
               onChange={this.updateState('username')} />
           </fieldset>
 
@@ -88,7 +68,7 @@ class SettingsForm extends React.PureComponent {
               className="form-control form-control-lg"
               rows="8"
               placeholder="Short bio about you"
-              value={this.state.bio}
+              value={bio}
               onChange={this.updateState('bio')}>
             </textarea>
           </fieldset>
@@ -98,7 +78,7 @@ class SettingsForm extends React.PureComponent {
               className="form-control form-control-lg"
               type="email"
               placeholder="Email"
-              value={this.state.email}
+              value={email}
               onChange={this.updateState('email')} />
           </fieldset>
 
