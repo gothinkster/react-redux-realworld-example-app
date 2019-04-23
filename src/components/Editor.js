@@ -70,9 +70,9 @@ class Editor extends React.PureComponent {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.match.params.slug !== nextProps.match.params.slug) {
-      if (nextProps.match.params.slug) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.slug !== this.props.match.params.slug) {
+      if (this.props.match.params.slug) {
         this.props.onUnload();
         return this.props.onLoad(agent.Articles.get(this.props.match.params.slug));
       }
