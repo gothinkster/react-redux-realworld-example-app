@@ -4,7 +4,7 @@
   "private": true,
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "react-scripts": "2.1.8"
+    "react-scripts": "3.0.0"
   },
   "dependencies": {
     "connected-react-router": "^6.4.0",
