@@ -56,11 +56,15 @@ describe('Sign in', () => {
     }).as('loadFeed');
 
     cy.get('input[placeholder="Email"]').type(registeredUser.email);
-    cy.get('input[placeholder="Password"]').type(`${registeredUser.password}{enter}`);
+    cy.get('input[placeholder="Password"]').type(
+      `${registeredUser.password}{enter}`
+    );
 
     cy.wait(['@postUser', '@loadTags', '@loadFeed']);
 
-    cy.get(`a[href="/@${registeredUser.username}"]`).contains(registeredUser.username);
+    cy.get(`a[href="/@${registeredUser.username}"]`).contains(
+      registeredUser.username
+    );
   });
 
   afterEach(() => {
