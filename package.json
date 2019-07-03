@@ -7,9 +7,9 @@
     "react-scripts": "3.0.1"
   },
   "dependencies": {
-    "connected-react-router": "^6.4.0",
+    "connected-react-router": "^6.5.0",
     "history": "^4.9.0",
-    "marked": "^0.6.2",
+    "marked": "^0.6.3",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
