@@ -9,7 +9,7 @@ import {
   LOGIN_PAGE_UNLOADED
 } from '../constants/actionTypes';
 
-const mapStateToProps = state => ({ ...state.auth });
+const mapStateToProps = state => state.auth;
 
 const mapDispatchToProps = dispatch => ({
   onChangeEmail: value =>
@@ -63,7 +63,7 @@ class Login extends React.PureComponent {
                       className="form-control form-control-lg"
                       type="email"
                       placeholder="Email"
-                      value={email}
+                      value={email || ''}
                       onChange={this.changeEmail} />
                   </fieldset>
 
@@ -72,7 +72,7 @@ class Login extends React.PureComponent {
                       className="form-control form-control-lg"
                       type="password"
                       placeholder="Password"
-                      value={password}
+                      value={password || ''}
                       onChange={this.changePassword} />
                   </fieldset>
 

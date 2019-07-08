@@ -9,15 +9,15 @@ import {
 } from '../constants/actionTypes';
 
 class SettingsForm extends React.PureComponent {
-  constructor() {
-    super();
-
+  constructor(props) {
+    super(props);
+    const { currentUser } = props;
     this.state = {
-      image: '',
-      username: '',
-      bio: '',
-      email: '',
-      password: ''
+      image: (currentUser && currentUser.image) || '',
+      username: (currentUser && currentUser.username) || '',
+      bio: (currentUser && currentUser.bio) || '',
+      email: (currentUser && currentUser.email) || '',
+      password: (currentUser && currentUser.password) || ''
     };
 
     this.updateState = field => ev => {
@@ -39,7 +39,7 @@ class SettingsForm extends React.PureComponent {
   }
 
   render() {
-    const { image, username, bio, email } = this.props.currentUser || {}
+    const { image, username, bio, email } = this.state
 
     return (
       <form onSubmit={this.submitForm}>
