@@ -39,7 +39,7 @@ class SettingsForm extends React.PureComponent {
   }
 
   render() {
-    const { image, username, bio, email } = this.props.currentUser
+    const { image, username, bio, email } = this.props.currentUser || {}
 
     return (
       <form onSubmit={this.submitForm}>
@@ -50,7 +50,7 @@ class SettingsForm extends React.PureComponent {
               className="form-control"
               type="text"
               placeholder="URL of profile picture"
-              value={image}
+              value={image || ''}
               onChange={this.updateState('image')} />
           </fieldset>
 
@@ -59,7 +59,7 @@ class SettingsForm extends React.PureComponent {
               className="form-control form-control-lg"
               type="text"
               placeholder="Username"
-              value={username}
+              value={username || ''}
               onChange={this.updateState('username')} />
           </fieldset>
 
@@ -68,7 +68,7 @@ class SettingsForm extends React.PureComponent {
               className="form-control form-control-lg"
               rows="8"
               placeholder="Short bio about you"
-              value={bio}
+              value={bio || ''}
               onChange={this.updateState('bio')}>
             </textarea>
           </fieldset>
@@ -78,7 +78,7 @@ class SettingsForm extends React.PureComponent {
               className="form-control form-control-lg"
               type="email"
               placeholder="Email"
-              value={email}
+              value={email || ''}
               onChange={this.updateState('email')} />
           </fieldset>
 
