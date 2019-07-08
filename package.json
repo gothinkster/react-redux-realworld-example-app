@@ -9,7 +9,7 @@
   "dependencies": {
     "connected-react-router": "^6.5.0",
     "history": "^4.9.0",
-    "marked": "^0.6.3",
+    "marked": "^0.7.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
