@@ -1,75 +1,74 @@
-import ArticleList from '../ArticleList';
-import React from 'react';
-import agent from '../../agent';
-import { connect } from 'react-redux';
-import { CHANGE_TAB } from '../../constants/actionTypes';
+import ArticleList from '../ArticleList'
+import React from 'react'
+import agent from '../../agent'
+import { connect } from 'react-redux'
+import { CHANGE_TAB } from '../../constants/actionTypes'
 
 const YourFeedTab = React.memo(props => {
   if (props.token) {
     const clickHandler = ev => {
-      ev.preventDefault();
-      props.onTabClick('feed', agent.Articles.feed, agent.Articles.feed());
+      ev.preventDefault()
+      props.onTabClick('feed', agent.Articles.feed, agent.Articles.feed())
     }
 
     return (
-      <li className="nav-item">
-        <a  href=""
-            className={ props.tab === 'feed' ? 'nav-link active' : 'nav-link' }
-            onClick={clickHandler}>
+      <li className='nav-item'>
+        <button type='button'
+          className={props.tab === 'feed' ? 'nav-link active' : 'nav-link'}
+          onClick={clickHandler}>
           Your Feed
-        </a>
+        </button>
       </li>
-    );
+    )
   }
-  return null;
-});
+  return null
+})
 
 const GlobalFeedTab = React.memo(props => {
   const clickHandler = ev => {
-    ev.preventDefault();
-    props.onTabClick('all', agent.Articles.all, agent.Articles.all());
-  };
+    ev.preventDefault()
+    props.onTabClick('all', agent.Articles.all, agent.Articles.all())
+  }
   return (
-    <li className="nav-item">
-      <a
-        href=""
-        className={ props.tab === 'all' ? 'nav-link active' : 'nav-link' }
+    <li className='nav-item'>
+      <button type='button'
+        className={props.tab === 'all' ? 'nav-link active' : 'nav-link'}
         onClick={clickHandler}>
         Global Feed
-      </a>
+      </button>
     </li>
-  );
-});
+  )
+})
 
 const TagFilterTab = React.memo(props => {
   if (!props.tag) {
-    return null;
+    return null
   }
 
   return (
-    <li className="nav-item">
-      <a href="" className="nav-link active">
-        <i className="ion-pound"></i> {props.tag}
-      </a>
+    <li className='nav-item'>
+      <button type='button' className='nav-link active'>
+        <i className='ion-pound' /> {props.tag}
+      </button>
     </li>
-  );
-});
+  )
+})
 
 const mapStateToProps = state => ({
   ...state.articleList,
   tags: state.home.tags,
   token: state.common.token
-});
+})
 
 const mapDispatchToProps = dispatch => ({
   onTabClick: (tab, pager, payload) => dispatch({ type: CHANGE_TAB, tab, pager, payload })
-});
+})
 
 const MainView = React.memo(props => {
   return (
-    <div className="col-md-9">
-      <div className="feed-toggle">
-        <ul className="nav nav-pills outline-active">
+    <div className='col-md-9'>
+      <div className='feed-toggle'>
+        <ul className='nav nav-pills outline-active'>
 
           <YourFeedTab
             token={props.token}
@@ -90,7 +89,7 @@ const MainView = React.memo(props => {
         articlesCount={props.articlesCount}
         currentPage={props.currentPage} />
     </div>
-  );
-});
+  )
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(MainView));
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(MainView))
