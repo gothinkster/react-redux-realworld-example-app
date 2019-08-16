@@ -4,19 +4,19 @@
   "private": true,
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.1.1"
   },
   "dependencies": {
-    "connected-react-router": "^6.5.0",
+    "connected-react-router": "^6.5.2",
     "history": "^4.9.0",
     "marked": "^0.7.0",
     "prop-types": "^15.7.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "react-redux": "^7.1.0",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
-    "redux": "^4.0.1",
+    "redux": "^4.0.4",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
     "superagent": "^5.1.0",
