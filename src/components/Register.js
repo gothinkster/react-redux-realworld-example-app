@@ -26,7 +26,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: REGISTER_PAGE_UNLOADED })
 });
 
-const Register = (props) => {
+const Register = props => {
   // props.onUnload();
 
   const changeEmail     = ev => props.onChangeEmail(ev.target.value);

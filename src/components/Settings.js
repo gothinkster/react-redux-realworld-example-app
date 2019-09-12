@@ -8,7 +8,7 @@ import {
   LOGOUT
 } from '../constants/actionTypes';
 
-const SettingsForm = (props) => {
+const SettingsForm = props => {
   const {currentUser} = props;
   const [state, setState] = useState(Object.assign({image:''}, currentUser));
 
@@ -105,7 +105,7 @@ const mapDispatchToProps = dispatch => ({
   onUnload: () => dispatch({ type: SETTINGS_PAGE_UNLOADED })
 });
 
-const Settings = (props) => {
+const Settings = props => {
   return (
     <div className="settings-page">
       <div className="container page">

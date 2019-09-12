@@ -8,7 +8,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: ADD_COMMENT, payload })
 });
 
-const CommentInput = (props) => {
+const CommentInput = props => {
   const [body, setBody] = useState('');
 
   const setBodyFromEvent = ev => {
