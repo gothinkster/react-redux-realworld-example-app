@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import ListErrors from './ListErrors';
-import React from 'react';
+import React, {useEffect} from 'react';
 import agent from '../agent';
 import { connect } from 'react-redux';
 import {
@@ -38,6 +38,10 @@ const Register = props => {
   }
 
   const {email, password, username} = props;
+
+  useEffect(() => {
+    return () => props.onUnload();
+  }, []);
 
   return (
     <div className="auth-page">
