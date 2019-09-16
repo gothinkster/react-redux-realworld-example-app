@@ -13,7 +13,7 @@ class SettingsForm extends React.PureComponent {
     super(props)
     const { currentUser } = props
     this.state = {
-      image: (currentUser && currentUser.image) || '',
+      image: ((currentUser && currentUser.image) || 'https://static.productionready.io/images/smiley-cyrus.jpg') || '',
       username: (currentUser && currentUser.username) || '',
       bio: (currentUser && currentUser.bio) || '',
       email: (currentUser && currentUser.email) || '',
@@ -51,7 +51,8 @@ class SettingsForm extends React.PureComponent {
               type='text'
               placeholder='URL of profile picture'
               value={image || ''}
-              onChange={this.updateState('image')} />
+              onChange={this.updateState('image')}
+            />
           </fieldset>
 
           <fieldset className='form-group'>
@@ -60,7 +61,8 @@ class SettingsForm extends React.PureComponent {
               type='text'
               placeholder='Username'
               value={username || ''}
-              onChange={this.updateState('username')} />
+              onChange={this.updateState('username')}
+            />
           </fieldset>
 
           <fieldset className='form-group'>
@@ -69,7 +71,8 @@ class SettingsForm extends React.PureComponent {
               rows='8'
               placeholder='Short bio about you'
               value={bio || ''}
-              onChange={this.updateState('bio')} />
+              onChange={this.updateState('bio')}
+            />
           </fieldset>
 
           <fieldset className='form-group'>
@@ -79,7 +82,8 @@ class SettingsForm extends React.PureComponent {
               type='email'
               placeholder='Email'
               value={email || ''}
-              onChange={this.updateState('email')} />
+              onChange={this.updateState('email')}
+            />
           </fieldset>
 
           <fieldset className='form-group'>
@@ -89,13 +93,15 @@ class SettingsForm extends React.PureComponent {
               autoComplete='current-password'
               placeholder='New Password'
               value={this.state.password}
-              onChange={this.updateState('password')} />
+              onChange={this.updateState('password')}
+            />
           </fieldset>
 
           <button
             className='btn btn-lg btn-primary pull-xs-right'
             type='submit'
-            disabled={this.state.inProgress}>
+            disabled={this.state.inProgress}
+          >
             Update Settings
           </button>
 
@@ -131,13 +137,15 @@ class Settings extends React.PureComponent {
 
               <SettingsForm
                 currentUser={this.props.currentUser}
-                onSubmitForm={this.props.onSubmitForm} />
+                onSubmitForm={this.props.onSubmitForm}
+              />
 
               <hr />
 
               <button
                 className='btn btn-outline-danger'
-                onClick={this.props.onClickLogout}>
+                onClick={this.props.onClickLogout}
+              >
                 Or click here to logout.
               </button>
 
