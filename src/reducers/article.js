@@ -5,7 +5,42 @@ import {
   DELETE_COMMENT
 } from '../constants/actionTypes';
 
-export default (state = {}, action) => {
+const defaultState = {
+  article: {
+    title: '',
+    slug: '',
+    body: '',
+    createdAt: '',
+    updatedAt: '',
+    tagList: [],
+    description: '',
+    author: {
+      username: '',
+      bio: null,
+      image: '',
+      following: false
+    },
+    favorited: false,
+    favoritesCount: 0
+  },
+  comments: [
+    {
+      id: 0,
+      createdAt: '',
+      updatedAt: '',
+      body: '',
+      author: {
+        username: '',
+        bio: null,
+        image: '',
+        following: false
+      }
+    }
+  ],
+  commentErrors: null
+};
+
+export default (state = defaultState, action) => {
   switch (action.type) {
     case ARTICLE_PAGE_LOADED:
       return {

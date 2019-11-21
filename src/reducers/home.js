@@ -1,6 +1,10 @@
 import { HOME_PAGE_LOADED, HOME_PAGE_UNLOADED } from '../constants/actionTypes';
 
-export default (state = {}, action) => {
+const defaultState = {
+  tags: []
+};
+
+export default (state = defaultState, action) => {
   switch (action.type) {
     case HOME_PAGE_LOADED:
       return {
@@ -8,7 +12,7 @@ export default (state = {}, action) => {
         tags: action.payload[0].tags
       };
     case HOME_PAGE_UNLOADED:
-      return {};
+      return { ...defaultState };
     default:
       return state;
   }

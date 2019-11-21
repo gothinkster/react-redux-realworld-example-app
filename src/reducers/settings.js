@@ -4,7 +4,12 @@ import {
   ASYNC_START
 } from '../constants/actionTypes';
 
-export default (state = {}, action) => {
+const defaultState = {
+  inProgress: false,
+  errors: null
+};
+
+export default (state = defaultState, action) => {
   switch (action.type) {
     case SETTINGS_SAVED:
       return {
@@ -13,12 +18,14 @@ export default (state = {}, action) => {
         errors: action.error ? action.payload.errors : null
       };
     case SETTINGS_PAGE_UNLOADED:
-      return {};
+      return { ...defaultState };
     case ASYNC_START:
-      return {
-        ...state,
-        inProgress: true
-      };
+      if (action.subtype === SETTINGS_SAVED) {
+        return {
+          ...state,
+          inProgress: true
+        };
+      }
     default:
       return state;
   }

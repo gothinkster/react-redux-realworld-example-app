@@ -3,19 +3,19 @@ import CommentList from './CommentList';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
-const CommentContainer = props => {
-  if (props.currentUser) {
+const CommentContainer = ({ currentUser, comments, slug, errors }) => {
+  if (currentUser) {
     return (
       <div className="col-xs-12 col-md-8 offset-md-2">
         <div>
-          <list-errors errors={props.errors}></list-errors>
-          <CommentInput slug={props.slug} currentUser={props.currentUser} />
+          <list-errors errors={errors}></list-errors>
+          <CommentInput slug={slug} currentUser={currentUser} />
         </div>
 
         <CommentList
-          comments={props.comments}
-          slug={props.slug}
-          currentUser={props.currentUser} />
+          comments={comments}
+          slug={slug}
+          currentUser={currentUser} />
       </div>
     );
   } else {
@@ -29,9 +29,9 @@ const CommentContainer = props => {
         </p>
 
         <CommentList
-          comments={props.comments}
-          slug={props.slug}
-          currentUser={props.currentUser} />
+          comments={comments}
+          slug={slug}
+          currentUser={currentUser} />
       </div>
     );
   }

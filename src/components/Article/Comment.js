@@ -2,10 +2,9 @@ import DeleteButton from './DeleteButton';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
-const Comment = props => {
-  const comment = props.comment;
-  const show = props.currentUser &&
-    props.currentUser.username === comment.author.username;
+const Comment = ({ currentUser, comment, slug }) => {
+  const show = currentUser &&
+    currentUser.username === comment.author.username;
   return (
     <div className="card">
       <div className="card-block">
@@ -26,7 +25,7 @@ const Comment = props => {
         <span className="date-posted">
           {new Date(comment.createdAt).toDateString()}
         </span>
-        <DeleteButton show={show} slug={props.slug} commentId={comment.id} />
+        <DeleteButton show={show} slug={slug} commentId={comment.id} />
       </div>
     </div>
   );

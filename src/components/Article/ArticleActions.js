@@ -9,12 +9,12 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: DELETE_ARTICLE, payload })
 });
 
-const ArticleActions = props => {
-  const article = props.article;
+const ArticleActions = ({ article, canModify, onClickDelete }) => {
   const del = () => {
-    props.onClickDelete(agent.Articles.del(article.slug))
+    onClickDelete(agent.Articles.del(article.slug))
   };
-  if (props.canModify) {
+
+  if (canModify) {
     return (
       <span>
 

@@ -18,18 +18,18 @@ const mapDispatchToProps = dispatch => ({
   })
 });
 
-const ArticlePreview = props => {
-  const article = props.article;
-  const favoriteButtonClass = article.favorited ?
-    FAVORITED_CLASS :
-    NOT_FAVORITED_CLASS;
+const ArticlePreview = ({ article, favorite, unfavorite }) => {
+  const favoriteButtonClass = article.favorited
+    ? FAVORITED_CLASS
+    : NOT_FAVORITED_CLASS;
 
   const handleClick = ev => {
     ev.preventDefault();
+
     if (article.favorited) {
-      props.unfavorite(article.slug);
+      unfavorite(article.slug);
     } else {
-      props.favorite(article.slug);
+      favorite(article.slug);
     }
   };
 
