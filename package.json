@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "cross-env": "^6.0.3",
-    "react-scripts": "3.3.0"
+    "cross-env": "^7.0.0",
+    "react-scripts": "3.3.1"
   },
   "dependencies": {
     "connected-react-router": "^6.6.1",
