@@ -4,22 +4,22 @@
   "private": true,
   "devDependencies": {
     "cross-env": "^7.0.0",
-    "react-scripts": "3.3.1"
+    "react-scripts": "3.4.0"
   },
   "dependencies": {
-    "connected-react-router": "^6.6.1",
+    "connected-react-router": "^6.7.0",
     "history": "^4.10.1",
     "marked": "^0.8.0",
     "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-redux": "^7.1.3",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-redux": "^7.2.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6",
-    "superagent": "^5.2.1",
+    "superagent": "^5.2.2",
     "superagent-promise": "^1.1.0"
   },
   "scripts": {
