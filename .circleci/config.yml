@@ -1,0 +1,14 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.16-browsers
+    working_directory: ~/your-project
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run build
+      - run: sudo npm install -g @lhci/cli@0.3.x
+      - run:
+          name: lhci autorun
+          command: lhci autorun --upload.target=temporary-public-storage || echo "LHCI failed!"
