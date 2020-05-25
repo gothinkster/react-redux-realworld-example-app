@@ -4,6 +4,8 @@ import agent from '../agent';
 import { connect } from 'react-redux';
 import { ARTICLE_FAVORITED, ARTICLE_UNFAVORITED } from '../constants/actionTypes';
 
+import {store} from '../store';
+
 const FAVORITED_CLASS = 'btn btn-sm btn-primary';
 const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
 
@@ -25,12 +27,17 @@ const ArticlePreview = props => {
     NOT_FAVORITED_CLASS;
 
   const handleClick = ev => {
-    ev.preventDefault();
-    if (article.favorited) {
-      props.unfavorite(article.slug);
-    } else {
-      props.favorite(article.slug);
-    }
+    const state = store.getState();
+    
+    if(state.common.currentUser !== null)
+      {
+        ev.preventDefault();
+        if (article.favorited) {
+          props.unfavorite(article.slug);
+        } else {
+          props.favorite(article.slug);
+        }
+      }  
   };
 
   return (
