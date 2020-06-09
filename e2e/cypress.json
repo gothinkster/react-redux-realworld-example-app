@@ -9,7 +9,7 @@
     "integrationFolder": "cypress/integration",
     "pluginsFolder": "cypress/plugins",
     "screenshotsFolder": "cypress/screenshots",
-    "testFiles": "**/*.feature",
+    "testFiles": "**/features/*.feature",
     "video": true,
     "videosFolder": "cypress/videos",
     "supportFile": "cypress/support/index.js",

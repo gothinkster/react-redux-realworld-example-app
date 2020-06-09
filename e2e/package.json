@@ -9,10 +9,12 @@
   "author": "JP",
   "license": "ISC",
   "cypress-cucumber-preprocessor": {
-    "nonGlobalStepDefinitions": true
+    "stepDefinitions": "cypress/support/step_definitions",
+    "commonPath": "cypress/support/step_definitions",
+    "nonGlobalStepDefinitions": false
   },
   "devDependencies": {
-    "cypress": "^4.6.0",
+    "cypress": "^4.8.0",
     "cypress-cucumber-preprocessor": "^2.3.1"
   }
 }

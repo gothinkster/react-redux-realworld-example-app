@@ -23,3 +23,28 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+const _ = Cypress._
+
+Cypress.Commands.add('loginBySingleSignOn', (overrides = {}, user, password) => {
+    Cypress.log({
+        name: 'loginBySingleSignOn',
+    })
+
+    const options = {
+        url: 'https://conduit.productionready.io/api/users/login',
+        method: 'POST',
+        qs: {
+            redirectTo: 'http://localhost:4100/',
+        },
+        form: false, 
+        body: {
+            "user":{
+                "email": user,
+                "password": password
+              }
+        }
+    }
+    // allow us to override defaults with passed in overrides
+    _.extend(options, overrides)
+    cy.request(options)
+})
