@@ -23,28 +23,44 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
 const _ = Cypress._
+const apiBaseUrl = Cypress.env('apiBaseUrl')
 
 Cypress.Commands.add('loginBySingleSignOn', (overrides = {}, user, password) => {
-    Cypress.log({
-        name: 'loginBySingleSignOn',
-    })
-
     const options = {
-        url: 'https://conduit.productionready.io/api/users/login',
+        url: apiBaseUrl + '/users/login',
         method: 'POST',
         qs: {
             redirectTo: 'http://localhost:4100/',
         },
-        form: false, 
+        form: false,
         body: {
-            "user":{
+            "user": {
                 "email": user,
                 "password": password
-              }
+            }
         }
     }
     // allow us to override defaults with passed in overrides
     _.extend(options, overrides)
     cy.request(options)
 })
+
+Cypress.Commands.add('createArticle', (id_token, myFixture) => {
+    //First retrieve fixture from file, then operate
+    // cy.fixture('article').then(myFixture => {
+    //     debugger;
+    //     myFixture.article.title = "Whatever"
+        cy.request({
+            method: 'POST',
+            url: apiBaseUrl + 'articles',
+            body: myFixture,
+            headers: {
+                'Authorization': 'Token ' + id_token,
+                'Content-Type': 'application/json;charset=UTF-8'
+            }
+        })
+    // });
+})
+

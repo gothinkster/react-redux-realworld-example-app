@@ -18,3 +18,38 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+import { Before, After } from 'cypress-cucumber-preprocessor/steps'
+import ArticleApi from '../integration/_apis/articlesApi';
+import UserAPi from '../integration/_apis/userApi'
+import Helper from '../support/helper'
+
+const helper = new Helper();
+const userApi = new UserAPi();
+const articleApi = new ArticleApi();
+const apiBaseUrl = Cypress.env('apiBaseUrl')
+
+
+Before({ tags: "@articles" }, () => {
+    cy.loginBySingleSignOn({ followRedirect: true }, Cypress.env('user'), Cypress.env('password'))
+        .then(helper.responseToToken)
+        .then((id_token) => {
+            Cypress.env('Token', id_token)
+            cy.fixture('article').then((article) => {
+                article.article.title = "Whatever"
+                cy.createArticle(id_token, article)
+            })
+        })
+})
+
+After({ tags: "(not @articles) and (not @smoke)"}, () => {
+    cy.request(apiBaseUrl + 'articles')
+        .its('body')
+        .then((body) => {
+            if (body.articles.length > 0) {
+                for (let i = 0; i < body.articles.length; i++) {
+                    articleApi.deleteArticle(Cypress.env('Token'), body.articles[i]['slug'])
+                }
+            }
+        });
+
+})

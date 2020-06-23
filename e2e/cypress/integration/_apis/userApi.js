@@ -1,18 +1,15 @@
 import '../../support/index'
+import Helper from '../../support/helper'
 
-const responseToToken = (resp) => {
-    return resp.body['user'].token
-}
-
-const user = "jprealini@gmail.com"
-const password = "jppooh74"
+const helper = new Helper();
 
 class userApi {
+
     userLogin() {
-        cy.loginBySingleSignOn({ followRedirect: true }, user, password)
-            .then(responseToToken)
+        cy.loginBySingleSignOn({ followRedirect: true }, Cypress.env('user'), Cypress.env('password'))
+            .then(helper.responseToToken)
             .then((id_token) => {
-                // now go visit our app
+                // now go visit our app                
                 cy.visit('/', {
                     onBeforeLoad(win) {
                         // and before the page finishes loading

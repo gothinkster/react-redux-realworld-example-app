@@ -14,20 +14,13 @@ When(/^I sign in$/, () => {
 
 When(/^I type user and password$/, () => {
     cy.get('input[type=email]').type('jprealini@gmail.com')
-    cy.get('input[type=password]').type('jppooh74')
+    cy.get('input[type=password]').type('123456')
     cy.get('button').contains('Sign in').click()
 });
 
 When(/^I create a new post$/, () => {
     cy.wait(1000)
     cy.get('a[href="/editor"]').click()
-});
-
-When(/^I sign in with my user$/, () => {
-    cy.get('a').contains('Sign in').click()
-    cy.get('input[type=email]').type('jprealini@gmail.com')
-    cy.get('input[type=password]').type('jppooh74')
-    cy.get('button').contains('Sign in').click()
 });
 
 When(/^I create a post with title "([^"]*)" and description "([^"]*)" and content "([^"]*)"$/, (title, description, content) => {
@@ -44,4 +37,11 @@ Then(/^I should see the new post edit page$/, () => {
 
 Then(/^I should see the new post detail page with title "([^"]*)"$/, (title) => {
     cy.get('h1').should('contain', title)
+});
+
+
+When(/^I like a post$/, () => {
+});
+
+Then(/^the like count should be increased by one$/, () => {	
 });

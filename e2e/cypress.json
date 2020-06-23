@@ -1,19 +1,22 @@
 {
-    "chromeWebSecurity": false, 
-    "env": {
-      "TAGS": "not @ignore and @smoke"
-    },
-    "baseUrl": "http://localhost:4100",
-    "ignoreTestFiles": "*.js",
-    "fixturesFolder": "cypress/fixtures",
-    "integrationFolder": "cypress/integration",
-    "pluginsFolder": "cypress/plugins",
-    "screenshotsFolder": "cypress/screenshots",
-    "testFiles": "**/features/*.feature",
-    "video": true,
-    "videosFolder": "cypress/videos",
-    "supportFile": "cypress/support/index.js",
-    "viewportWidth": 1920,
-    "viewportHeight": 1080
-  }
-  
+  "chromeWebSecurity": false,
+  "env": {
+    "TAGS": "not @ignore and @smoke",
+    "Token": "",
+    "user": "jprealini@gmail.com",
+    "password": "123456",
+    "apiBaseUrl": "http://localhost:3000/api/"
+  },
+  "baseUrl": "http://localhost:4100",
+  "ignoreTestFiles": "*.js",
+  "fixturesFolder": "cypress/fixtures",
+  "integrationFolder": "cypress/integration",
+  "pluginsFolder": "cypress/plugins",
+  "screenshotsFolder": "cypress/screenshots",
+  "testFiles": "**/features/*.feature",
+  "video": true,
+  "videosFolder": "cypress/videos",
+  "supportFile": "cypress/support/index.js",
+  "viewportWidth": 1920,
+  "viewportHeight": 1080
+}
