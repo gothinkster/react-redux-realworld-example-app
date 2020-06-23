@@ -48,10 +48,6 @@ Cypress.Commands.add('loginBySingleSignOn', (overrides = {}, user, password) => 
 })
 
 Cypress.Commands.add('createArticle', (id_token, myFixture) => {
-    //First retrieve fixture from file, then operate
-    // cy.fixture('article').then(myFixture => {
-    //     debugger;
-    //     myFixture.article.title = "Whatever"
         cy.request({
             method: 'POST',
             url: apiBaseUrl + 'articles',
@@ -61,6 +57,5 @@ Cypress.Commands.add('createArticle', (id_token, myFixture) => {
                 'Content-Type': 'application/json;charset=UTF-8'
             }
         })
-    // });
 })
 

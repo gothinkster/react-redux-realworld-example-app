@@ -34,22 +34,14 @@ Before({ tags: "@articles" }, () => {
         .then(helper.responseToToken)
         .then((id_token) => {
             Cypress.env('Token', id_token)
+            articleApi.deleteAllArticles();
             cy.fixture('article').then((article) => {
                 article.article.title = "Whatever"
-                cy.createArticle(id_token, article)
+                articleApi.createArticle(id_token, article)
             })
         })
 })
 
-After({ tags: "(not @articles) and (not @smoke)"}, () => {
-    cy.request(apiBaseUrl + 'articles')
-        .its('body')
-        .then((body) => {
-            if (body.articles.length > 0) {
-                for (let i = 0; i < body.articles.length; i++) {
-                    articleApi.deleteArticle(Cypress.env('Token'), body.articles[i]['slug'])
-                }
-            }
-        });
-
+After({ tags: "(not @articles) and (not @smoke)" }, () => {
+    articleApi.deleteAllArticles();
 })
