@@ -11,10 +11,7 @@ const apiBaseUrl = Cypress.env('apiBaseUrl')
 
 before(() => {
 
-    const spec = Cypress.mocha.getRunner().suite.ctx.currentTest.parent.title;
-    cy.log('Spec = ' + spec)
-    if(spec != 'Home login')
-        userApi.userLogin()
+    const spec = Cypress.mocha.getRunner().suite.ctx.currentTest.parent.title;        
     
 });
 

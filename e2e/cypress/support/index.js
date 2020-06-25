@@ -30,16 +30,25 @@ const apiBaseUrl = Cypress.env('apiBaseUrl')
 
 
 Before({ tags: "@articles" }, () => {
-    cy.loginBySingleSignOn({ followRedirect: true }, Cypress.env('user'), Cypress.env('password'))
-        .then(helper.responseToToken)
-        .then((id_token) => {
-            Cypress.env('Token', id_token)
-            articleApi.deleteAllArticles();
-            cy.fixture('articles').then((fixture) => {
-                //fixture.article.title = "Whatever"
-                articleApi.createArticles(id_token, fixture)
+    if (Cypress.env('Token').length == 0) {
+        cy.loginBySingleSignOn({ followRedirect: true }, Cypress.env('user'), Cypress.env('password'))
+            .then(helper.responseToToken)
+            .then((id_token) => {
+                Cypress.env('Token', id_token)
+                articleApi.deleteAllArticles();
+                cy.fixture('articles').then((fixture) => {
+                    //fixture.article.title = "Whatever"
+                    articleApi.createArticles(id_token, fixture)
+                })
             })
+    } else {
+        articleApi.deleteAllArticles();
+        cy.fixture('articles').then((fixture) => {
+            //fixture.article.title = "Whatever"
+            articleApi.createArticles(Cypress.env('Token'), fixture)
         })
+    }
+
 })
 
 After({ tags: "(not @articles) and (not @smoke)" }, () => {

@@ -4,7 +4,7 @@ import Helper from '../../support/helper'
 const helper = new Helper();
 
 class userApi {
-
+    
     userLogin() {
         cy.loginBySingleSignOn({ followRedirect: true }, Cypress.env('user'), Cypress.env('password'))
             .then(helper.responseToToken)
