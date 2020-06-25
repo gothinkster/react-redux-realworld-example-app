@@ -55,4 +55,3 @@ class ArticlesApi {
 }
 
 export default ArticlesApi;
-

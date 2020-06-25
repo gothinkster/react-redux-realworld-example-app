@@ -35,9 +35,9 @@ Before({ tags: "@articles" }, () => {
         .then((id_token) => {
             Cypress.env('Token', id_token)
             articleApi.deleteAllArticles();
-            cy.fixture('article').then((article) => {
-                article.article.title = "Whatever"
-                articleApi.createArticle(id_token, article)
+            cy.fixture('articles').then((fixture) => {
+                //fixture.article.title = "Whatever"
+                articleApi.createArticles(id_token, fixture)
             })
         })
 })
