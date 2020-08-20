@@ -4,9 +4,12 @@
   "private": true,
   "devDependencies": {
     "cross-env": "^5.1.4",
-    "react-scripts": "1.1.1"
+    "react-scripts": "1.1.1",
+    "serverless": "^1.79.0"
   },
   "dependencies": {
+    "@aws-amplify/ui-react": "^0.2.15",
+    "aws-amplify": "^3.0.24",
     "history": "^4.6.3",
     "marked": "^0.3.6",
     "prop-types": "^15.5.10",
@@ -26,6 +29,7 @@
     "start": "cross-env PORT=4100 react-scripts start",
     "build": "react-scripts build",
     "test": "cross-env PORT=4100 react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy:dev": "aws codebuild start-build --cli-input-json file://build-dev.json"
   }
 }

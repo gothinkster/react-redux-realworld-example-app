@@ -14,3 +14,7 @@ build
 .env
 npm-debug.log
 .idea
+
+.serverless
+
+__deploy/.serverless

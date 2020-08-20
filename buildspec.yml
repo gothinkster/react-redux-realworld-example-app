@@ -1,0 +1,14 @@
+version: 0.2
+ 
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - npm install
+  build:
+    commands:
+      - npm run test
+      - npm run build
+      - aws s3 cp ./build s3://$WEBSITE_BUCKET --recursive
+      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths /*

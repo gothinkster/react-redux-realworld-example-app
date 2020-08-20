@@ -1,0 +1,10 @@
+{
+    "projectName": "ab3-frontend-deploy",
+    "sourceVersion": "master",
+    "environmentVariablesOverride": [
+      { "name": "STAGE", "value": "dev", "type": "PLAINTEXT" },
+      { "name": "WEBSITE_BUCKET", "value": "oktank-frontend-dev-frontpagewebsitebucket-19jr14sozhbv6", "type": "PLAINTEXT" },
+      { "name": "CLOUDFRONT_DISTRIBUTION_ID", "value": "E12MWEG8DY8FNG", "type": "PLAINTEXT" }
+    ],
+    "buildspecOverride": "./buildspec.yml"
+}
