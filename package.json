@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "connected-react-router": "^6.8.0",
-    "history": "^5.0.0",
+    "history": "^4.10.1",
     "marked": "^1.1.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
