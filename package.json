@@ -3,10 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "@types/jest": "^26.0.13",
+    "@types/node": "^14.6.3",
+    "@types/react": "^16.9.49",
+    "@types/react-dom": "^16.9.8",
     "cross-env": "^5.1.4",
-    "react-scripts": "1.1.1"
+    "prettier": "^2.1.1",
+    "react-scripts": "3.4.3",
+    "typescript": "^4.0.2"
   },
   "dependencies": {
+    "@grammarly/focal": "^0.8.1",
     "history": "^4.6.3",
     "marked": "^0.3.6",
     "prop-types": "^15.5.10",
@@ -19,6 +26,7 @@
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.1",
+    "rxjs": "^6.6.2",
     "superagent": "^3.8.2",
     "superagent-promise": "^1.1.0"
   },
@@ -26,6 +34,19 @@
     "start": "cross-env PORT=4100 react-scripts start",
     "build": "react-scripts build",
     "test": "cross-env PORT=4100 react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "fmt": "prettier --write \"**/*.{js,jsx,json,ts,tsx,md,mdx,css,html,yml,yaml}\" --ignore-path .gitignore"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

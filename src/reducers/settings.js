@@ -1,8 +1,4 @@
-import {
-  SETTINGS_SAVED,
-  SETTINGS_PAGE_UNLOADED,
-  ASYNC_START
-} from '../constants/actionTypes';
+import { SETTINGS_SAVED, SETTINGS_PAGE_UNLOADED, ASYNC_START } from '../constants/actionTypes'
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -10,16 +6,16 @@ export default (state = {}, action) => {
       return {
         ...state,
         inProgress: false,
-        errors: action.error ? action.payload.errors : null
-      };
+        errors: action.error ? action.payload.errors : null,
+      }
     case SETTINGS_PAGE_UNLOADED:
-      return {};
+      return {}
     case ASYNC_START:
       return {
         ...state,
-        inProgress: true
-      };
+        inProgress: true,
+      }
     default:
-      return state;
+      return state
   }
-};
+}
