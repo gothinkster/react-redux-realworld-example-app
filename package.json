@@ -6,7 +6,9 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.4",
     "cross-env": "^5.1.4",
-    "react-scripts": "3.4.3"
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "react-scripts": "3.4.3",
+    "superagent-mock": "^3.7.0"
   },
   "dependencies": {
     "history": "^4.6.3",
@@ -27,7 +29,7 @@
   "scripts": {
     "start": "cross-env PORT=4100 react-scripts start",
     "build": "react-scripts build",
-    "test": "cross-env PORT=4100 react-scripts test --env=jsdom",
+    "test": "cross-env PORT=4100 react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject"
   },
   "browserslist": {

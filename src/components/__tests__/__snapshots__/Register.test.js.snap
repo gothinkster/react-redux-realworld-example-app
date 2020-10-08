@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Register /> should render 1`] = `
+<div
+  class="auth-page"
+>
+  <div
+    class="container page"
+  >
+    <div
+      class="row"
+    >
+      <div
+        class="col-md-6 offset-md-3 col-xs-12"
+      >
+        <h1
+          class="text-xs-center"
+        >
+          Sign Up
+        </h1>
+        <p
+          class="text-xs-center"
+        >
+          <a
+            href="/login"
+          >
+            Have an account?
+          </a>
+        </p>
+        <form>
+          <fieldset>
+            <fieldset
+              class="form-group"
+            >
+              <input
+                class="form-control form-control-lg"
+                placeholder="Username"
+                type="text"
+                value=""
+              />
+            </fieldset>
+            <fieldset
+              class="form-group"
+            >
+              <input
+                class="form-control form-control-lg"
+                placeholder="Email"
+                type="email"
+                value=""
+              />
+            </fieldset>
+            <fieldset
+              class="form-group"
+            >
+              <input
+                class="form-control form-control-lg"
+                placeholder="Password"
+                type="password"
+                value=""
+              />
+            </fieldset>
+            <button
+              class="btn btn-lg btn-primary pull-xs-right"
+              type="submit"
+            >
+              Sign up
+            </button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+`;
