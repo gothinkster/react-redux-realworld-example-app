@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../css/styles.css'
 
 const LoggedOutView = props => {
   if (!props.currentUser) {
@@ -78,10 +79,11 @@ class Header extends React.Component {
           <Link to="/" className="navbar-brand">
             {this.props.appName.toLowerCase()}
           </Link>
+          <div className="my-nav">
+            <LoggedOutView currentUser={this.props.currentUser} />
 
-          <LoggedOutView currentUser={this.props.currentUser} />
-
-          <LoggedInView currentUser={this.props.currentUser} />
+            <LoggedInView currentUser={this.props.currentUser} />
+          </div>
         </div>
       </nav>
     );
