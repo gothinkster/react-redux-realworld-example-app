@@ -70,18 +70,38 @@ const LoggedInView = props => {
 };
 
 class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.toggleMenu= this.toggleMenu.bind(this);
+    this.state = {
+        active: true,
+    };
+  }
+
+  toggleMenu(){    
+    this.setState(state => ({ active: !state.active }));
+  }
+
   render() {
     return (
-      <nav className="navbar navbar-light">
-        <div className="container">
+      <nav className="navbar navbar-light nav-conduit">
+        <div className="container nav-responsive">
+
+          <div className="hamburger">
+            <button className="btn btn-sm btn-outline-primary" onClick={this.toggleMenu}>
+              <i className="ion-android-menu"></i>
+            </button>
+          </div>
 
           <Link to="/" className="navbar-brand">
             {this.props.appName.toLowerCase()}
           </Link>
 
-          <LoggedOutView currentUser={this.props.currentUser} />
+          <span className={this.state.active ? 'menu-hamburger' : 'menu-hamburger active'}>
+            <LoggedOutView currentUser={this.props.currentUser} />
 
-          <LoggedInView currentUser={this.props.currentUser} />
+            <LoggedInView currentUser={this.props.currentUser} />
+          </span>
         </div>
       </nav>
     );
