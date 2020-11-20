@@ -7,7 +7,7 @@ import Loader from './Loader';
 function ArticleList(props) {
   const { setLoading, loading } = props;
 
-  loading ? <div className="loader">{setLoading(true)}</div> : <div className="loader">{setLoading(false)}</div>
+  loading ? <div className="loader">{setLoading(true)}</div> : setLoading(false)
 
   if (!props.articles) return (<div></div>)
 
@@ -38,7 +38,7 @@ function ArticleList(props) {
 };
 
 const mapStateToProps = (state) => ({
-  loading: state.home.loading
+  loading: state.articleList.loading
 })
 
 
