@@ -37,7 +37,7 @@ class Article extends React.Component {
   render() {
     const { setLoading, loading } = this.props;
 
-    loading ? <div className="loader">{setLoading(true)}</div> : setLoading(false)
+    loading ? setLoading(true) : setLoading(false)
 
     if (!this.props.article) {
       return null;

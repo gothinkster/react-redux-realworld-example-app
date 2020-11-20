@@ -7,7 +7,7 @@ import Loader from './Loader';
 function ArticleList(props) {
   const { setLoading, loading } = props;
 
-  loading ? <div className="loader">{setLoading(true)}</div> : setLoading(false)
+  loading ? setLoading(true) : setLoading(false)
 
   if (!props.articles) return (<div></div>)
 
