@@ -7,6 +7,7 @@
     "react-scripts": "1.1.1"
   },
   "dependencies": {
+    "@emotion/react": "^11.1.1",
     "history": "^4.6.3",
     "marked": "^0.3.6",
     "prop-types": "^15.5.10",
