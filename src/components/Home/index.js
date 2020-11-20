@@ -5,6 +5,7 @@ import Tags from './Tags';
 import agent from '../../agent';
 import { connect } from 'react-redux';
 import {
+  ARTICLE_BEGIN,
   HOME_PAGE_LOADED,
   HOME_PAGE_UNLOADED,
   APPLY_TAG_FILTER
@@ -21,10 +22,12 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onClickTag: (tag, pager, payload) =>
     dispatch({ type: APPLY_TAG_FILTER, tag, pager, payload }),
-  onLoad: (tab, pager, payload) =>
-    dispatch({ type: HOME_PAGE_LOADED, tab, pager, payload }),
+  onLoad: (tab, pager, payload) => {
+    dispatch({ type: ARTICLE_BEGIN })
+    dispatch({ type: HOME_PAGE_LOADED, tab, pager, payload })
+  },
   onUnload: () =>
-    dispatch({  type: HOME_PAGE_UNLOADED })
+    dispatch({ type: HOME_PAGE_UNLOADED })
 });
 
 class Home extends React.Component {
