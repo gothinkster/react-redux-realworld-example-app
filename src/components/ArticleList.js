@@ -1,12 +1,12 @@
+import React from 'react';
 import ArticlePreview from './ArticlePreview';
 import ListPagination from './ListPagination';
-import React from 'react';
+import WithLoader from "./hoc/withLoader";
+
 
 const ArticleList = props => {
   if (!props.articles) {
-    return (
-      <div className="article-preview">Loading...</div>
-    );
+    return <div />;
   }
 
   if (props.articles.length === 0) {
@@ -35,4 +35,4 @@ const ArticleList = props => {
   );
 };
 
-export default ArticleList;
+export default WithLoader(ArticleList);
