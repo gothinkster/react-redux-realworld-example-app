@@ -9,7 +9,8 @@ import { ARTICLE_BEGIN, ARTICLE_PAGE_LOADED, ARTICLE_PAGE_UNLOADED } from '../..
 
 const mapStateToProps = state => ({
   ...state.article,
-  currentUser: state.common.currentUser
+  currentUser: state.common.currentUser,
+  loading: state.article.loading
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -34,6 +35,10 @@ class Article extends React.Component {
   }
 
   render() {
+    const { setLoading, loading } = this.props;
+
+    loading ? <div className="loader">{setLoading(true)}</div> : setLoading(false)
+
     if (!this.props.article) {
       return null;
     }
