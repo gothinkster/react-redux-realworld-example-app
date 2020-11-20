@@ -1,7 +1,52 @@
+.topnav {
+  /* border: 1px solid red; */
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.hide {
+  display: none;
+}
+
+@media (min-width: 768px){
+  .hamburger {
+    display: none;
+  }
+  
+  .my-nav {
+    display: block;  
+  }
+}
 
 @media (max-width: 767px){
   .my-nav {
-  display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    border: 1px solid rgb(207, 205, 205);
+    border-left: none;
+    width: 30%;
+    background: #fff;
+    z-index: 1;
+  }
+
+  .my-nav > ul {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .my-nav > ul>li {
+    text-align: center;
+    /* border: 1px solid red; */
+    width: 100%;
+    margin: 0 !important;
+    z-index: 2;
+  }
+  .hamburger {
+    display: block;
   }
 }
