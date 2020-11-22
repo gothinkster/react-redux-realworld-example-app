@@ -1,9 +1,10 @@
 import React from 'react';
 import agent from '../../agent';
+import  LoadingSpinnerHoc from '../HOC/spinner'
 
 const Tags = props => {
   const tags = props.tags;
-  if (tags) {
+ 
     return (
       <div className="tag-list">
         {
@@ -26,11 +27,6 @@ const Tags = props => {
         }
       </div>
     );
-  } else {
-    return (
-      <div>Loading Tags...</div>
-    );
-  }
 };
 
-export default Tags;
+export default LoadingSpinnerHoc(Tags);

@@ -31,6 +31,17 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class App extends React.Component {
+    
+   state={
+     showNav:false
+   }
+
+   toggleNavBar=(action)=>{
+     this.setState({
+       showNav:action
+     })
+   }
+    
   componentWillReceiveProps(nextProps) {
     if (nextProps.redirectTo) {
       // this.context.router.replace(nextProps.redirectTo);
@@ -73,7 +84,7 @@ class App extends React.Component {
       <div>
         <Header
           appName={this.props.appName}
-          currentUser={this.props.currentUser} />
+          currentUser={this.props.currentUser} showNav={this.state.showNav} onHideNav={()=>this.toggleNavBar(false)} onNavOpen={()=>this.toggleNavBar(true)}/>
       </div>
     );
   }
