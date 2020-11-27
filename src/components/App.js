@@ -1,6 +1,6 @@
 import agent from '../agent';
 import Header from './Header';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { APP_LOAD, REDIRECT } from '../constants/actionTypes';
 import { Route, Switch } from 'react-router-dom';
@@ -30,31 +30,27 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: REDIRECT })
 });
 
-class App extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.redirectTo) {
+function App(props) {
+  useEffect(() => {
+    if (props.redirectTo) {
       // this.context.router.replace(nextProps.redirectTo);
-      store.dispatch(push(nextProps.redirectTo));
-      this.props.onRedirect();
+      store.dispatch(push(props.redirectTo));
+      props.onRedirect();
     }
-  }
-
-  componentWillMount() {
+    // settings token
     const token = window.localStorage.getItem('jwt');
     if (token) {
       agent.setToken(token);
     }
+    props.onLoad(token ? agent.Auth.current() : null, token);
+  });
 
-    this.props.onLoad(token ? agent.Auth.current() : null, token);
-  }
-
-  render() {
-    if (this.props.appLoaded) {
+    if (props.appLoaded) {
       return (
         <div>
           <Header
-            appName={this.props.appName}
-            currentUser={this.props.currentUser} />
+            appName={props.appName}
+            currentUser={props.currentUser} />
             <Switch>
             <Route exact path="/" component={Home}/>
             <Route path="/login" component={Login} />
@@ -68,15 +64,15 @@ class App extends React.Component {
             </Switch>
         </div>
       );
+    } else {
+      return (
+          <div>
+            <Header
+                appName={props.appName}
+                currentUser={props.currentUser} />
+          </div>
+      );
     }
-    return (
-      <div>
-        <Header
-          appName={this.props.appName}
-          currentUser={this.props.currentUser} />
-      </div>
-    );
-  }
 }
 
 // App.contextTypes = {
