@@ -43,7 +43,7 @@ function App(props) {
       agent.setToken(token);
     }
     props.onLoad(token ? agent.Auth.current() : null, token);
-  });
+  }, []);
 
     if (props.appLoaded) {
       return (
@@ -74,9 +74,5 @@ function App(props) {
       );
     }
 }
-
-// App.contextTypes = {
-//   router: PropTypes.object.isRequired
-// };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
