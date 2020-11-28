@@ -33,6 +33,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const Editor = (props) => {
+    this.props = props;
     useSingleton (() => {
         const updateFieldEvent =
             key => ev => props.onUpdateField(key, ev.target.value);
@@ -55,18 +56,18 @@ const Editor = (props) => {
         this.submitForm = ev => {
             ev.preventDefault();
             const article = {
-                title: props.title,
-                description: props.description,
-                body: props.body,
-                tagList: props.tagList
+                title: this.props.title,
+                description: this.props.description,
+                body: this.props.body,
+                tagList: this.props.tagList
             };
 
-            const slug = {slug: props.articleSlug};
-            const promise = props.articleSlug ?
+            const slug = {slug: this.props.articleSlug};
+            const promise = this.props.articleSlug ?
                 agent.Articles.update(Object.assign(article, slug)) :
                 agent.Articles.create(article);
 
-            props.onSubmit(promise);
+            this.props.onSubmit(promise);
         };
     });
     const previousProps = usePrevious(props);
