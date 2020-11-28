@@ -27,8 +27,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     onLoad: (payload, token) =>
         dispatch({type: APP_LOAD, payload, token, skipTracking: true}),
-    onRedirect: () =>
-        dispatch({type: REDIRECT})
+    onRedirect: () => {
+        dispatch({type: REDIRECT});
+    }
+
 });
 
 const App = (props) => {
@@ -37,15 +39,18 @@ const App = (props) => {
             store.dispatch(push(props.redirectTo));
             props.onRedirect();
         }
+    }, [props.redirectTo]);
+
+    useEffect(() => {
         // settings token
         const token = window.localStorage.getItem('jwt');
         if (token) {
             agent.setToken(token);
         }
         props.onLoad(token ? agent.Auth.current() : null, token);
-    }, []);
+    }, [])
 
-    if (props.appLoaded) {
+    if (props.appLoaded) { console.log('here1');
         return (
             <div>
                 <Header

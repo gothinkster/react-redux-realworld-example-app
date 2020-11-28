@@ -83,7 +83,6 @@ const Editor = (props) => {
             props.onUnload();
         };
     }, []);
-
     return (
         <div className="editor-page">
             <div className="container page">
@@ -91,7 +90,6 @@ const Editor = (props) => {
                     <div className="col-md-10 offset-md-1 col-xs-12">
 
                         <ListErrors errors={props.errors}></ListErrors>
-
                         <form>
                             <fieldset>
 
