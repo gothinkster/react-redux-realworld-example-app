@@ -69,23 +69,21 @@ const LoggedInView = props => {
   return null;
 };
 
-class Header extends React.Component {
-  render() {
+const Header = (props) => {
     return (
       <nav className="navbar navbar-light">
         <div className="container">
 
           <Link to="/" className="navbar-brand">
-            {this.props.appName.toLowerCase()}
+            {props.appName.toLowerCase()}
           </Link>
 
-          <LoggedOutView currentUser={this.props.currentUser} />
+          <LoggedOutView currentUser={props.currentUser} />
 
-          <LoggedInView currentUser={this.props.currentUser} />
+          <LoggedInView currentUser={props.currentUser} />
         </div>
       </nav>
     );
-  }
 }
 
 export default Header;
