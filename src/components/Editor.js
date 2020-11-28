@@ -11,6 +11,7 @@ import {
     UPDATE_FIELD_EDITOR
 } from '../constants/actionTypes';
 import usePrevious from "../hooks/usePrevious";
+import useSingleton from "../hooks/useSingleton";
 
 const mapStateToProps = state => ({
     ...state.editor
@@ -32,40 +33,42 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const Editor = (props) => {
-    const updateFieldEvent =
-        key => ev => props.onUpdateField(key, ev.target.value);
-    this.changeTitle = updateFieldEvent('title');
-    this.changeDescription = updateFieldEvent('description');
-    this.changeBody = updateFieldEvent('body');
-    this.changeTagInput = updateFieldEvent('tagInput');
+    useSingleton (() => {
+        const updateFieldEvent =
+            key => ev => props.onUpdateField(key, ev.target.value);
+        this.changeTitle = updateFieldEvent('title');
+        this.changeDescription = updateFieldEvent('description');
+        this.changeBody = updateFieldEvent('body');
+        this.changeTagInput = updateFieldEvent('tagInput');
 
-    this.watchForEnter = ev => {
-        if (ev.keyCode === 13) {
-            ev.preventDefault();
-            props.onAddTag();
-        }
-    };
-
-    this.removeTagHandler = tag => () => {
-        props.onRemoveTag(tag);
-    };
-
-    this.submitForm = ev => {
-        ev.preventDefault();
-        const article = {
-            title: props.title,
-            description: props.description,
-            body: props.body,
-            tagList: props.tagList
+        this.watchForEnter = ev => {
+            if (ev.keyCode === 13) {
+                ev.preventDefault();
+                props.onAddTag();
+            }
         };
 
-        const slug = {slug: props.articleSlug};
-        const promise = props.articleSlug ?
-            agent.Articles.update(Object.assign(article, slug)) :
-            agent.Articles.create(article);
+        this.removeTagHandler = tag => () => {
+            props.onRemoveTag(tag);
+        };
 
-        props.onSubmit(promise);
-    };
+        this.submitForm = ev => {
+            ev.preventDefault();
+            const article = {
+                title: props.title,
+                description: props.description,
+                body: props.body,
+                tagList: props.tagList
+            };
+
+            const slug = {slug: props.articleSlug};
+            const promise = props.articleSlug ?
+                agent.Articles.update(Object.assign(article, slug)) :
+                agent.Articles.create(article);
+
+            props.onSubmit(promise);
+        };
+    });
     const previousProps = usePrevious(props);
     useEffect(() => {
         if (previousProps && previousProps.match.params.slug !== props.match.params.slug) {
