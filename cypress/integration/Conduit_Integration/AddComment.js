@@ -4,6 +4,7 @@ describe('Cypress test for editing blog successfully', function() {
         cy.fixture('profile').then(function (data) {
           this.data = data;
         })
+        
       })
 
     it('Login to application and edit the blog', function() {

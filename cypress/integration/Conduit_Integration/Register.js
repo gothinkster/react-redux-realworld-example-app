@@ -30,6 +30,7 @@ it('CLick on SignUp and and verify registartion', function() {
     cy.get('.error-messages > :nth-child(2)').should('contain','username has already been taken');
     }
 
+    
    // If user in new, verify success
     else{
       cy.get(':nth-child(4) > .nav-link').should('have.text',this.data.userName);

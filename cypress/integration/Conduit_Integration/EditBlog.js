@@ -13,6 +13,7 @@ describe('Cypress test for editing blog successfully', function() {
     // Login to application
     cy.login(this.data.email, this.data.Password);
 
+    
     // Verify username after login
     cy.get(':nth-child(4) > .nav-link').should('have.text',this.data.userName).click();
 

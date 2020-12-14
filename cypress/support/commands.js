@@ -19,6 +19,7 @@ Cypress.Commands.add("OpenApplication", (appURL) => {
  cy.get('.logo-font').should('have.text','conduit');
 })
 
+
 Cypress.Commands.add("login", (email, password) => {
 
     cy.get(':nth-child(2) > .nav-link').click();
