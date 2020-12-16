@@ -6,7 +6,6 @@ describe('Cypress test for editing blog successfully', function() {
         })
         
       })
-
     it('Login to application and edit the blog', function() {
     //Visit the Conduit - RealWorld Page 
    cy.OpenApplication(this.data.AppUrl);

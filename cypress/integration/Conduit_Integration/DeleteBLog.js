@@ -10,7 +10,6 @@ describe('Cypress test for editing blog successfully', function() {
    //Visit the Conduit - RealWorld Page 
    cy.OpenApplication(this.data.AppUrl);
     
-   
    // Login to application
    cy.login(this.data.email, this.data.Password);
 
