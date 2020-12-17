@@ -1,10 +1,12 @@
 {
   "language": "node_js",
-  "os": [
-    "linux"
-  ],
+
   "dist": "xenial",
   "node_js": [
     "stable"
   ]
+
+script:
+#run E2E tests
+$(npm bin)/cypress run
 }
