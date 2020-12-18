@@ -37,10 +37,10 @@ const Tags = {
 const limit = (count: number, p: number) => `limit=${count}&offset=${p ? p * count : 0}`
 const omitSlug = (article: any) => Object.assign({}, article, { slug: undefined })
 const Articles = {
-  all: (page: any) => requests.get(`/articles?${limit(10, page)}`),
-  byAuthor: (author: string | number | boolean, page: any) =>
+  all: (page?: any) => requests.get(`/articles?${limit(10, page)}`),
+  byAuthor: (author: string | number | boolean, page?: any) =>
     requests.get(`/articles?author=${encode(author)}&${limit(5, page)}`),
-  byTag: (tag: string | number | boolean, page: any) =>
+  byTag: (tag: string | number | boolean, page?: any) =>
     requests.get(`/articles?tag=${encode(tag)}&${limit(10, page)}`),
   del: (slug: any) => requests.del(`/articles/${slug}`),
   favorite: (slug: any) => requests.post(`/articles/${slug}/favorite`, undefined),
