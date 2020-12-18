@@ -19,7 +19,8 @@ export default (state = {}, action) => {
       return {
         ...state,
         articles: state.articles.map(article => {
-          if (article.slug === action.payload.article.slug) {
+          const slug = action.payload && action.payload.article && action.payload.article.slug
+          if (article.slug === slug) {
             return {
               ...article,
               favorited: action.payload.article.favorited,
