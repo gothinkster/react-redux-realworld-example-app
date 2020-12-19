@@ -107,9 +107,8 @@ const MainView = (props: {
 
       <ArticleList
         pager={props.pager}
-        articles={props.articles}
-        loading={props.loading}
-        articlesCount={props.articlesCount}
+        articles={props.articles || []}
+        articlesCount={props.articlesCount || 0}
         currentPage={props.currentPage}
       />
     </div>
