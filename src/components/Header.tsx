@@ -1,11 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react"
+import { Link } from "react-router-dom"
 
-const LoggedOutView = props => {
+const LoggedOutView = (props: { currentUser: any }) => {
   if (!props.currentUser) {
     return (
       <ul className="nav navbar-nav pull-xs-right">
-
         <li className="nav-item">
           <Link to="/" className="nav-link">
             Home
@@ -23,18 +22,16 @@ const LoggedOutView = props => {
             Sign up
           </Link>
         </li>
-
       </ul>
-    );
+    )
   }
-  return null;
-};
+  return null
+}
 
-const LoggedInView = props => {
+const LoggedInView = (props: { currentUser: { username?: string; image?: string } }) => {
   if (props.currentUser) {
     return (
       <ul className="nav navbar-nav pull-xs-right">
-
         <li className="nav-item">
           <Link to="/" className="nav-link">
             Home
@@ -54,27 +51,27 @@ const LoggedInView = props => {
         </li>
 
         <li className="nav-item">
-          <Link
-            to={`/@${props.currentUser.username}`}
-            className="nav-link">
-            <img src={props.currentUser.image} className="user-pic" alt={props.currentUser.username} />
+          <Link to={`/@${props.currentUser.username}`} className="nav-link">
+            <img
+              src={props.currentUser.image}
+              className="user-pic"
+              alt={props.currentUser.username}
+            />
             {props.currentUser.username}
           </Link>
         </li>
-
       </ul>
-    );
+    )
   }
 
-  return null;
-};
+  return null
+}
 
-class Header extends React.Component {
+class Header extends React.Component<{ appName: string; currentUser: any }> {
   render() {
     return (
       <nav className="navbar navbar-light">
         <div className="container">
-
           <Link to="/" className="navbar-brand">
             {this.props.appName.toLowerCase()}
           </Link>
@@ -84,8 +81,8 @@ class Header extends React.Component {
           <LoggedInView currentUser={this.props.currentUser} />
         </div>
       </nav>
-    );
+    )
   }
 }
 
-export default Header;
+export default Header

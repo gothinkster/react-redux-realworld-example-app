@@ -2,5 +2,8 @@
     "typescript.tsdk": "node_modules/typescript/lib",
     "[typescriptreact]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
 }

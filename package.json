@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "@types/marked": "^1.2.1",
     "@types/react-redux": "^7.1.12",
     "@types/react-router-dom": "^5.1.6",
     "@types/react-router-redux": "^5.0.18",
@@ -17,7 +18,7 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "history": "^4.6.3",
-    "marked": "^0.3.6",
+    "marked": "^1.2.7",
     "prop-types": "^15.5.10",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",

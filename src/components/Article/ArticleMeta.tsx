@@ -1,9 +1,9 @@
-import ArticleActions from './ArticleActions';
-import { Link } from 'react-router-dom';
-import React from 'react';
+import ArticleActions from "./ArticleActions"
+import { Link } from "react-router-dom"
+import React from "react"
 
-const ArticleMeta = props => {
-  const article = props.article;
+const ArticleMeta = (props: { article: any; canModify: boolean }) => {
+  const article = props.article
   return (
     <div className="article-meta">
       <Link to={`/@${article.author.username}`}>
@@ -14,14 +14,12 @@ const ArticleMeta = props => {
         <Link to={`/@${article.author.username}`} className="author">
           {article.author.username}
         </Link>
-        <span className="date">
-          {new Date(article.createdAt).toDateString()}
-        </span>
+        <span className="date">{new Date(article.createdAt).toDateString()}</span>
       </div>
 
       <ArticleActions canModify={props.canModify} article={article} />
     </div>
-  );
-};
+  )
+}
 
-export default ArticleMeta;
+export default ArticleMeta

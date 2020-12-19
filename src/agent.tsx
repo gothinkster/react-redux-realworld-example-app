@@ -5,7 +5,7 @@ const API_ROOT = "https://conduit.productionready.io/api"
 const encode = encodeURIComponent
 const responseBody = (res: { body: any }) => res.body
 
-let token: null = null
+let token: string | null = null
 const tokenPlugin = (req: { set: (arg0: string, arg1: string) => void }) => {
   if (token) {
     req.set("authorization", `Token ${token}`)
@@ -13,19 +13,19 @@ const tokenPlugin = (req: { set: (arg0: string, arg1: string) => void }) => {
 }
 
 const requests = {
-  del: (url: any) => superagent.del(`${API_ROOT}${url}`).use(tokenPlugin).then(responseBody),
-  get: (url: any) => superagent.get(`${API_ROOT}${url}`).use(tokenPlugin).then(responseBody),
-  put: (url: any, body: any) =>
+  del: (url: string) => superagent.del(`${API_ROOT}${url}`).use(tokenPlugin).then(responseBody),
+  get: (url: string) => superagent.get(`${API_ROOT}${url}`).use(tokenPlugin).then(responseBody),
+  put: (url: string, body: any) =>
     superagent.put(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody),
-  post: (url: any, body: any) =>
+  post: (url: string, body: any) =>
     superagent.post(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody),
 }
 
 const Auth = {
   current: () => requests.get("/user"),
-  login: (email: any, password: any) =>
+  login: (email: string, password: string) =>
     requests.post("/users/login", { user: { email, password } }),
-  register: (username: any, email: any, password: any) =>
+  register: (username: string, email: string, password: string) =>
     requests.post("/users", { user: { username, email, password } }),
   save: (user: any) => requests.put("/user", { user }),
 }
@@ -34,36 +34,37 @@ const Tags = {
   getAll: () => requests.get("/tags"),
 }
 
-const limit = (count: number, p: number) => `limit=${count}&offset=${p ? p * count : 0}`
+const limit = (count: number, p?: number) => `limit=${count}&offset=${p ? p * count : 0}`
 const omitSlug = (article: any) => Object.assign({}, article, { slug: undefined })
 const Articles = {
-  all: (page?: any) => requests.get(`/articles?${limit(10, page)}`),
-  byAuthor: (author: string | number | boolean, page?: any) =>
+  all: (page?: number) => requests.get(`/articles?${limit(10, page)}`),
+  byAuthor: (author: string | number | boolean, page?: number) =>
     requests.get(`/articles?author=${encode(author)}&${limit(5, page)}`),
-  byTag: (tag: string | number | boolean, page?: any) =>
+  byTag: (tag: string | number | boolean, page?: number) =>
     requests.get(`/articles?tag=${encode(tag)}&${limit(10, page)}`),
-  del: (slug: any) => requests.del(`/articles/${slug}`),
-  favorite: (slug: any) => requests.post(`/articles/${slug}/favorite`, undefined),
-  favoritedBy: (author: string | number | boolean, page: any) =>
+  del: (slug: string) => requests.del(`/articles/${slug}`),
+  favorite: (slug: string) => requests.post(`/articles/${slug}/favorite`, undefined),
+  favoritedBy: (author: string | number | boolean, page?: number) =>
     requests.get(`/articles?favorited=${encode(author)}&${limit(5, page)}`),
   feed: () => requests.get("/articles/feed?limit=10&offset=0"),
-  get: (slug: any) => requests.get(`/articles/${slug}`),
-  unfavorite: (slug: any) => requests.del(`/articles/${slug}/favorite`),
-  update: (article: { slug: any }) =>
+  get: (slug: string) => requests.get(`/articles/${slug}`),
+  unfavorite: (slug: string) => requests.del(`/articles/${slug}/favorite`),
+  update: (article: { slug: string }) =>
     requests.put(`/articles/${article.slug}`, { article: omitSlug(article) }),
   create: (article: any) => requests.post("/articles", { article }),
 }
 
 const Comments = {
-  create: (slug: any, comment: any) => requests.post(`/articles/${slug}/comments`, { comment }),
-  delete: (slug: any, commentId: any) => requests.del(`/articles/${slug}/comments/${commentId}`),
-  forArticle: (slug: any) => requests.get(`/articles/${slug}/comments`),
+  create: (slug: string, comment: any) => requests.post(`/articles/${slug}/comments`, { comment }),
+  delete: (slug: string, commentId: number) =>
+    requests.del(`/articles/${slug}/comments/${commentId}`),
+  forArticle: (slug: string) => requests.get(`/articles/${slug}/comments`),
 }
 
 const Profile = {
-  follow: (username: any) => requests.post(`/profiles/${username}/follow`, undefined),
-  get: (username: any) => requests.get(`/profiles/${username}`),
-  unfollow: (username: any) => requests.del(`/profiles/${username}/follow`),
+  follow: (username: string) => requests.post(`/profiles/${username}/follow`, undefined),
+  get: (username: string) => requests.get(`/profiles/${username}`),
+  unfollow: (username: string) => requests.del(`/profiles/${username}/follow`),
 }
 
 export default {
@@ -72,7 +73,7 @@ export default {
   Comments,
   Profile,
   Tags,
-  setToken: (_token: any) => {
+  setToken: (_token: string | null) => {
     token = _token
   },
 }
