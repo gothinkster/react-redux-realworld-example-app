@@ -12,6 +12,8 @@ Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1
 
 We also have notes in [**our wiki**](https://github.com/gothinkster/react-redux-realworld-example-app/wiki) about how the various patterns used in this codebase and how they work (thanks [@thejmazz](https://github.com/thejmazz)!)
 
+Something
+
 
 ## Getting started
 
