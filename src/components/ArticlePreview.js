@@ -42,7 +42,14 @@ const ArticlePreview = (props) => {
     <div className="article-preview">
       <div className="article-meta">
         <Link to={`/@${article.author.username}`}>
-          <img src={article.author.image} alt={article.author.username} />
+          <img
+            src={
+              article.author.image !== ""
+                ? article.author.image
+                : "https://icons.iconarchive.com/icons/google/noto-emoji-smileys/512/10001-grinning-face-icon.png"
+            }
+            alt={article.author.username}
+          />
         </Link>
 
         <div className="info">
