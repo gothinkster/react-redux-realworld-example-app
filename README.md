@@ -49,6 +49,7 @@ The example application is a social blogging site (i.e. a Medium.com clone) call
 - GET and display paginated lists of articles
 - Favorite articles
 - Follow other users
+- Just going to add something new here
 
 **The general page breakdown looks like this:**
 
