@@ -25,5 +25,7 @@
 
 	@ All rigths reserved
 	
+	Waiting for the merge from the other branch while this readme was updated :)
+	
 
 #And so on...
