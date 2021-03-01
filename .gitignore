@@ -17,3 +17,6 @@ npm-debug.log
 
 #Tutorial purporse
 toignore.txt
+
+#Exclude .orig files
+*.orig
