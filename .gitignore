@@ -14,3 +14,6 @@ build
 .env
 npm-debug.log
 .idea
+
+#Tutorial purporse
+toignore.txt
