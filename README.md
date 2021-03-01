@@ -21,5 +21,9 @@
 
 	A bit more changes here.
 
+## Copyright 
+
+	@ All rigths reserved
+	
 
 #And so on...
