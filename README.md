@@ -1,6 +1,9 @@
 # Starter
 
 	Adding something here to rebase the new feature branch!
+	
+	A lot of changes on the read me.
+	
 
 
 #Introduction
