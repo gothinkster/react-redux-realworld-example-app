@@ -35,6 +35,8 @@
 	
 	Adding a line to advance master with one commit to try and create a rebase conflict.
 	Quick fix on the readme. 
+	
+	In github comparision
 		
 
 #And so on...
