@@ -31,7 +31,7 @@
 
 	@ All rigths reserved
 	
-	Waiting for the merge from the other branch while this readme was updated :)
-	
+	Adding a line to advance master with one commit to try and create a rebase conflict.
+		
 
 #And so on...
