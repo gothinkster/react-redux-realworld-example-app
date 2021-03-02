@@ -23,7 +23,8 @@
 #Something else
 
 	This should be added to the staged area so we can difference it with the current commit.
-
+	Some more changes here
+	
 ## Deployement
 
 	A bit more changes here.
