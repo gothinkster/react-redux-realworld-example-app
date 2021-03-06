@@ -24,6 +24,7 @@ class App extends React.Component {
 
 
   render() {
+    const onClick = () => store.dispatch({ type: 'TOGGLE' });
     return (
       <div>
         <h1>Shit-To-Do</h1>
@@ -32,7 +33,7 @@ class App extends React.Component {
           <input
             type="checkbox"
             checked={!!this.state.checked}
-          />
+            onClick={onClick} />
         </div>
         {
           this.state.checked ? (<h2>Done!</h2>) : null
@@ -40,8 +41,6 @@ class App extends React.Component {
       </div>
     );
   }
-
-  
 }
 
 ReactDOM.render((
