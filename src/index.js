@@ -1,14 +1,14 @@
-import ReactDOM from 'react-dom';
-import React from 'react';
-import { createStore } from 'redux';
+import ReactDOM from "react-dom";
+import React from "react";
+import { createStore } from "redux";
 
 const deaultState = { checked: false };
-const reducer = function(state = defaultState, action) {
-  switch (action,type) {
-    case 'TOGGLE';
+const reducer = function (state = defaultState, action) {
+  switch ((action, type)) {
+    case "TOGGLE":
       return { ...state, checked: !state.checked };
   }
-return state;
+  return state;
 };
 const store = createStore(reducer);
 
@@ -22,9 +22,8 @@ class App extends React.Component {
     store.subscribe(() => this.setState(store.getState()));
   }
 
-
   render() {
-    const onClick = () => store.dispatch({ type: 'TOGGLE' });
+    const onClick = () => store.dispatch({ type: "TOGGLE" });
     return (
       <div>
         <h1>Shit-To-Do</h1>
@@ -33,16 +32,13 @@ class App extends React.Component {
           <input
             type="checkbox"
             checked={!!this.state.checked}
-            onClick={onClick} />
+            onClick={onClick}
+          />
         </div>
-        {
-          this.state.checked ? (<h2>Done!</h2>) : null
-        }
+        {this.state.checked ? <h2>Done!</h2> : null}
       </div>
     );
   }
 }
 
-ReactDOM.render((
-  <App />
-), document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));
