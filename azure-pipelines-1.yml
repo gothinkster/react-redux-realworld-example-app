@@ -23,7 +23,8 @@ stages:
         - script: |
                npm install
                npm run build
-               npm test
+               npm test --watch=false --code-coverage
+               mkdir $(Build.ArtifactStagingDirectory)
             
         - task: CopyFiles@2
           inputs:
