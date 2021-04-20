@@ -9,13 +9,39 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+stages:
+  - stage: Build
+    jobs:
+      - job: Build_react
+        displayName: React Build
+        steps:
+        - task: NodeTool@0
+          inputs:
+           versionSpec: '10.x'
+
+        - script: |
+               npm install
+               npm run build
+               npm test
+            
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(System.DefaultWorkingDirectory)'
+            TargetFolder: '$(Build.ArtifactStagingDirectory)'
+          
+        - task: ArchiveFiles@2
+          inputs:
+            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build/React'
+            includeRootFolder: true
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+            replaceExistingArchive: true
+          displayName: Archiving the content
+          
+        - task: PublishBuildArtifacts@1
+          inputs:
+              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+              ArtifactName: 'ReactArtifact'
+              publishLocation: 'Container'
+
