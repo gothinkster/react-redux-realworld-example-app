@@ -27,8 +27,11 @@ stages:
         - task: CopyFiles@2
           inputs:
             SourceFolder: '$(System.DefaultWorkingDirectory)'
+            Contents: |
+                **\*.js
+                package.json
             TargetFolder: '$(Build.ArtifactStagingDirectory)'
-          
+
         - task: ArchiveFiles@2
           inputs:
             rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
