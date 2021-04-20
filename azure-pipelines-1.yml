@@ -46,5 +46,15 @@ stages:
               targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
               artifact: 'ReactArtifact'
               publishLocation: 'pipeline'
+
+      - job: Build_image
+        displayName: Build Docker image
+        steps:
+        - task: Docker@2
+          displayName: Build an image
+          inputs:
+            repository: master
+            command: build
+            Dockerfile: app/Dockerfile
               
 
