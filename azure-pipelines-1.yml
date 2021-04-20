@@ -31,7 +31,7 @@ stages:
           
         - task: ArchiveFiles@2
           inputs:
-            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/build/React'
+            rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
             includeRootFolder: true
             archiveType: 'zip'
             archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
