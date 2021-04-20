@@ -38,9 +38,10 @@ stages:
             replaceExistingArchive: true
           displayName: Archiving the content
           
-        - task: PublishBuildArtifacts@1
+        - task: PublishPipelineArtifact@1
           inputs:
-              PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              ArtifactName: 'ReactArtifact'
+              targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              artifact: 'ReactArtifact'
+              publishLocation: 'pipeline'
               
 
