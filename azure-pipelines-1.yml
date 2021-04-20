@@ -42,5 +42,5 @@ stages:
           inputs:
               PathtoPublish: '$(Build.ArtifactStagingDirectory)'
               ArtifactName: 'ReactArtifact'
-              publishLocation: 'Container'
+              
 
