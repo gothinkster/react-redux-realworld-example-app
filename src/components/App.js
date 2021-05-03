@@ -81,6 +81,6 @@ class App extends React.Component {
 
 // App.contextTypes = {
 //   router: PropTypes.object.isRequired
-// };
+// }; More commments in App
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
