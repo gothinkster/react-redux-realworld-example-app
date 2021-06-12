@@ -4,10 +4,10 @@
   "private": true,
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "react-scripts": "^4.0.3",
-    "redux-devtools-extension": "^2.13.9"
+    "react-scripts": "^4.0.3"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.6.0",
     "connected-react-router": "^6.9.1",
     "history": "^4.10.1",
     "marked": "^2.0.3",
@@ -17,8 +17,6 @@
     "react-redux": "^7.2.3",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "redux": "^4.0.5",
-    "redux-logger": "^3.0.6",
     "superagent": "^6.1.0",
     "superagent-promise": "^1.1.0"
   },
