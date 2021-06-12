@@ -5,8 +5,7 @@ import xss from 'xss';
 
 import ArticleMeta from './ArticleMeta';
 import CommentContainer from './CommentContainer';
-import agent from '../../agent';
-import { ARTICLE_PAGE_LOADED, ARTICLE_PAGE_UNLOADED } from '../../constants/actionTypes';
+import { articlePageLoaded, articlePageUnloaded } from '../../reducers/article';
 
 const mapStateToProps = state => ({
   ...state.article,
@@ -14,18 +13,13 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: payload =>
-    dispatch({ type: ARTICLE_PAGE_LOADED, payload }),
-  onUnload: () =>
-    dispatch({ type: ARTICLE_PAGE_UNLOADED })
+  onLoad: slug => dispatch(articlePageLoaded(slug)),
+  onUnload: () => dispatch(articlePageUnloaded()),
 });
 
 class Article extends React.PureComponent {
   componentDidMount() {
-    this.props.onLoad(Promise.all([
-      agent.Articles.get(this.props.match.params.id),
-      agent.Comments.forArticle(this.props.match.params.id)
-    ]));
+    this.props.onLoad(this.props.match.params.id);
   }
 
   componentWillUnmount() {

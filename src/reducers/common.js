@@ -7,7 +7,6 @@ import {
   LOGIN,
   REGISTER,
   DELETE_ARTICLE,
-  ARTICLE_PAGE_UNLOADED,
   EDITOR_PAGE_UNLOADED,
   HOME_PAGE_UNLOADED,
   PROFILE_PAGE_UNLOADED,
@@ -16,6 +15,7 @@ import {
   LOGIN_PAGE_UNLOADED,
   REGISTER_PAGE_UNLOADED
 } from '../constants/actionTypes';
+import { articlePageUnloaded } from './article';
 
 const defaultState = {
   appName: 'Conduit',
@@ -55,7 +55,7 @@ export default (state = defaultState, action) => {
       };
     case DELETE_ARTICLE:
       return { ...state, redirectTo: '/' };
-    case ARTICLE_PAGE_UNLOADED:
+    case articlePageUnloaded.type:
     case EDITOR_PAGE_UNLOADED:
     case HOME_PAGE_UNLOADED:
     case PROFILE_PAGE_UNLOADED:

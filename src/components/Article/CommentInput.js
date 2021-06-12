@@ -1,11 +1,10 @@
 import React from 'react';
-import agent from '../../agent';
 import { connect } from 'react-redux';
-import { ADD_COMMENT } from '../../constants/actionTypes';
+
+import { addComment } from '../../reducers/article';
 
 const mapDispatchToProps = dispatch => ({
-  onSubmit: payload =>
-    dispatch({ type: ADD_COMMENT, payload })
+  onSubmit: payload => dispatch(addComment(payload)),
 });
 
 class CommentInput extends React.PureComponent {
@@ -21,10 +20,11 @@ class CommentInput extends React.PureComponent {
 
     this.createComment = ev => {
       ev.preventDefault();
-      const payload = agent.Comments.create(this.props.slug,
-        { body: this.state.body });
+      this.props.onSubmit({
+        slug: this.props.slug,
+        comment: this.state.body,
+      });
       this.setState({ body: '' });
-      this.props.onSubmit(payload);
     };
   }
 
