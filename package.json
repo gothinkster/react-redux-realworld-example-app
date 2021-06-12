@@ -10,13 +10,14 @@
     "@reduxjs/toolkit": "^1.6.0",
     "connected-react-router": "^6.9.1",
     "history": "^4.10.1",
-    "marked": "^2.0.3",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.3",
     "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "snarkdown": "^2.0.0",
+    "xss": "^1.0.9"
   },
   "scripts": {
     "start": "cross-env PORT=4100 react-scripts start",

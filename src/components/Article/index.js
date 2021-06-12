@@ -1,9 +1,11 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import snarkdown from 'snarkdown';
+import xss from 'xss';
+
 import ArticleMeta from './ArticleMeta';
 import CommentContainer from './CommentContainer';
-import React from 'react';
 import agent from '../../agent';
-import { connect } from 'react-redux';
-import marked from 'marked';
 import { ARTICLE_PAGE_LOADED, ARTICLE_PAGE_UNLOADED } from '../../constants/actionTypes';
 
 const mapStateToProps = state => ({
@@ -35,7 +37,7 @@ class Article extends React.PureComponent {
       return null;
     }
 
-    const markup = { __html: marked(this.props.article.body, { sanitize: true }) };
+    const markup = { __html: xss(snarkdown(this.props.article.body)) };
     const canModify = this.props.currentUser &&
       this.props.currentUser.username === this.props.article.author.username;
     return (
