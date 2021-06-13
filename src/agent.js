@@ -20,7 +20,15 @@ const agent = async (url, body, method = 'GET') => {
     headers,
     body: body ? JSON.stringify(body) : undefined,
   });
-  const result = await response.json();
+  let result;
+
+  try {
+    result = await response.json();
+  } catch (error) {
+    result = { statusCode: response.status, errors: [response.statusText] };
+  }
+
+  if (!response.ok) throw result;
 
   return result;
 };

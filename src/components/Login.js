@@ -1,45 +1,41 @@
-import { Link } from 'react-router-dom'
-import ListErrors from './ListErrors'
-import React from 'react'
-import agent from '../agent'
-import { connect } from 'react-redux'
-import {
-  UPDATE_FIELD_AUTH,
-  LOGIN,
-  LOGIN_PAGE_UNLOADED
-} from '../constants/actionTypes'
+import { Link } from 'react-router-dom';
+import React from 'react';
+import { connect } from 'react-redux';
 
-const mapStateToProps = state => state.auth
+import ListErrors from './ListErrors';
+import { login, loginPageUnloaded } from '../reducers/auth';
+
+const mapStateToProps = state => state.auth;
 
 const mapDispatchToProps = dispatch => ({
-  onChangeEmail: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
-  onChangePassword: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
-  onSubmit: (email, password) =>
-    dispatch({ type: LOGIN, payload: agent.Auth.login(email, password) }),
-  onUnload: () =>
-    dispatch({ type: LOGIN_PAGE_UNLOADED })
-})
+  onSubmit: (email, password) => dispatch(login({ email, password })),
+  onUnload: () => dispatch(loginPageUnloaded()),
+});
 
 class Login extends React.PureComponent {
-  constructor () {
-    super()
-    this.changeEmail = ev => this.props.onChangeEmail(ev.target.value)
-    this.changePassword = ev => this.props.onChangePassword(ev.target.value)
-    this.submitForm = (email, password) => ev => {
-      ev.preventDefault()
-      this.props.onSubmit(email, password)
-    }
+  state = {
+    email: '',
+    password: '',
+  };
+
+  componentWillUnmount() {
+    this.props.onUnload();
   }
 
-  componentWillUnmount () {
-    this.props.onUnload()
-  }
+  changeEmail = event => {
+    this.setState({ email: event.target.value });
+  };
 
-  render () {
-    const email = this.props.email
-    const password = this.props.password
+  changePassword = event => {
+    this.setState({ password: event.target.value });
+  };
+
+  submitForm = event => {
+    event.preventDefault();
+    this.props.onSubmit(this.state.email, this.state.password);
+  };
+
+  render() {
     return (
       <div className='auth-page'>
         <div className='container page'>
@@ -55,7 +51,7 @@ class Login extends React.PureComponent {
 
               <ListErrors errors={this.props.errors} />
 
-              <form onSubmit={this.submitForm(email, password)}>
+              <form onSubmit={this.submitForm}>
                 <fieldset>
 
                   <fieldset className='form-group'>
@@ -63,19 +59,24 @@ class Login extends React.PureComponent {
                       className='form-control form-control-lg'
                       autoComplete='username'
                       type='email'
+                      name='email'
                       placeholder='Email'
-                      value={email || ''}
-                      onChange={this.changeEmail} />
+                      autoComplete='email'
+                      value={this.state.email}
+                      onChange={this.changeEmail}
+                    />
                   </fieldset>
 
                   <fieldset className='form-group'>
                     <input
                       className='form-control form-control-lg'
                       type='password'
-                      autoComplete='current-password'
+                      name='password'
                       placeholder='Password'
-                      value={password || ''}
-                      onChange={this.changePassword} />
+                      autoComplete='current-password'
+                      value={this.state.password}
+                      onChange={this.changePassword}
+                    />
                   </fieldset>
 
                   <button

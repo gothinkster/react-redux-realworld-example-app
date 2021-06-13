@@ -1,52 +1,45 @@
-import { Link } from 'react-router-dom'
-import ListErrors from './ListErrors'
-import React from 'react'
-import agent from '../agent'
-import { connect } from 'react-redux'
-import {
-  UPDATE_FIELD_AUTH,
-  REGISTER,
-  REGISTER_PAGE_UNLOADED
-} from '../constants/actionTypes'
+import { Link } from 'react-router-dom';
+import React from 'react';
+import { connect } from 'react-redux';
 
-const mapStateToProps = state => ({ ...state.auth })
+import ListErrors from './ListErrors';
+import { register, registerPageUnloaded } from '../reducers/auth';
+
+const mapStateToProps = state => ({ ...state.auth });
 
 const mapDispatchToProps = dispatch => ({
-  onChangeEmail: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
-  onChangePassword: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
-  onChangeUsername: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'username', value }),
-  onSubmit: (username, email, password) => {
-    const payload = agent.Auth.register(username, email, password)
-    dispatch({ type: REGISTER, payload })
-  },
-  onUnload: () =>
-    dispatch({ type: REGISTER_PAGE_UNLOADED })
-})
+  onSubmit: (username, email, password) =>
+    dispatch(register({ username, email, password })),
+  onUnload: () => dispatch(registerPageUnloaded()),
+});
 
 class Register extends React.PureComponent {
-  constructor () {
-    super()
-    this.changeEmail = ev => this.props.onChangeEmail(ev.target.value)
-    this.changePassword = ev => this.props.onChangePassword(ev.target.value)
-    this.changeUsername = ev => this.props.onChangeUsername(ev.target.value)
-    this.submitForm = (username, email, password) => ev => {
-      ev.preventDefault()
-      this.props.onSubmit(username, email, password)
+  state = {
+    username: '',
+    email: '',
+    password: '',
+  };
+
+  componentWillUnmount() {
+    this.props.onUnload();
     }
-  }
 
-  componentWillUnmount () {
-    this.props.onUnload()
-  }
+  changeUsername = event => this.setState({ username: event.target.value });
 
-  render () {
-    const email = this.props.email
-    const password = this.props.password
-    const username = this.props.username
+  changeEmail = event => this.setState({ email: event.target.value });
 
+  changePassword = event => this.setState({ password: event.target.value });
+
+  submitForm = event => {
+    event.preventDefault();
+    this.props.onSubmit(
+      this.state.username,
+      this.state.email,
+      this.state.password
+    );
+  };
+
+  render() {
     return (
       <div className='auth-page'>
         <div className='container page'>
@@ -62,7 +55,7 @@ class Register extends React.PureComponent {
 
               <ListErrors errors={this.props.errors} />
 
-              <form onSubmit={this.submitForm(username, email, password)}>
+              <form onSubmit={this.submitForm}>
                 <fieldset>
 
                   <fieldset className='form-group'>
@@ -70,28 +63,34 @@ class Register extends React.PureComponent {
                       className='form-control form-control-lg'
                       type='text'
                       placeholder='Username'
-                      value={this.props.username || ''}
-                      onChange={this.changeUsername} />
+                      autoComplete='username'
+                      name='username'
+                      value={this.state.username}
+                      onChange={this.changeUsername}
+                    />
                   </fieldset>
 
                   <fieldset className='form-group'>
                     <input
                       className='form-control form-control-lg'
                       type='email'
-                      autoComplete='username'
                       placeholder='Email'
-                      value={this.props.email || ''}
-                      onChange={this.changeEmail} />
+                      autoComplete='email'
+                      value={this.state.email}
+                      onChange={this.changeEmail}
+                    />
                   </fieldset>
 
                   <fieldset className='form-group'>
                     <input
                       className='form-control form-control-lg'
                       type='password'
-                      autoComplete='current-password'
+                      autoComplete='new-password'
                       placeholder='Password'
-                      value={this.props.password || ''}
-                      onChange={this.changePassword} />
+                      name='password'
+                      value={this.state.password}
+                      onChange={this.changePassword}
+                    />
                   </fieldset>
 
                   <button
