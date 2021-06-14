@@ -1,15 +1,14 @@
+import { createAction } from '@reduxjs/toolkit';
+
 import {
   APP_LOAD,
   REDIRECT,
-  LOGOUT,
   ARTICLE_SUBMITTED,
-  SETTINGS_SAVED,
   DELETE_ARTICLE,
   EDITOR_PAGE_UNLOADED,
   HOME_PAGE_UNLOADED,
   PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_UNLOADED,
-  SETTINGS_PAGE_UNLOADED,
 } from '../constants/actionTypes';
 import { articlePageUnloaded } from './article';
 import {
@@ -18,12 +17,15 @@ import {
   loginPageUnloaded,
   registerPageUnloaded,
 } from './auth';
+import { saveSettings, settingsPageUnloaded } from './settings';
 
 const defaultState = {
   appName: 'Conduit',
   token: null,
   viewChangeCounter: 0,
 };
+
+export const logout = createAction('logout');
 
 export default (state = defaultState, action) => {
   switch (action.type) {
@@ -36,13 +38,13 @@ export default (state = defaultState, action) => {
       };
     case REDIRECT:
       return { ...state, redirectTo: null };
-    case LOGOUT:
+    case logout.type:
       return { ...state, redirectTo: '/', token: null, currentUser: null };
     case ARTICLE_SUBMITTED:
       const redirectUrl =
         action.payload.article && `/article/${action.payload.article.slug}`;
       return { ...state, redirectTo: redirectUrl };
-    case SETTINGS_SAVED:
+    case saveSettings.fulfilled.type:
       return {
         ...state,
         redirectTo: action.error ? null : '/',
@@ -63,7 +65,7 @@ export default (state = defaultState, action) => {
     case HOME_PAGE_UNLOADED:
     case PROFILE_PAGE_UNLOADED:
     case PROFILE_FAVORITES_PAGE_UNLOADED:
-    case SETTINGS_PAGE_UNLOADED:
+    case settingsPageUnloaded.type:
     case loginPageUnloaded.type:
     case registerPageUnloaded.type:
       return { ...state, viewChangeCounter: state.viewChangeCounter + 1 };

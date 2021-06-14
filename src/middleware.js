@@ -1,6 +1,7 @@
 import agent from './agent';
-import { ASYNC_START, ASYNC_END, LOGOUT } from './constants/actionTypes';
+import { ASYNC_START, ASYNC_END } from './constants/actionTypes';
 import { login, register } from './reducers/auth';
+import { logout } from './reducers/common';
 
 const promiseMiddleware = store => next => action => {
   if (isPromise(action.payload)) {
@@ -48,7 +49,7 @@ const localStorageMiddleware = store => next => action => {
   ) {
       window.localStorage.setItem('jwt', action.payload.user.token);
       agent.setToken(action.payload.user.token);
-  } else if (action.type === LOGOUT) {
+  } else if (action.type === logout.type) {
     window.localStorage.setItem('jwt', '');
     agent.setToken(null);
   }

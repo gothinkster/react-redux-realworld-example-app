@@ -1,42 +1,42 @@
-import ListErrors from './ListErrors'
-import React from 'react'
-import agent from '../agent'
-import { connect } from 'react-redux'
-import {
-  SETTINGS_SAVED,
-  SETTINGS_PAGE_UNLOADED,
-  LOGOUT
-} from '../constants/actionTypes'
+import React from 'react';
+import { connect } from 'react-redux';
+
+import ListErrors from './ListErrors';
+import { logout } from '../reducers/common';
+import { saveSettings, settingsPageUnloaded } from '../reducers/settings';
 
 class SettingsForm extends React.PureComponent {
-  constructor (props) {
-    super(props)
-    const { currentUser } = props
+  constructor(props) {
+    super(props);
+    const { currentUser } = props;
     this.state = {
-      image: ((currentUser && currentUser.image) || 'https://static.productionready.io/images/smiley-cyrus.jpg') || '',
-      username: (currentUser && currentUser.username) || '',
-      bio: (currentUser && currentUser.bio) || '',
-      email: (currentUser && currentUser.email) || '',
-      password: (currentUser && currentUser.password) || ''
-    }
+      image:
+        currentUser?.image ??
+        'https://static.productionready.io/images/smiley-cyrus.jpg',
+      username: currentUser?.username ?? '',
+      bio: currentUser?.bio ?? '',
+      email: currentUser?.email ?? '',
+      password: currentUser?.password ?? '',
+    };
+  }
 
-    this.updateState = field => ev => {
-      const state = this.state
-      const newState = Object.assign({}, state, { [field]: ev.target.value })
-      this.setState(newState)
-    }
+  updateState = event => {
+    this.setState(oldState => ({
+      ...oldState,
+      [event.target.name]: event.target.value,
+    }));
+  };
 
-    this.submitForm = ev => {
-      ev.preventDefault()
+  submitForm = event => {
+    event.preventDefault();
 
-      const user = Object.assign({}, this.state)
+    const user = Object.assign({}, this.state);
       if (!user.password) {
-        delete user.password
+      delete user.password;
       }
 
-      this.props.onSubmitForm(user)
-    }
-  }
+    this.props.onSubmitForm(user);
+  };
 
   render () {
     const { image, username, bio, email } = this.state
@@ -50,8 +50,9 @@ class SettingsForm extends React.PureComponent {
               className='form-control'
               type='text'
               placeholder='URL of profile picture'
-              value={image || ''}
-              onChange={this.updateState('image')}
+              name='image'
+              value={image}
+              onChange={this.updateState}
             />
           </fieldset>
 
@@ -60,8 +61,9 @@ class SettingsForm extends React.PureComponent {
               className='form-control form-control-lg'
               type='text'
               placeholder='Username'
-              value={username || ''}
-              onChange={this.updateState('username')}
+              name='username'
+              value={username}
+              onChange={this.updateState}
             />
           </fieldset>
 
@@ -70,8 +72,9 @@ class SettingsForm extends React.PureComponent {
               className='form-control form-control-lg'
               rows='8'
               placeholder='Short bio about you'
-              value={bio || ''}
-              onChange={this.updateState('bio')}
+              name='bio'
+              value={bio}
+              onChange={this.updateState}
             />
           </fieldset>
 
@@ -81,8 +84,9 @@ class SettingsForm extends React.PureComponent {
               autoComplete='username'
               type='email'
               placeholder='Email'
-              value={email || ''}
-              onChange={this.updateState('email')}
+              name='email'
+              value={email}
+              onChange={this.updateState}
             />
           </fieldset>
 
@@ -92,8 +96,9 @@ class SettingsForm extends React.PureComponent {
               type='password'
               autoComplete='current-password'
               placeholder='New Password'
+              name='password'
               value={this.state.password}
-              onChange={this.updateState('password')}
+              onChange={this.updateState}
             />
           </fieldset>
 
@@ -117,11 +122,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  onClickLogout: () => dispatch({ type: LOGOUT }),
-  onSubmitForm: user =>
-    dispatch({ type: SETTINGS_SAVED, payload: agent.Auth.save(user) }),
-  onUnload: () => dispatch({ type: SETTINGS_PAGE_UNLOADED })
-})
+  onClickLogout: () => dispatch(logout()),
+  onSubmitForm: user => dispatch(saveSettings(user)),
+  onUnload: () => dispatch(settingsPageUnloaded()),
+});
 
 class Settings extends React.PureComponent {
   render () {
