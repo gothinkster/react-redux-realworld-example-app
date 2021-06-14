@@ -7,7 +7,6 @@ import {
   DELETE_ARTICLE,
   EDITOR_PAGE_UNLOADED,
   HOME_PAGE_UNLOADED,
-  PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_UNLOADED,
 } from '../constants/actionTypes';
 import { articlePageUnloaded } from './article';
@@ -18,6 +17,7 @@ import {
   registerPageUnloaded,
 } from './auth';
 import { saveSettings, settingsPageUnloaded } from './settings';
+import { profilePageUnloaded } from './profile';
 
 const defaultState = {
   appName: 'Conduit',
@@ -63,7 +63,7 @@ export default (state = defaultState, action) => {
     case articlePageUnloaded.type:
     case EDITOR_PAGE_UNLOADED:
     case HOME_PAGE_UNLOADED:
-    case PROFILE_PAGE_UNLOADED:
+    case profilePageUnloaded.type:
     case PROFILE_FAVORITES_PAGE_UNLOADED:
     case settingsPageUnloaded.type:
     case loginPageUnloaded.type:

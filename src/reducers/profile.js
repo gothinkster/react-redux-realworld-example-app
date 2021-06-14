@@ -1,24 +1,43 @@
-import {
-  PROFILE_PAGE_LOADED,
-  PROFILE_PAGE_UNLOADED,
-  FOLLOW_USER,
-  UNFOLLOW_USER
-} from '../constants/actionTypes';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-export default (state = {}, action) => {
-  switch (action.type) {
-    case PROFILE_PAGE_LOADED:
-      return {
-        ...action.payload[0].profile
-      };
-    case PROFILE_PAGE_UNLOADED:
-      return {};
-    case FOLLOW_USER:
-    case UNFOLLOW_USER:
-      return {
-        ...action.payload.profile
-      };
-    default:
-      return state;
-  }
-};
+import agent from '../agent';
+import { getByAuthor } from './articleList';
+
+export const getProfile = createAsyncThunk(
+  'profile/getProfile',
+  agent.Profile.get
+);
+
+export const follow = createAsyncThunk('profile/follow', agent.Profile.follow);
+
+export const unfollow = createAsyncThunk(
+  'profile/unfollow',
+  agent.Profile.unfollow
+);
+
+export const profilePageLoaded = username => dispatch =>
+  Promise.all([
+    dispatch(getProfile(username)),
+    dispatch(getByAuthor({ username })),
+  ]);
+
+const profileSlice = createSlice({
+  name: 'profile',
+  initialState: {},
+  reducers: {
+    profilePageUnloaded: () => ({}),
+  },
+  extraReducers: builder => {
+    const successCaseReducer = (state, action) => {
+      state = action.payload.profile;
+    };
+
+    builder.addCase(getProfile.fulfilled, successCaseReducer);
+    builder.addCase(follow.fulfilled, successCaseReducer);
+    builder.addCase(unfollow.fulfilled, successCaseReducer);
+  },
+});
+
+export const { profilePageUnloaded } = profileSlice.actions;
+
+export default profileSlice.reducer;

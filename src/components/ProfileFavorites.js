@@ -1,18 +1,16 @@
-import { Profile, mapStateToProps } from './Profile';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import agent from '../agent';
 import { connect } from 'react-redux';
-import {
-  PROFILE_PAGE_LOADED,
-  PROFILE_PAGE_UNLOADED
-} from '../constants/actionTypes';
+
+import { Profile, mapStateToProps } from './Profile';
+import agent from '../agent';
+import { PROFILE_PAGE_LOADED } from '../constants/actionTypes';
+import { profilePageUnloaded } from '../reducers/profile';
 
 const mapDispatchToProps = dispatch => ({
   onLoad: (pager, payload) =>
     dispatch({ type: PROFILE_PAGE_LOADED, pager, payload }),
-  onUnload: () =>
-    dispatch({ type: PROFILE_PAGE_UNLOADED })
+  onUnload: () => dispatch(profilePageUnloaded()),
 });
 
 class ProfileFavorites extends Profile {

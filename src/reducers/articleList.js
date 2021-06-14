@@ -1,3 +1,5 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import {
   ARTICLE_FAVORITED,
   ARTICLE_UNFAVORITED,
@@ -7,10 +9,16 @@ import {
   HOME_PAGE_UNLOADED,
   CHANGE_TAB,
   PROFILE_PAGE_LOADED,
-  PROFILE_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_LOADED,
-  PROFILE_FAVORITES_PAGE_UNLOADED
+  PROFILE_FAVORITES_PAGE_UNLOADED,
 } from '../constants/actionTypes';
+import agent from '../agent';
+import { profilePageUnloaded } from './profile';
+
+export const getByAuthor = createAsyncThunk(
+  'articleList/getByAuthor',
+  ({ author, page }) => agent.Articles.byAuthor(author, page)
+);
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -77,7 +85,7 @@ export default (state = {}, action) => {
         articlesCount: action.payload[1].articlesCount,
         currentPage: 0
       };
-    case PROFILE_PAGE_UNLOADED:
+    case profilePageUnloaded.type:
     case PROFILE_FAVORITES_PAGE_UNLOADED:
       return {};
     default:
