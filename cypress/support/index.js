@@ -1,3 +1,4 @@
+/// <reference types="cypress" />
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.
@@ -14,3 +15,32 @@
 // ***********************************************************
 import '@cypress/code-coverage/support';
 import '@testing-library/cypress/add-commands';
+
+import { LOGIN } from '../../src/constants/actionTypes';
+
+/**
+ * Dispatches a given Redux action straight to the application
+ */
+Cypress.Commands.add('dispatch', (action) => {
+  expect(action).to.be.an('object').and.to.have.property('type');
+
+  cy.window().its('store').invoke('dispatch', action);
+});
+
+/**
+ * Login the user using the API, then dispatch the login action
+ */
+Cypress.Commands.add(
+  'login',
+  (email = Cypress.env('email'), password = Cypress.env('password')) => {
+    cy.request({
+      url: `${Cypress.env('apiUrl')}/users/login`,
+      method: 'POST',
+      body: { user: { email, password } },
+    })
+      .its('body')
+      .then((body) => {
+        cy.dispatch({ type: LOGIN, payload: body });
+      });
+  }
+);
