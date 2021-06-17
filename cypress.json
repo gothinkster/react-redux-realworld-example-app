@@ -1,3 +1,8 @@
 {
-  "baseUrl": "http://localhost:4100"
+  "baseUrl": "http://localhost:4100",
+  "env": {
+    "username": "warren_boyd",
+    "email": "warren.boyd@mailinator.com",
+    "password": "Pa$$w0rd!"
+  }
 }
