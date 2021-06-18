@@ -4,13 +4,13 @@
 /// <reference types="@testing-library/cypress" />
 import faker from 'faker';
 
-describe('New post', () => {
-  const titlePlaceholder = 'Article Title';
-  const descriptionPlaceholder = "What's this article about?";
-  const bodyPlaceholder = 'Write your article (in markdown)';
-  const tagPlaceholder = 'Enter tags';
-  const submitButton = 'Publish Article';
+const titlePlaceholder = 'Article Title';
+const descriptionPlaceholder = "What's this article about?";
+const bodyPlaceholder = 'Write your article (in markdown)';
+const tagPlaceholder = 'Enter tags';
+const submitButton = 'Publish Article';
 
+describe('New post', () => {
   beforeEach(() => {
     cy.visit('/').login();
 
@@ -66,5 +66,89 @@ describe('New post', () => {
     });
 
     cy.get('@tagList').children().should('have.length', 3);
+  });
+});
+
+describe('Edit post', () => {
+  let article;
+
+  before(() => {
+    cy.visit('/')
+      .login()
+      .createArticle()
+      .then((newArticle) => {
+        article = newArticle;
+
+        cy.visit(`/editor/${newArticle.slug}`);
+      });
+  });
+
+  it("should fill the form with article's data", () => {
+    cy.findByPlaceholderText(titlePlaceholder).should(
+      'have.value',
+      article.title
+    );
+
+    cy.findByPlaceholderText(descriptionPlaceholder).should(
+      'have.value',
+      article.description
+    );
+
+    cy.findByPlaceholderText(bodyPlaceholder).should(
+      'have.value',
+      article.body
+    );
+
+    cy.findByPlaceholderText(tagPlaceholder).should('have.value', '');
+
+    cy.get('.tag-list')
+      .children()
+      .should('have.length', article.tagList.length);
+
+    cy.get('.tag-list').within(() => {
+      Cypress._.each(article.tagList, (tag) => {
+        cy.findByText(RegExp(tag, 'i')).should('exist');
+      });
+    });
+  });
+
+  it('should update the article', () => {
+    const description = faker.lorem.paragraph();
+
+    cy.intercept('PUT', '**/articles/*').as('updateArticle');
+
+    cy.findByPlaceholderText(descriptionPlaceholder).clear().type(description);
+
+    cy.get('.tag-list').within(() => {
+      Cypress._.each(article.tagList, (tag) => {
+        cy.findByText(RegExp(tag, 'i')).find('i').click();
+      });
+    });
+
+    cy.findByPlaceholderText(tagPlaceholder).type(
+      'react{enter}redux{enter}markdown{enter}lorem ipsum{enter}'
+    );
+
+    cy.findByRole('button', { name: submitButton }).click();
+
+    cy.wait('@updateArticle')
+      .its('response')
+      .then((response) => {
+        expect(response.statusCode).to.equal(200);
+
+        expect(response.body.article).to.haveOwnProperty(
+          'description',
+          description
+        );
+        expect(response.body.article).to.haveOwnProperty('tagList');
+        expect(response.body.article.tagList).to.deep.equal([
+          'react',
+          'redux',
+          'markdown',
+          'lorem ipsum',
+        ]);
+      });
+
+    cy.location('pathname').should('match', /\/article\/[\w-]+/);
   });
 });

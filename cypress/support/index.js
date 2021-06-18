@@ -15,6 +15,7 @@
 // ***********************************************************
 import '@cypress/code-coverage/support';
 import '@testing-library/cypress/add-commands';
+import faker from 'faker';
 
 import { LOGIN } from '../../src/constants/actionTypes';
 
@@ -43,4 +44,38 @@ Cypress.Commands.add(
         cy.dispatch({ type: LOGIN, payload: body });
       });
   }
+);
+
+/**
+ * Create a new article (with a markdown body) using the API
+ *
+ * @returns {Object}   article
+ */
+Cypress.Commands.add('createArticle', () =>
+  cy
+    .request(
+      'https://jaspervdj.be/lorem-markdownum/markdown.txt?no-headers=on&fenced-code-blocks=on'
+    )
+    .its('body')
+    .then((markdown) =>
+      cy
+        .request({
+          method: 'POST',
+          url: `${Cypress.env('apiUrl')}/articles`,
+          body: {
+            article: {
+              title: faker.lorem.words(),
+              description: faker.lorem.sentences(),
+              body: markdown,
+              tagList: ['lorem ipsum', 'markdown'].concat(
+                ...faker.lorem.words(5).split(' ')
+              ),
+            },
+          },
+          headers: {
+            authorization: `Token ${localStorage.getItem('jwt')}`,
+          },
+        })
+        .its('body.article')
+    )
 );
