@@ -53,29 +53,57 @@ Cypress.Commands.add(
  */
 Cypress.Commands.add('createArticle', () =>
   cy
-    .request(
-      'https://jaspervdj.be/lorem-markdownum/markdown.txt?no-headers=on&fenced-code-blocks=on'
-    )
-    .its('body')
-    .then((markdown) =>
-      cy
-        .request({
-          method: 'POST',
-          url: `${Cypress.env('apiUrl')}/articles`,
-          body: {
-            article: {
-              title: faker.lorem.words(),
-              description: faker.lorem.sentences(),
-              body: markdown,
-              tagList: ['lorem ipsum', 'markdown'].concat(
-                ...faker.lorem.words(5).split(' ')
-              ),
-            },
-          },
-          headers: {
-            authorization: `Token ${localStorage.getItem('jwt')}`,
-          },
-        })
-        .its('body.article')
-    )
+    .request({
+      method: 'POST',
+      url: `${Cypress.env('apiUrl')}/articles`,
+      body: {
+        article: {
+          title: faker.lorem.words(),
+          description: faker.lorem.sentences(),
+          body: faker.fake(`![{{lorem.words}}]({{image.city}})
+
+> {{lorem.sentence}}
+
+-----
+
+## {{lorem.text}}
+
+{{lorem.paragraph}}
+
+- _{{lorem.word}}_
+- _{{lorem.word}}_
+- _{{lorem.word}}_
+
+### {{lorem.text}}
+
+{{lorem.paragraph}}
+
+1. **{{lorem.words}}**
+2. **{{lorem.words}}**
+3. **{{lorem.words}}**
+
+{{lorem.paragraph}}
+
+* [x] ~{{lorem.words}}~
+* [x] ~{{lorem.words}}~
+* [ ] {{lorem.words}}
+
+> {{hacker.phrase}}
+
+\`\`\`
+<script>
+  alert('Hello, world!');
+</script>
+\`\`\`
+`),
+          tagList: ['lorem ipsum', 'markdown'].concat(
+            ...faker.lorem.words(5).split(' ')
+          ),
+        },
+      },
+      headers: {
+        authorization: `Token ${localStorage.getItem('jwt')}`,
+      },
+    })
+    .its('body.article')
 );

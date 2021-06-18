@@ -4,13 +4,15 @@
 /// <reference types="@testing-library/cypress" />
 import faker from 'faker';
 
+import { ARTICLE_SUBMITTED } from '../../src/constants/actionTypes';
+
 const titlePlaceholder = 'Article Title';
 const descriptionPlaceholder = "What's this article about?";
 const bodyPlaceholder = 'Write your article (in markdown)';
 const tagPlaceholder = 'Enter tags';
 const submitButton = 'Publish Article';
 
-describe('New post', () => {
+describe('New article', () => {
   beforeEach(() => {
     cy.visit('/').login();
 
@@ -25,10 +27,13 @@ describe('New post', () => {
     cy.findByPlaceholderText(titlePlaceholder).type(faker.lorem.words());
 
     cy.findByPlaceholderText(descriptionPlaceholder).type(
-      faker.lorem.sentences()
+      faker.lorem.sentence(),
+      { delay: 1 }
     );
 
-    cy.findByPlaceholderText(bodyPlaceholder).type(faker.lorem.paragraphs());
+    cy.findByPlaceholderText(bodyPlaceholder).type(faker.lorem.paragraphs(), {
+      delay: 1,
+    });
 
     cy.findByPlaceholderText(tagPlaceholder).type(
       'react{enter}redux{enter}lorem ipsum{enter}'
@@ -69,17 +74,29 @@ describe('New post', () => {
   });
 });
 
-describe('Edit post', () => {
+describe('Edit article', () => {
   let article;
 
   before(() => {
+    cy.intercept('GET', '**/articles/*')
+      .as('getArticle')
+      .intercept('GET', '**/articles/*/comments')
+      .as('getCommentsForArticle');
+
     cy.visit('/')
       .login()
       .createArticle()
       .then((newArticle) => {
         article = newArticle;
 
-        cy.visit(`/editor/${newArticle.slug}`);
+        cy.dispatch({ type: ARTICLE_SUBMITTED, payload: { article } }).wait([
+          '@getArticle',
+          '@getCommentsForArticle',
+        ]);
+
+        cy.findByRole('link', {
+          name: /edit article/i,
+        }).click();
       });
   });
 
@@ -107,7 +124,7 @@ describe('Edit post', () => {
 
     cy.get('.tag-list').within(() => {
       Cypress._.each(article.tagList, (tag) => {
-        cy.findByText(RegExp(tag, 'i')).should('exist');
+        cy.findByText(RegExp(`^${tag}$`, 'i')).should('exist');
       });
     });
   });
@@ -121,7 +138,9 @@ describe('Edit post', () => {
 
     cy.get('.tag-list').within(() => {
       Cypress._.each(article.tagList, (tag) => {
-        cy.findByText(RegExp(tag, 'i')).find('i').click();
+        cy.findByText(RegExp(`^${tag}$`, 'i'))
+          .find('i')
+          .click();
       });
     });
 
