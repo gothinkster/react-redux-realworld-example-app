@@ -28,6 +28,7 @@ module.exports = (on, config) => {
       username = faker.internet.userName(),
       email = faker.internet.exampleEmail(),
       password = 'Pa$$w0rd!',
+      followUser = false,
     }) {
       let user = { username: username.substr(-20), email, password };
       let article = {
@@ -129,6 +130,30 @@ module.exports = (on, config) => {
       )
         .then((response) => response.json())
         .then((body) => body.comment);
+
+      if (followUser) {
+        const { token } = await fetch(`${config.env.apiUrl}/users/login`, {
+          method: 'POST',
+          body: JSON.stringify({
+            user: {
+              email: config.env.email,
+              password: config.env.password,
+            },
+          }),
+          headers: {
+            'content-type': 'application/json',
+          },
+        })
+          .then((response) => response.json())
+          .then((body) => body.user);
+
+        await fetch(`${config.env.apiUrl}/profiles/${username}/follow`, {
+          method: 'POST',
+          headers: {
+            authorization: `Token ${token}`,
+          },
+        });
+      }
 
       return {
         ...article,

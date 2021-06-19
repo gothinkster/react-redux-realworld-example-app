@@ -103,3 +103,74 @@ describe('Home page', () => {
       });
   });
 });
+
+describe('Home page (authenticated)', () => {
+  beforeEach(() => {
+    cy.task('createUserWithArticle', { followUser: true });
+
+    cy.intercept('**/articles?*')
+      .as('getAllArticles')
+      .intercept('**/articles/feed?*')
+      .as('getAllFeed')
+      .intercept('**/tags')
+      .as('getAllTags')
+      .intercept('POST', '**/articles/*/favorite')
+      .as('favoriteArticle')
+      .intercept('DELETE', '**/articles/*/favorite')
+      .as('unfavoriteArticle')
+      .visit('/')
+      .login();
+  });
+
+  it('should mark an article as favorite', () => {
+    cy.findByRole('button', {
+      name: /global feed/i,
+    }).click();
+
+    cy.wait('@getAllArticles')
+      .its('response.body.articles')
+      .then((articles) => {
+        const article = articles[0];
+
+        cy.findAllByRole('heading', { name: article.title })
+          .first()
+          .parent()
+          .parent()
+          .find('.article-meta')
+          .within(() => {
+            cy.findByRole('button').click();
+          });
+      });
+
+    cy.wait('@favoriteArticle').its('response.statusCode').should('equal', 200);
+  });
+
+  it('should mark an article as unfavorite', () => {
+    cy.findByRole('button', {
+      name: /global feed/i,
+    }).click();
+
+    cy.wait('@getAllArticles')
+      .its('response.body.articles')
+      .then((articles) => {
+        const article = articles[1];
+
+        cy.findAllByRole('heading', { name: article.title })
+          .first()
+          .parent()
+          .parent()
+          .find('.article-meta')
+          .within(() => {
+            cy.findByRole('button').click();
+
+            cy.wait('@favoriteArticle');
+
+            cy.findByRole('button').click();
+          });
+      });
+
+    cy.wait('@unfavoriteArticle')
+      .its('response.statusCode')
+      .should('equal', 200);
+  });
+});
