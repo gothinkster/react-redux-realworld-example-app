@@ -58,38 +58,10 @@ Cypress.Commands.add('createArticle', () =>
       url: `${Cypress.env('apiUrl')}/articles`,
       body: {
         article: {
-          title: faker.lorem.words(),
-          description: faker.lorem.sentences(),
-          body: faker.fake(`## {{lorem.text}}
-
-{{lorem.paragraph}}
-
-- _{{lorem.word}}_
-- _{{lorem.word}}_
-- _{{lorem.word}}_
-
-### {{lorem.text}}
-
-{{lorem.paragraph}}
-
-1. **{{lorem.words}}**
-2. **{{lorem.words}}**
-3. **{{lorem.words}}**
-
-{{lorem.paragraph}}
-
-* [x] ~{{lorem.words}}~
-* [x] ~{{lorem.words}}~
-* [ ] {{lorem.words}}
-
-> {{hacker.phrase}}
-
-\`\`\`
-<script>
-  alert('Hello, world!');
-</script>
-\`\`\``),
-          tagList: ['lorem ipsum', 'markdown'].concat(
+          title: faker.company.catchPhrase(),
+          description: faker.commerce.productDescription(),
+          body: faker.lorem.paragraph(),
+          tagList: ['lorem ipsum', 'markdown', 'faker'].concat(
             ...faker.lorem.words(5).split(' ')
           ),
         },
