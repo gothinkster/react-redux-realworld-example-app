@@ -9,6 +9,7 @@
     "cross-env": "^7.0.3",
     "cypress": "^7.5.0",
     "faker": "^5.5.3",
+    "node-fetch": "^2.6.1",
     "react-scripts": "^4.0.3",
     "redux-devtools-extension": "^2.13.9",
     "start-server-and-test": "^1.12.5"
