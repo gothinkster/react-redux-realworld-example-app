@@ -17,7 +17,7 @@ import '@cypress/code-coverage/support';
 import '@testing-library/cypress/add-commands';
 import faker from 'faker';
 
-import { LOGIN } from '../../src/constants/actionTypes';
+import { login } from '../../src/reducers/auth';
 
 /**
  * Dispatches a given Redux action straight to the application
@@ -41,7 +41,7 @@ Cypress.Commands.add(
     })
       .its('body')
       .then((body) => {
-        cy.dispatch({ type: LOGIN, payload: body });
+        cy.dispatch({ type: login.fulfilled.type, payload: body });
       });
   }
 );
