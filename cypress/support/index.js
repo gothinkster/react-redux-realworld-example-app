@@ -60,13 +60,7 @@ Cypress.Commands.add('createArticle', () =>
         article: {
           title: faker.lorem.words(),
           description: faker.lorem.sentences(),
-          body: faker.fake(`![{{lorem.words}}]({{image.city}})
-
-> {{lorem.sentence}}
-
------
-
-## {{lorem.text}}
+          body: faker.fake(`## {{lorem.text}}
 
 {{lorem.paragraph}}
 
@@ -94,8 +88,7 @@ Cypress.Commands.add('createArticle', () =>
 <script>
   alert('Hello, world!');
 </script>
-\`\`\`
-`),
+\`\`\``),
           tagList: ['lorem ipsum', 'markdown'].concat(
             ...faker.lorem.words(5).split(' ')
           ),
