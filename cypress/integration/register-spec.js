@@ -15,11 +15,11 @@ describe('Register page', () => {
 
   it('should submit the register form', () => {
     cy.findByPlaceholderText(usernamePlaceholder).type(
-      faker.internet.userName().substr(0, 20)
+      faker.internet.userName().toLowerCase().replace(/\W/g, '_').substr(0, 20)
     );
 
     cy.findByPlaceholderText(emailPlaceholder).type(
-      faker.internet.exampleEmail()
+      faker.internet.exampleEmail().toLowerCase()
     );
 
     cy.findByPlaceholderText(passwordPlaceholder).type('Pa$$w0rd!');
@@ -43,7 +43,7 @@ describe('Register page', () => {
 
   it('should require the username', () => {
     cy.findByPlaceholderText(emailPlaceholder).type(
-      faker.internet.exampleEmail()
+      faker.internet.exampleEmail().toLowerCase()
     );
 
     cy.findByPlaceholderText(passwordPlaceholder).type(
@@ -61,7 +61,7 @@ describe('Register page', () => {
 
   it('should require the email', () => {
     cy.findByPlaceholderText(usernamePlaceholder).type(
-      faker.internet.userName().substr(0, 30)
+      faker.internet.userName().toLowerCase().replace(/\W/g, '_').substr(0, 20)
     );
 
     cy.findByPlaceholderText(passwordPlaceholder).type(
@@ -79,10 +79,12 @@ describe('Register page', () => {
 
   it('should require the password', () => {
     cy.findByPlaceholderText(usernamePlaceholder).type(
-      faker.internet.userName().substr(0, 30)
+      faker.internet.userName().toLowerCase().replace(/\W/g, '_').substr(0, 20)
     );
 
-    cy.findByPlaceholderText(emailPlaceholder).type(faker.internet.email());
+    cy.findByPlaceholderText(emailPlaceholder).type(
+      faker.internet.email().toLowerCase()
+    );
 
     cy.findByRole('button', { name: /sign up/i }).click();
 
