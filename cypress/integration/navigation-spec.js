@@ -93,3 +93,98 @@ describe('Navigation', () => {
       });
   });
 });
+
+describe('Navigation (authenticated)', () => {
+  beforeEach(() => {
+    cy.intercept('**/articles?*')
+      .as('getAllArticles')
+      .intercept('**/tags')
+      .as('getAllTags')
+      .intercept(`**/profiles/*`)
+      .as('getProfile')
+      .visit('/')
+      .login();
+  });
+
+  it('should switch between tabs', () => {
+    cy.findByRole('button', {
+      name: /global feed/i,
+    }).click();
+
+    cy.wait('@getAllArticles').its('response.statusCode').should('equal', 200);
+
+    cy.findByRole('button', {
+      name: /your feed/i
+    }).click();
+  });
+
+  it('should navigate to new post page', () => {
+    cy.wait('@getAllTags');
+
+    cy.findByRole('link', {
+      name: /new post/i,
+    }).click();
+
+    cy.location('pathname').should('equal', '/editor');
+  });
+
+  it('should navigate to settings page', () => {
+    cy.findByRole('link', {
+      name: /settings/i,
+    }).click();
+
+    cy.location('pathname').should('equal', '/settings');
+  });
+
+  it('should navigate to my profile page', () => {
+    cy.findByRole('navigation')
+      .findByRole('link', {
+        name: RegExp(Cypress.env('username')),
+      })
+      .click();
+
+    cy.location('pathname').should('equal', `/@${Cypress.env('username')}`);
+
+    cy.get('.user-info').within(() => {
+      cy.findByRole('img', Cypress.env('username')).should('be.visible');
+
+      cy.findByRole('heading', Cypress.env('username')).should('be.visible');
+    });
+  });
+
+  it('should navigate to my favorited articles page', () => {
+    cy.findByRole('navigation')
+      .findByRole('link', {
+        name: RegExp(Cypress.env('username')),
+      })
+      .click();
+
+    cy.wait(['@getAllArticles', '@getProfile']);
+
+    cy.get('.user-info').within(() => {
+      cy.findByRole('img', Cypress.env('username')).should('be.visible');
+
+      cy.findByRole('heading', Cypress.env('username')).should('be.visible');
+    });
+
+    cy.findByRole('link', {
+      name: /favorited articles/i,
+    }).click();
+
+    cy.wait('@getAllArticles')
+      .its('response.body')
+      .then((body) => {
+        const pages = Math.floor(body.articlesCount / body.articles.length);
+        const page = Math.round(Math.random() * (pages - 2 + 1) + 2);
+
+        cy.get('.pagination').findByText(page.toString()).click();
+
+        cy.wait('@getAllArticles');
+      });
+
+    cy.location('pathname').should(
+      'equal',
+      `/@${Cypress.env('username')}/favorites`
+    );
+  });
+});
