@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://localhost:4100",
+  "env": {
+    "apiUrl": "https://conduit.productionready.io/api",
+    "username": "warren_boyd",
+    "email": "warren.boyd@mailinator.com",
+    "password": "Pa$$w0rd!"
+  }
+}

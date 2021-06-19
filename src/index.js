@@ -8,6 +8,12 @@ import { ConnectedRouter } from 'connected-react-router';
 
 import App from './components/App';
 
+// https://www.cypress.io/blog/2018/11/14/testing-redux-store/
+/* istanbul ignore else */
+if (window.Cypress) {
+  window.store = store;
+}
+
 ReactDOM.render((
   <Provider store={store}>
     <ConnectedRouter history={history}>
