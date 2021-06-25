@@ -2,6 +2,23 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import agent from '../agent';
 
+function serializeError(error) {
+  if (error instanceof Error) {
+    return {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      code: error.code,
+    };
+  }
+
+  if (typeof error === 'object' && error !== null) {
+    return error;
+  }
+
+  return { message: String(error) };
+}
+
 export const getArticle = createAsyncThunk(
   'article/getArticle',
   agent.Articles.get
@@ -14,22 +31,14 @@ export const getCommentsForArticle = createAsyncThunk(
 
 export const addComment = createAsyncThunk(
   'article/addComment',
-  ({ slug, comment }) => agent.Comments.create(slug, comment)
+  ({ slug, comment }) => agent.Comments.create(slug, { body: comment }),
+  { serializeError }
 );
 
 export const deleteComment = createAsyncThunk(
   'article/deleteComment',
-  async ({ slug, commentId }, { rejectWithValue }) => {
-    try {
-      agent.Comments.delete(slug, commentId);
-    } catch (error) {
-      if (error instanceof Error) {
-        throw error;
-      } else {
-        return rejectWithValue(error);
-      }
-    }
-  }
+  ({ slug, commentId }) => agent.Comments.delete(slug, commentId),
+  { serializeError }
 );
 
 export const articlePageLoaded = slug => dispatch =>
@@ -60,16 +69,16 @@ const articleSlice = createSlice({
     });
 
     builder.addCase(addComment.fulfilled, (state, action) => {
-      state.comments.concat(action.payload.comment);
+      state.comments.unshift(action.payload.comment);
     });
 
     builder.addCase(addComment.rejected, (state, action) => {
-      state.commentErrors = action.payload.errors;
+      state.commentErrors = action.error.errors;
     });
 
     builder.addCase(deleteComment.fulfilled, (state, action) => {
       state.comments = state.comments.filter(
-        comment => comment.id === action.meta.arg.commentId
+        comment => comment.id !== action.meta.arg.commentId
       );
     });
   },
