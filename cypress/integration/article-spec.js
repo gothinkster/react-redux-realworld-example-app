@@ -87,11 +87,11 @@ describe('Article page (authenticated)', () => {
 
     cy.wait('@createComment').its('response.statusCode').should('equal', 200);
 
-    /* cy.get('.card:not(form)')
+    cy.wait(100).get('.card:not(form)')
       .first()
       .within(() => {
         cy.findByText(comment).should('exist');
-      }); */
+      });
   });
 
   it('should validate the comment box', () => {
@@ -101,9 +101,9 @@ describe('Article page (authenticated)', () => {
 
     cy.wait('@createComment').its('response.statusCode').should('equal', 422);
 
-    /* cy.get('.error-messages').within(() => {
+    cy.get('.error-messages').within(() => {
       cy.findAllByRole('listitem').should('have.length', 1);
-    }); */
+    });
   });
 
   it('should remove my own comment', () => {
