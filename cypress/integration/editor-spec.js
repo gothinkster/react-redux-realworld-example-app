@@ -4,7 +4,7 @@
 /// <reference types="@testing-library/cypress" />
 import faker from 'faker';
 
-import { ARTICLE_SUBMITTED } from '../../src/constants/actionTypes';
+import { createArticle } from '../../src/reducers/article';
 
 const titlePlaceholder = 'Article Title';
 const descriptionPlaceholder = "What's this article about?";
@@ -89,7 +89,7 @@ describe('Edit article', () => {
       .then((newArticle) => {
         article = newArticle;
 
-        cy.dispatch({ type: ARTICLE_SUBMITTED, payload: { article } }).wait([
+        cy.dispatch({ type: createArticle.fulfilled.type, payload: { article } }).wait([
           '@getArticle',
           '@getCommentsForArticle',
         ]);
@@ -97,6 +97,8 @@ describe('Edit article', () => {
         cy.findByRole('link', {
           name: /edit article/i,
         }).click();
+
+        cy.wait('@getArticle');
       });
   });
 
