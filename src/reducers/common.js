@@ -3,13 +3,11 @@ import { createAction } from '@reduxjs/toolkit';
 import {
   APP_LOAD,
   REDIRECT,
-  ARTICLE_SUBMITTED,
   DELETE_ARTICLE,
-  EDITOR_PAGE_UNLOADED,
   HOME_PAGE_UNLOADED,
   PROFILE_FAVORITES_PAGE_UNLOADED,
 } from '../constants/actionTypes';
-import { articlePageUnloaded } from './article';
+import { articlePageUnloaded, createArticle, updateArticle } from './article';
 import {
   login,
   register,
@@ -40,7 +38,8 @@ export default (state = defaultState, action) => {
       return { ...state, redirectTo: null };
     case logout.type:
       return { ...state, redirectTo: '/', token: null, currentUser: null };
-    case ARTICLE_SUBMITTED:
+    case createArticle.fulfilled.type:
+    case updateArticle.fulfilled.type:
       const redirectUrl =
         action.payload.article && `/article/${action.payload.article.slug}`;
       return { ...state, redirectTo: redirectUrl };
@@ -61,7 +60,6 @@ export default (state = defaultState, action) => {
     case DELETE_ARTICLE:
       return { ...state, redirectTo: '/' };
     case articlePageUnloaded.type:
-    case EDITOR_PAGE_UNLOADED:
     case HOME_PAGE_UNLOADED:
     case profilePageUnloaded.type:
     case PROFILE_FAVORITES_PAGE_UNLOADED:

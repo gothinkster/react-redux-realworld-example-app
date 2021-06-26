@@ -41,6 +41,18 @@ export const deleteComment = createAsyncThunk(
   { serializeError }
 );
 
+export const createArticle = createAsyncThunk(
+  'article/createArticle',
+  agent.Articles.create,
+  { serializeError }
+);
+
+export const updateArticle = createAsyncThunk(
+  'article/updateArticle',
+  agent.Articles.update,
+  { serializeError }
+);
+
 export const articlePageLoaded = slug => dispatch =>
   Promise.all([
     dispatch(getArticle(slug)),
@@ -51,6 +63,8 @@ const initialState = {
   article: undefined,
   comments: [],
   commentErrors: undefined,
+  inProgress: false,
+  errors: undefined,
 };
 
 const articleSlice = createSlice({
@@ -62,24 +76,58 @@ const articleSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(getArticle.fulfilled, (state, action) => {
       state.article = action.payload.article;
+      state.inProgress = false;
     });
 
     builder.addCase(getCommentsForArticle.fulfilled, (state, action) => {
       state.comments = action.payload.comments;
+      state.inProgress = false;
     });
 
     builder.addCase(addComment.fulfilled, (state, action) => {
       state.comments.unshift(action.payload.comment);
+      state.inProgress = false;
     });
 
     builder.addCase(addComment.rejected, (state, action) => {
       state.commentErrors = action.error.errors;
+      state.inProgress = false;
     });
 
     builder.addCase(deleteComment.fulfilled, (state, action) => {
       state.comments = state.comments.filter(
         comment => comment.id !== action.meta.arg.commentId
       );
+      state.inProgress = false;
+    });
+
+    builder.addCase(createArticle.fulfilled, state => {
+      state.inProgress = false;
+    });
+
+    builder.addCase(createArticle.rejected, (state, action) => {
+      state.errors = action.error.errors;
+      state.inProgress = false;
+    });
+
+    builder.addCase(updateArticle.fulfilled, state => {
+      state.inProgress = false;
+    });
+
+    builder.addCase(updateArticle.rejected, (state, action) => {
+      state.errors = action.error.errors;
+      state.inProgress = false;
+    });
+
+    builder.addMatcher(
+      action => action.type.endsWith('/pending'),
+      state => {
+        state.inProgress = true;
+      }
+    );
+
+    builder.addDefaultCase(state => {
+      state.inProgress = false;
     });
   },
 });
