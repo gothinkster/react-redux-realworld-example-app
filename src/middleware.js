@@ -1,65 +1,23 @@
 import agent from './agent';
-import { ASYNC_START, ASYNC_END } from './constants/actionTypes';
 import { login, register } from './reducers/auth';
 import { logout } from './reducers/common';
 
-const promiseMiddleware = store => next => action => {
-  if (isPromise(action.payload)) {
-    store.dispatch({ type: ASYNC_START, subtype: action.type });
-
-    const currentView = store.getState().viewChangeCounter;
-    const skipTracking = action.skipTracking;
-
-    action.payload.then(
-      res => {
-        const currentState = store.getState()
-        if (!skipTracking && currentState.viewChangeCounter !== currentView) {
-          return
-        }
-        console.log('RESULT', res);
-        action.payload = res;
-        store.dispatch({ type: ASYNC_END, promise: action.payload });
-        store.dispatch(action);
-      },
-      error => {
-        const currentState = store.getState()
-        if (!skipTracking && currentState.viewChangeCounter !== currentView) {
-          return
-        }
-        console.log('ERROR', error);
-        action.error = true;
-        action.payload = error.response && error.response.body;
-        if (!action.skipTracking) {
-          store.dispatch({ type: ASYNC_END, promise: action.payload });
-        }
-        store.dispatch(action);
-      }
-    );
-
-    return;
-  }
-
-  next(action);
-};
-
 const localStorageMiddleware = store => next => action => {
-  if (
-    action.type === register.fulfilled.type ||
-    action.type === login.fulfilled.type
-  ) {
+  switch (action.type) {
+    case register.fulfilled.type:
+    case login.fulfilled.type:
       window.localStorage.setItem('jwt', action.payload.user.token);
       agent.setToken(action.payload.user.token);
-  } else if (action.type === logout.type) {
-    window.localStorage.setItem('jwt', '');
-    agent.setToken(null);
-  }
+      break;
 
-  next(action);
+    case logout.type:
+      window.localStorage.removeItem('jwt');
+      agent.setToken(undefined);
+      break;
+
+    default:
+      return next(action);
+  }
 };
 
-function isPromise(v) {
-  return v && typeof v.then === 'function';
-}
-
-
-export { promiseMiddleware, localStorageMiddleware }
+export { localStorageMiddleware };

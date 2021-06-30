@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { promiseMiddleware, localStorageMiddleware } from './middleware';
+import { localStorageMiddleware } from './middleware';
 import createRootReducer from './reducer';
 
 import { routerMiddleware } from 'connected-react-router';
@@ -14,9 +14,8 @@ export const store = configureStore({
   reducer: createRootReducer(history),
   devTools: process.env.NODE_ENV !== 'production',
   middleware: getDefaultMiddleware => [
+    ...getDefaultMiddleware(),
     myRouterMiddleware,
-    promiseMiddleware,
     localStorageMiddleware,
-    ...getDefaultMiddleware({ serializableCheck: false }),
   ],
 });
