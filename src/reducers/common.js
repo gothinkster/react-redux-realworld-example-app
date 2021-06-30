@@ -1,6 +1,6 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { APP_LOAD, REDIRECT, DELETE_ARTICLE } from '../constants/actionTypes';
+import agent from '../agent';
 import { articlePageUnloaded, createArticle, updateArticle } from './article';
 import {
   login,
@@ -12,56 +12,106 @@ import { saveSettings, settingsPageUnloaded } from './settings';
 import { profilePageUnloaded } from './profile';
 import { homePageUnloaded } from './articleList';
 
-const defaultState = {
-  appName: 'Conduit',
-  token: null,
-  viewChangeCounter: 0,
-};
+export const deleteArticle = createAsyncThunk(
+  'common/deleteArticle',
+  agent.Articles.del
+);
 
-export const logout = createAction('logout');
+export const getCurrentUser = createAsyncThunk(
+  'common/getCurrentUser',
+  agent.Auth.current
+);
 
-export default (state = defaultState, action) => {
-  switch (action.type) {
-    case APP_LOAD:
-      return {
-        ...state,
-        token: action.token || null,
-        appLoaded: true,
-        currentUser: action.payload ? action.payload.user : null,
-      };
-    case REDIRECT:
-      return { ...state, redirectTo: null };
-    case logout.type:
-      return { ...state, redirectTo: '/', token: null, currentUser: null };
-    case createArticle.fulfilled.type:
-    case updateArticle.fulfilled.type:
-      const redirectUrl =
-        action.payload.article && `/article/${action.payload.article.slug}`;
-      return { ...state, redirectTo: redirectUrl };
-    case saveSettings.fulfilled.type:
-      return {
-        ...state,
-        redirectTo: action.error ? null : '/',
-        currentUser: action.error ? null : action.payload.user,
-      };
-    case login.fulfilled.type:
-    case register.fulfilled.type:
-      return {
-        ...state,
-        redirectTo: '/',
-        token: action.payload.user.token,
-        currentUser: action.payload.user,
-      };
-    case DELETE_ARTICLE:
-      return { ...state, redirectTo: '/' };
-    case articlePageUnloaded.type:
-    case homePageUnloaded.type:
-    case profilePageUnloaded.type:
-    case settingsPageUnloaded.type:
-    case loginPageUnloaded.type:
-    case registerPageUnloaded.type:
-      return { ...state, viewChangeCounter: state.viewChangeCounter + 1 };
-    default:
-      return state;
+export const appLoad = token => dispatch => {
+  dispatch(commonSlice.actions.loadApp());
+
+  if (token) {
+    agent.setToken(token);
+    dispatch(commonSlice.actions.setToken(token));
+    return dispatch(getCurrentUser());
   }
 };
+
+const initialState = {
+  appName: 'Conduit',
+  token: null,
+  appLoaded: false,
+  viewChangeCounter: 0,
+  currentUser: undefined,
+  redirectTo: undefined,
+};
+
+const commonSlice = createSlice({
+  name: 'common',
+  initialState,
+  reducers: {
+    setToken(state, action) {
+      state.token = action.payload;
+    },
+    loadApp(state) {
+      state.appLoaded = true;
+    },
+    logout(state) {
+      state.redirectTo = '/';
+      delete state.token;
+      delete state.currentUser;
+    },
+    clearRedirect(state) {
+      delete state.redirectTo;
+    },
+  },
+  extraReducers: builder => {
+    builder.addCase(deleteArticle.fulfilled, state => {
+      state.redirectTo = '/';
+    });
+
+    builder.addCase(getCurrentUser.fulfilled, (state, action) => {
+      state.currentUser = action.payload.user;
+    });
+
+    builder.addCase(saveSettings.fulfilled, (state, action) => {
+      state.redirectTo = '/';
+      state.token = action.payload.user.token;
+      state.currentUser = action.payload.user;
+    });
+
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.redirectTo = '/';
+      state.token = action.payload.user.token;
+      state.currentUser = action.payload.user;
+    });
+
+    builder.addCase(register.fulfilled, (state, action) => {
+      state.redirectTo = '/';
+      state.token = action.payload.user.token;
+      state.currentUser = action.payload.user;
+    });
+
+    builder.addCase(createArticle.fulfilled, (state, action) => {
+      state.redirectTo = `/article/${action.payload.article.slug}`;
+    });
+
+    builder.addCase(updateArticle.fulfilled, (state, action) => {
+      state.redirectTo = `/article/${action.payload.article.slug}`;
+    });
+
+    builder.addMatcher(
+      action =>
+        [
+          articlePageUnloaded.type,
+          homePageUnloaded.type,
+          profilePageUnloaded.type,
+          settingsPageUnloaded.type,
+          loginPageUnloaded.type,
+          registerPageUnloaded.type,
+        ].includes(action.type),
+      state => {
+        state.viewChangeCounter++;
+      }
+    );
+  },
+});
+
+export const { logout, clearRedirect } = commonSlice.actions;
+
+export default commonSlice.reducer;
