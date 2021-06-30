@@ -1,20 +1,19 @@
-import agent from '../agent'
-import Header from './Header'
-import React, { lazy, Suspense } from 'react'
-import { connect } from 'react-redux'
-import { APP_LOAD, REDIRECT } from '../constants/actionTypes'
-import { Route, Switch } from 'react-router-dom'
-import { store } from '../store'
-import { push } from 'connected-react-router'
-// const Home = lazy(() => import('../components/Home'/* webpackChunkName: "Home", webpackPreload: true  */))
-import Home from '../components/Home'
-const Article = lazy(() => import('../components/Article' /* webpackChunkName: "Article", webpackPrefetch: true  */))
-const Editor = lazy(() => import('../components/Editor'/* webpackChunkName: "Editor", webpackPrefetch: true  */))
-const Login = lazy(() => import('../components/Login'/* webpackChunkName: "Login", webpackPrefetch: true  */))
-const Profile = lazy(() => import('../components/Profile'/* webpackChunkName: "Profile", webpackPrefetch: true  */))
-const ProfileFavorites = lazy(() => import('../components/ProfileFavorites'/* webpackChunkName: "ProfileFavorites", webpackPrefetch: true  */))
-const Register = lazy(() => import('../components/Register'/* webpackChunkName: "Register", webpackPrefetch: true  */))
-const Settings = lazy(() => import('../components/Settings'/* webpackChunkName: "Settings", webpackPrefetch: true  */))
+import React, { lazy, Suspense } from 'react';
+import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
+import { Route, Switch } from 'react-router-dom';
+
+import Header from './Header';
+import { appLoad, clearRedirect } from '../reducers/common';
+import { store } from '../store';
+import Home from '../components/Home';
+const Article = lazy(() => import('../components/Article' /* webpackChunkName: "Article", webpackPrefetch: true  */));
+const Editor = lazy(() => import('../components/Editor' /* webpackChunkName: "Editor", webpackPrefetch: true  */));
+const Login = lazy(() => import('../components/Login' /* webpackChunkName: "Login", webpackPrefetch: true  */));
+const Profile = lazy(() => import('../components/Profile' /* webpackChunkName: "Profile", webpackPrefetch: true  */));
+const ProfileFavorites = lazy(() => import('../components/ProfileFavorites' /* webpackChunkName: "ProfileFavorites", webpackPrefetch: true  */));
+const Register = lazy(() => import('../components/Register' /* webpackChunkName: "Register", webpackPrefetch: true  */));
+const Settings = lazy(() => import('../components/Settings' /* webpackChunkName: "Settings", webpackPrefetch: true  */));
 
 const mapStateToProps = state => {
   return {
@@ -26,28 +25,23 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: (payload, token) =>
-    dispatch({ type: APP_LOAD, payload, token, skipTracking: true }),
-  onRedirect: () =>
-    dispatch({ type: REDIRECT })
-})
+  onLoad: token => dispatch(appLoad(token)),
+  onRedirect: () => dispatch(clearRedirect()),
+});
 
 class App extends React.PureComponent {
   componentDidUpdate (prevProps) {
     if (this.props.redirectTo && this.props.redirectTo !== prevProps.redirectTo) {
       // this.context.router.replace(this.props.redirectTo);
-      store.dispatch(push(this.props.redirectTo))
-      this.props.onRedirect()
+      store.dispatch(push(this.props.redirectTo));
+      this.props.onRedirect();
     }
   }
 
   componentDidMount () {
     const token = window.localStorage.getItem('jwt')
-    if (token) {
-      agent.setToken(token)
-    }
 
-    this.props.onLoad(token ? agent.Auth.current() : null, token)
+    this.props.onLoad(token)
   }
 
   render () {
@@ -82,9 +76,5 @@ class App extends React.PureComponent {
     )
   }
 }
-
-// App.contextTypes = {
-//   router: PropTypes.object.isRequired
-// };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
