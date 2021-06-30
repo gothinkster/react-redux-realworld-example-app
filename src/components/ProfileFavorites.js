@@ -3,22 +3,16 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { Profile, mapStateToProps } from './Profile';
-import agent from '../agent';
-import { PROFILE_PAGE_LOADED } from '../constants/actionTypes';
-import { profilePageUnloaded } from '../reducers/profile';
+import { profilePageLoaded, profilePageUnloaded } from '../reducers/profile';
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: (pager, payload) =>
-    dispatch({ type: PROFILE_PAGE_LOADED, pager, payload }),
+  onLoad: username => dispatch(profilePageLoaded(username)),
   onUnload: () => dispatch(profilePageUnloaded()),
 });
 
 class ProfileFavorites extends Profile {
   componentDidMount() {
-    this.props.onLoad(page => agent.Articles.favoritedBy(this.props.match.params.username, page), Promise.all([
-      agent.Profile.get(this.props.match.params.username),
-      agent.Articles.favoritedBy(this.props.match.params.username)
-    ]));
+    this.props.onLoad(this.props.match.params.username);
   }
 
   componentWillUnmount() {

@@ -222,10 +222,15 @@ const Articles = {
   /**
    * Get all articles
    *
-   * @param {Number} [page]
+   * @param {Object} query Article's query parameters
+   * @param {Number} [query.limit=10]
+   * @param {Number} [query.page]
+   * @param {String} [query.author]
+   * @param {String} [query.tag]
+   * @param {String} [query.favorited]
    * @returns {Promise<ArticlesResponse>}
    */
-  all: page => requests.get(`/articles`, { page }),
+  all: query => requests.get(`/articles`, query),
   /**
    * Get all articles from author
    *

@@ -143,10 +143,11 @@ class Profile extends React.PureComponent {
               </div>
 
               <ArticleList
-                pager={this.props.pager}
                 articles={this.props.articles}
                 articlesCount={this.props.articlesCount}
-                state={this.props.currentPage} />
+                currentPage={this.props.currentPage}
+                articlesPerPage={this.props.articlesPerPage}
+              />
             </div>
 
           </div>
