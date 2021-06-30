@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import agent from '../agent';
-import { getByAuthor } from './articleList';
+import { getArticlesByAuthor } from './articleList';
 
 export const getProfile = createAsyncThunk(
   'profile/getProfile',
@@ -18,7 +18,7 @@ export const unfollow = createAsyncThunk(
 export const profilePageLoaded = username => dispatch =>
   Promise.all([
     dispatch(getProfile(username)),
-    dispatch(getByAuthor({ username })),
+    dispatch(getArticlesByAuthor({ username })),
   ]);
 
 const profileSlice = createSlice({

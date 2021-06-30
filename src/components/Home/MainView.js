@@ -1,15 +1,16 @@
-import ArticleList from '../ArticleList'
-import React from 'react'
-import agent from '../../agent'
-import { connect } from 'react-redux'
-import { CHANGE_TAB } from '../../constants/actionTypes'
+import React from 'react';
+import { connect } from 'react-redux';
+
+import ArticleList from '../ArticleList';
+import { changeTab } from '../../reducers/articleList';
 
 const YourFeedTab = React.memo(props => {
-  if (props.token) {
-    const clickHandler = ev => {
-      ev.preventDefault()
-      props.onTabClick('feed', agent.Articles.feed, agent.Articles.feed())
-    }
+  if (!props.token) return null;
+
+  const clickHandler = event => {
+    event.preventDefault();
+    props.onTabClick('feed');
+  };
 
     return (
       <li className='nav-item'>
@@ -22,15 +23,14 @@ const YourFeedTab = React.memo(props => {
         </button>
       </li>
     )
-  }
-  return null
 })
 
 const GlobalFeedTab = React.memo(props => {
-  const clickHandler = ev => {
-    ev.preventDefault()
-    props.onTabClick('all', agent.Articles.all, agent.Articles.all())
-  }
+  const clickHandler = event => {
+    event.preventDefault();
+    props.onTabClick('all');
+  };
+
   return (
     <li className='nav-item'>
       <button
@@ -46,7 +46,7 @@ const GlobalFeedTab = React.memo(props => {
 
 const TagFilterTab = React.memo(props => {
   if (!props.tag) {
-    return null
+    return null;
   }
 
   return (
@@ -60,13 +60,12 @@ const TagFilterTab = React.memo(props => {
 
 const mapStateToProps = state => ({
   ...state.articleList,
-  tags: state.home.tags,
-  token: state.common.token
-})
+  token: state.common.token,
+});
 
 const mapDispatchToProps = dispatch => ({
-  onTabClick: (tab, pager, payload) => dispatch({ type: CHANGE_TAB, tab, pager, payload })
-})
+  onTabClick: tab => dispatch(changeTab(tab)),
+});
 
 const MainView = React.memo(props => {
   return (
@@ -88,11 +87,11 @@ const MainView = React.memo(props => {
       </div>
 
       <ArticleList
-        pager={props.pager}
         articles={props.articles}
         loading={props.loading}
         articlesCount={props.articlesCount}
         currentPage={props.currentPage}
+        articlesPerPage={props.articlesPerPage}
       />
     </div>
   )

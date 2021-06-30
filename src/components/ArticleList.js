@@ -28,9 +28,9 @@ const ArticleList = React.memo(props => {
       }
 
       <ListPagination
-        pager={props.pager}
         articlesCount={props.articlesCount}
         currentPage={props.currentPage}
+        articlesPerPage={props.articlesPerPage}
       />
     </div>
   )

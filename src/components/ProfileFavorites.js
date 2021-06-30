@@ -3,22 +3,16 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { mapStateToProps } from './Profile'
-import agent from '../agent'
-import { PROFILE_PAGE_LOADED } from '../constants/actionTypes'
-import { profilePageUnloaded } from '../reducers/profile'
+import { profilePageLoaded, profilePageUnloaded } from '../reducers/profile'
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: (pager, payload) =>
-    dispatch({ type: PROFILE_PAGE_LOADED, pager, payload }),
-  onUnload: () => dispatch(profilePageUnloaded())
+  onLoad: username => dispatch(profilePageLoaded(username)),
+  onUnload: () => dispatch(profilePageUnloaded()),
 })
 
 function ProfileFavorites (props) {
   useEffect(() => {
-    props.onLoad(page => agent.Articles.favoritedBy(props.match.params.username, page), Promise.all([
-      agent.Profile.get(props.match.params.username),
-      agent.Articles.favoritedBy(props.match.params.username)
-    ]))
+    props.onLoad(this.props.match.params.username)
     return () => {
       props.onUnload()
     }

@@ -1,12 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import {
-  APP_LOAD,
-  REDIRECT,
-  DELETE_ARTICLE,
-  HOME_PAGE_UNLOADED,
-  PROFILE_FAVORITES_PAGE_UNLOADED,
-} from '../constants/actionTypes';
+import { APP_LOAD, REDIRECT, DELETE_ARTICLE } from '../constants/actionTypes';
 import { articlePageUnloaded, createArticle, updateArticle } from './article';
 import {
   login,
@@ -16,6 +10,7 @@ import {
 } from './auth';
 import { saveSettings, settingsPageUnloaded } from './settings';
 import { profilePageUnloaded } from './profile';
+import { homePageUnloaded } from './articleList';
 
 const defaultState = {
   appName: 'Conduit',
@@ -60,9 +55,8 @@ export default (state = defaultState, action) => {
     case DELETE_ARTICLE:
       return { ...state, redirectTo: '/' };
     case articlePageUnloaded.type:
-    case HOME_PAGE_UNLOADED:
+    case homePageUnloaded.type:
     case profilePageUnloaded.type:
-    case PROFILE_FAVORITES_PAGE_UNLOADED:
     case settingsPageUnloaded.type:
     case loginPageUnloaded.type:
     case registerPageUnloaded.type:
