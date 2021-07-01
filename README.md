@@ -10,12 +10,12 @@
 
 Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1353). The codebase is now feature complete; please submit bug fixes via pull requests & feedback via issues.
 
-We also have notes in [**our wiki**](https://github.com/gothinkster/react-redux-realworld-example-app/wiki) about how the various patterns used in this codebase and how they work (thanks [@thejmazz](https://github.com/thejmazz)!)
+We also have notes in [**our wiki**](https://github.com/khaledosman/react-redux-realworld-example-app/wiki) about how the various patterns used in this codebase and how they work (thanks [@thejmazz](https://github.com/thejmazz)!)
 
 
 ## Getting started
 
-You can view a live demo over at https://react-redux.realworld.io/
+You can view a live demo over at https://react-redux-realworld.netlify.app/
 
 To get the frontend running locally:
 
