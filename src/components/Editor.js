@@ -70,10 +70,11 @@ function Editor (props) {
 
   useEffect(() => {
     if (props.match.params.slug) {
-      props.onUnload()
       props.onLoad(props.match.params.slug)
+    } else {
+      props.onUnload()
     }
-    props.onLoad(null)
+
     return () => {
       props.onUnload()
     }
