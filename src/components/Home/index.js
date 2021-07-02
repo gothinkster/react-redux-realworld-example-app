@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import Banner from './Banner';
 import MainView from './MainView';
 import Tags from './Tags';
 import {
-  getArticlesByTag,
   homePageLoaded,
   homePageUnloaded,
+  getArticlesByTag,
 } from '../../reducers/articleList';
 
 const mapStateToProps = state => ({
@@ -22,44 +22,36 @@ const mapDispatchToProps = dispatch => ({
   onUnload: () => dispatch(homePageUnloaded()),
 });
 
-class Home extends React.PureComponent {
-  componentDidMount() {
-    const tab = this.props.token ? 'feed' : 'all';
+function Home(props) {
+  useEffect(() => {
+    const tab = props.token ? 'feed' : 'all';
 
-    this.props.onLoad(tab);
-  }
+    props.onLoad(tab);
 
-  componentWillUnmount() {
-    this.props.onUnload();
-  }
+    return () => {
+      props.onUnload();
+    };
+  }, []);
 
-  render() {
-    return (
-      <div className="home-page">
+  return (
+    <div className="home-page">
+      <Banner token={props.token} appName={props.appName} />
 
-        <Banner token={this.props.token} appName={this.props.appName} />
+      <div className="container page">
+        <div className="row">
+          <MainView />
 
-        <div className="container page">
-          <div className="row">
-            <MainView />
+          <div className="col-md-3">
+            <div className="sidebar">
+              <p>Popular Tags</p>
 
-            <div className="col-md-3">
-              <div className="sidebar">
-
-                <p>Popular Tags</p>
-
-                <Tags
-                  tags={this.props.tags}
-                  onClickTag={this.props.onClickTag} />
-
-              </div>
+              <Tags tags={props.tags} onClickTag={props.onClickTag} />
             </div>
           </div>
         </div>
-
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -14,9 +14,9 @@ const mapDispatchToProps = dispatch => ({
 
 const ArticlePreview = React.memo(props => {
   const article = props.article;
-  const favoriteButtonClass = article.favorited ?
-    FAVORITED_CLASS :
-    NOT_FAVORITED_CLASS;
+  const favoriteButtonClass = article.favorited
+    ? FAVORITED_CLASS
+    : NOT_FAVORITED_CLASS;
 
   const handleClick = event => {
     event.preventDefault();
@@ -31,7 +31,13 @@ const ArticlePreview = React.memo(props => {
     <div className="article-preview">
       <div className="article-meta">
         <Link to={`/@${article.author.username}`}>
-          <img src={article.author.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'} alt={article.author.username} />
+          <img
+            src={
+              article.author.image ||
+              'https://static.productionready.io/images/smiley-cyrus.jpg'
+            }
+            alt={article.author.username}
+          />
         </Link>
 
         <div className="info">
@@ -45,7 +51,7 @@ const ArticlePreview = React.memo(props => {
 
         <div className="pull-xs-right">
           <button className={favoriteButtonClass} onClick={handleClick}>
-            <i className="ion-heart"></i> {article.favoritesCount}
+            <i className="ion-heart" /> {article.favoritesCount}
           </button>
         </div>
       </div>
@@ -55,19 +61,17 @@ const ArticlePreview = React.memo(props => {
         <p>{article.description}</p>
         <span>Read more...</span>
         <ul className="tag-list">
-          {
-            article.tagList.map(tag => {
-              return (
-                <li className="tag-default tag-pill tag-outline" key={tag}>
-                  {tag}
-                </li>
-              )
-            })
-          }
+          {article.tagList.map(tag => {
+            return (
+              <li className="tag-default tag-pill tag-outline" key={tag}>
+                {tag}
+              </li>
+            );
+          })}
         </ul>
       </Link>
     </div>
   );
-})
+});
 
 export default connect(() => ({}), mapDispatchToProps)(ArticlePreview);

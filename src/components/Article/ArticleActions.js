@@ -15,21 +15,21 @@ const ArticleActions = props => {
     return null;
   }
 
-    return (
-      <span>
-        <Link
-          to={`/editor/${article.slug}`}
+  return (
+    <span>
+      <Link
+        to={`/editor/${article.slug}`}
         className="btn btn-outline-secondary btn-sm"
       >
-          <i className="ion-edit"></i> Edit Article
-        </Link>
+        <i className="ion-edit"></i> Edit Article
+      </Link>
 
       <button
         className="btn btn-outline-danger btn-sm"
         onClick={() => props.onClickDelete(article.slug)}
       >
-          <i className="ion-trash-a"></i> Delete Article
-        </button>
+        <i className="ion-trash-a"></i> Delete Article
+      </button>
     </span>
   );
 };

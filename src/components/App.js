@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Route, Switch } from 'react-router-dom';
@@ -20,61 +20,53 @@ const mapStateToProps = state => {
     appLoaded: state.common.appLoaded,
     appName: state.common.appName,
     currentUser: state.common.currentUser,
-    redirectTo: state.common.redirectTo
-  }
-}
+    redirectTo: state.common.redirectTo,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   onLoad: token => dispatch(appLoad(token)),
   onRedirect: () => dispatch(clearRedirect()),
 });
 
-class App extends React.PureComponent {
-  componentDidUpdate (prevProps) {
-    if (this.props.redirectTo && this.props.redirectTo !== prevProps.redirectTo) {
-      // this.context.router.replace(this.props.redirectTo);
-      store.dispatch(push(this.props.redirectTo));
-      this.props.onRedirect();
+function App(props) {
+  useEffect(() => {
+    if (props.redirectTo) {
+      store.dispatch(push(props.redirectTo));
+      props.onRedirect();
     }
-  }
+  }, [props.redirectTo, props.onRedirect]);
 
-  componentDidMount () {
-    const token = window.localStorage.getItem('jwt')
+  useEffect(() => {
+    const token = window.localStorage.getItem('jwt');
+    props.onLoad(token);
+  }, []);
 
-    this.props.onLoad(token)
-  }
-
-  render () {
-    if (this.props.appLoaded) {
-      return (
-        <div>
-          <Header
-            appName={this.props.appName}
-            currentUser={this.props.currentUser} />
-            <Suspense fallback={<p>Loading...</p>}>
-              <Switch>
-                <Route exact path='/' component={Home} />
-                <Route path='/login' component={Login} />
-                <Route path='/register' component={Register} />
-                <Route path='/editor/:slug' component={Editor} />
-                <Route path='/editor' component={Editor} />
-                <Route path='/article/:id' component={Article} />
-                <Route path='/settings' component={Settings} />
-                <Route path='/@:username/favorites' component={ProfileFavorites} />
-                <Route path='/@:username' component={Profile} />
-              </Switch>
-            </Suspense>
-        </div>
-      )
-    }
+  if (props.appLoaded) {
     return (
       <div>
-        <Header
-          appName={this.props.appName}
-          currentUser={this.props.currentUser} />
+        <Header appName={props.appName} currentUser={props.currentUser} />
+        <Suspense fallback={<p>Loading...</p>}>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <Route path="/editor/:slug" component={Editor} />
+            <Route path="/editor" component={Editor} />
+            <Route path="/article/:id" component={Article} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/@:username/favorites" component={ProfileFavorites} />
+            <Route path="/@:username" component={Profile} />
+          </Switch>
+        </Suspense>
       </div>
-    )
+    );
   }
+  return (
+    <div>
+      <Header appName={props.appName} currentUser={props.currentUser} />
+    </div>
+  );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App);
