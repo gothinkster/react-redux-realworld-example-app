@@ -2,11 +2,14 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { mapStateToProps } from './Profile'
-import { profilePageLoaded, profilePageUnloaded } from '../reducers/profile'
+import { mapStateToProps } from './Profile';
+import {
+  profileFavoritesPageLoaded,
+  profilePageUnloaded,
+} from '../reducers/profile';
 
 const mapDispatchToProps = dispatch => ({
-  onLoad: username => dispatch(profilePageLoaded(username)),
+  onLoad: username => dispatch(profileFavoritesPageLoaded(username)),
   onUnload: () => dispatch(profilePageUnloaded()),
 })
 
