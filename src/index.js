@@ -15,12 +15,13 @@ if (window.Cypress) {
 }
 
 ReactDOM.render((
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <Switch>
-        <Route path="/" component={App} />
-      </Switch>
-    </ConnectedRouter>
-  </Provider>
-
+  <React.StrictMode>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <Switch>
+          <Route path="/" component={App} />
+        </Switch>
+      </ConnectedRouter>
+    </Provider>
+  </React.StrictMode>
 ), document.getElementById('root'));

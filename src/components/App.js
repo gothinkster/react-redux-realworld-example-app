@@ -1,6 +1,6 @@
 import agent from '../agent'
 import Header from './Header'
-import React, { lazy, Suspense } from 'react'
+import React, { lazy, Suspense, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { APP_LOAD, REDIRECT } from '../constants/actionTypes'
 import { Route, Switch } from 'react-router-dom'
@@ -32,31 +32,29 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: REDIRECT })
 })
 
-class App extends React.PureComponent {
-  componentDidUpdate (prevProps) {
-    if (this.props.redirectTo && this.props.redirectTo !== prevProps.redirectTo) {
-      // this.context.router.replace(this.props.redirectTo);
-      store.dispatch(push(this.props.redirectTo))
-      this.props.onRedirect()
+function App(props) {
+  useEffect(() => {
+    if (!!props.redirectTo) {
+      store.dispatch(push(props.redirectTo))
+      props.onRedirect()
     }
-  }
+  }, [])
 
-  componentDidMount () {
+  useEffect(() => {
     const token = window.localStorage.getItem('jwt')
     if (token) {
       agent.setToken(token)
     }
+    props.onLoad(token ? agent.Auth.current() : null, token)
+  }, [])
 
-    this.props.onLoad(token ? agent.Auth.current() : null, token)
-  }
-
-  render () {
-    if (this.props.appLoaded) {
+  
+    if (props.appLoaded) {
       return (
         <div>
           <Header
-            appName={this.props.appName}
-            currentUser={this.props.currentUser} />
+            appName={props.appName}
+            currentUser={props.currentUser} />
             <Suspense fallback={<p>Loading...</p>}>
               <Switch>
                 <Route exact path='/' component={Home} />
@@ -76,15 +74,10 @@ class App extends React.PureComponent {
     return (
       <div>
         <Header
-          appName={this.props.appName}
-          currentUser={this.props.currentUser} />
+          appName={props.appName}
+          currentUser={props.currentUser} />
       </div>
     )
-  }
 }
-
-// App.contextTypes = {
-//   router: PropTypes.object.isRequired
-// };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
