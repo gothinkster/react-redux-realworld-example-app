@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import agent from '../agent';
-import { getArticlesByAuthor } from './articleList';
+import { getArticlesByAuthor, getFavoriteArticles } from './articleList';
 
 export const getProfile = createAsyncThunk(
   'profile/getProfile',
@@ -18,7 +18,13 @@ export const unfollow = createAsyncThunk(
 export const profilePageLoaded = username => dispatch =>
   Promise.all([
     dispatch(getProfile(username)),
-    dispatch(getArticlesByAuthor({ username })),
+    dispatch(getArticlesByAuthor({ author: username })),
+  ]);
+
+export const profileFavoritesPageLoaded = username => dispatch =>
+  Promise.all([
+    dispatch(getProfile(username)),
+    dispatch(getFavoriteArticles({ username })),
   ]);
 
 const profileSlice = createSlice({
@@ -28,9 +34,9 @@ const profileSlice = createSlice({
     profilePageUnloaded: () => ({}),
   },
   extraReducers: builder => {
-    const successCaseReducer = (state, action) => {
-      state = action.payload.profile;
-    };
+    const successCaseReducer = (_, action) => ({
+      ...action.payload.profile,
+    });
 
     builder.addCase(getProfile.fulfilled, successCaseReducer);
     builder.addCase(follow.fulfilled, successCaseReducer);
