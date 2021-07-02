@@ -13,9 +13,11 @@ const YourFeedTab = React.memo(props => {
 
     return (
       <li className='nav-item'>
-        <button type='button'
+        <button
+          type='button'
           className={props.tab === 'feed' ? 'nav-link active' : 'nav-link'}
-          onClick={clickHandler}>
+          onClick={clickHandler}
+        >
           Your Feed
         </button>
       </li>
@@ -31,9 +33,11 @@ const GlobalFeedTab = React.memo(props => {
   }
   return (
     <li className='nav-item'>
-      <button type='button'
+      <button
+        type='button'
         className={props.tab === 'all' ? 'nav-link active' : 'nav-link'}
-        onClick={clickHandler}>
+        onClick={clickHandler}
+      >
         Global Feed
       </button>
     </li>
@@ -73,7 +77,8 @@ const MainView = React.memo(props => {
           <YourFeedTab
             token={props.token}
             tab={props.tab}
-            onTabClick={props.onTabClick} />
+            onTabClick={props.onTabClick}
+          />
 
           <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
 
@@ -87,7 +92,8 @@ const MainView = React.memo(props => {
         articles={props.articles}
         loading={props.loading}
         articlesCount={props.articlesCount}
-        currentPage={props.currentPage} />
+        currentPage={props.currentPage}
+      />
     </div>
   )
 })

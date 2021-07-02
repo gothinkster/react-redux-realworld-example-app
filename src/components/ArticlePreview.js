@@ -1,11 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import agent from '../agent';
-import { connect } from 'react-redux';
-import { ARTICLE_FAVORITED, ARTICLE_UNFAVORITED } from '../constants/actionTypes';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import agent from '../agent'
+import { connect } from 'react-redux'
+import { ARTICLE_FAVORITED, ARTICLE_UNFAVORITED } from '../constants/actionTypes'
 
-const FAVORITED_CLASS = 'btn btn-sm btn-primary';
-const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
+const FAVORITED_CLASS = 'btn btn-sm btn-primary'
+const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary'
 
 const mapDispatchToProps = dispatch => ({
   favorite: slug => dispatch({
@@ -16,55 +16,55 @@ const mapDispatchToProps = dispatch => ({
     type: ARTICLE_UNFAVORITED,
     payload: agent.Articles.unfavorite(slug)
   })
-});
+})
 
 const ArticlePreview = React.memo(props => {
-  const article = props.article;
-  const favoriteButtonClass = article.favorited ?
-    FAVORITED_CLASS :
-    NOT_FAVORITED_CLASS;
+  const article = props.article
+  const favoriteButtonClass = article.favorited
+    ? FAVORITED_CLASS
+    : NOT_FAVORITED_CLASS
 
   const handleClick = ev => {
-    ev.preventDefault();
+    ev.preventDefault()
     if (article.favorited) {
-      props.unfavorite(article.slug);
+      props.unfavorite(article.slug)
     } else {
-      props.favorite(article.slug);
+      props.favorite(article.slug)
     }
-  };
+  }
 
   return (
-    <div className="article-preview">
-      <div className="article-meta">
+    <div className='article-preview'>
+      <div className='article-meta'>
         <Link to={`/@${article.author.username}`}>
           <img src={article.author.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'} alt={article.author.username} />
         </Link>
 
-        <div className="info">
-          <Link className="author" to={`/@${article.author.username}`}>
+        <div className='info'>
+          <Link className='author' to={`/@${article.author.username}`}>
             {article.author.username}
           </Link>
-          <span className="date">
+          <span className='date'>
             {new Date(article.createdAt).toDateString()}
           </span>
         </div>
 
-        <div className="pull-xs-right">
+        <div className='pull-xs-right'>
           <button className={favoriteButtonClass} onClick={handleClick}>
-            <i className="ion-heart"></i> {article.favoritesCount}
+            <i className='ion-heart' /> {article.favoritesCount}
           </button>
         </div>
       </div>
 
-      <Link to={`/article/${article.slug}`} className="preview-link">
+      <Link to={`/article/${article.slug}`} className='preview-link'>
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <span>Read more...</span>
-        <ul className="tag-list">
+        <ul className='tag-list'>
           {
             article.tagList.map(tag => {
               return (
-                <li className="tag-default tag-pill tag-outline" key={tag}>
+                <li className='tag-default tag-pill tag-outline' key={tag}>
                   {tag}
                 </li>
               )
@@ -73,7 +73,7 @@ const ArticlePreview = React.memo(props => {
         </ul>
       </Link>
     </div>
-  );
+  )
 })
 
-export default connect(() => ({}), mapDispatchToProps)(ArticlePreview);
+export default connect(() => ({}), mapDispatchToProps)(ArticlePreview)

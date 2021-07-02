@@ -1,13 +1,13 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 
-import ListErrors from './ListErrors';
+import ListErrors from './ListErrors'
 import {
   getArticle,
   createArticle,
   updateArticle,
-  articlePageUnloaded,
-} from '../reducers/article';
+  articlePageUnloaded
+} from '../reducers/article'
 
 const mapStateToProps = state => ({
   articleSlug: state.article.article?.slug,
@@ -16,164 +16,148 @@ const mapStateToProps = state => ({
   body: state.article.article?.body,
   tagList: state.article.article?.tagList,
   inProgress: state.article.inProgress,
-  errors: state.article.errors,
-});
+  errors: state.article.errors
+})
 
 const mapDispatchToProps = dispatch => ({
   onLoad: slug => dispatch(getArticle(slug)),
   onSubmit: (articleSlug, article) =>
     dispatch(articleSlug ? updateArticle(article) : createArticle(article)),
-  onUnload: () => dispatch(articlePageUnloaded()),
-});
+  onUnload: () => dispatch(articlePageUnloaded())
+})
 
-class Editor extends React.PureComponent {
-  constructor(props) {
-    super(props);
+function Editor (props) {
+  const [state, setState] = useState({
+    articleSlug: props.articleSlug,
+    title: props.title ?? '',
+    description: props.description ?? '',
+    body: props.body ?? '',
+    tagInput: '',
+    tagList: props.tagList ?? []
+  })
 
-    this.state = {
-      articleSlug: props.articleSlug,
-      title: props.title ?? '',
-      description: props.description ?? '',
-      body: props.body ?? '',
-      tagInput: '',
-      tagList: props.tagList ?? [],
-    };
-  }
-
-  updateFieldEvent = key => event =>
-    this.setState(prevState => ({
+  const updateFieldEvent = key => event =>
+    setState(prevState => ({
       ...prevState,
-      [key]: event.target.value,
-    }));
+      [key]: event.target.value
+    }))
 
-  watchForEnter = event => {
+  const watchForEnter = event => {
     if (event.keyCode === 13) {
-      event.preventDefault();
+      event.preventDefault()
 
-      this.setState(prevState => ({
+      setState(prevState => ({
         ...prevState,
         tagList: [...prevState.tagList, prevState.tagInput],
-        tagInput: '',
-      }));
+        tagInput: ''
+      }))
     }
-  };
+  }
 
-  removeTagHandler = tag => () => {
-    this.setState(prevState => ({
+  const removeTagHandler = tag => () => {
+    setState(prevState => ({
       ...prevState,
-      tagList: prevState.tagList.filter(_tag => _tag !== tag),
-    }));
-  };
+      tagList: prevState.tagList.filter(_tag => _tag !== tag)
+    }))
+  }
 
-  submitForm = event => {
-    event.preventDefault();
-    const { tagInput, articleSlug, ...article } = this.state;
+  const submitForm = event => {
+    event.preventDefault()
+    const { tagInput, articleSlug, ...article } = state
 
-    this.props.onSubmit(articleSlug, article);
-  };
+    props.onSubmit(articleSlug, article)
+  }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.match.params.slug !== this.props.match.params.slug) {
-      if (this.props.match.params.slug) {
-        this.props.onUnload();
-        this.props.onLoad(this.props.match.params.slug);
-      }
-      this.props.onLoad(null);
+  useEffect(() => {
+    if (props.match.params.slug) {
+      props.onUnload()
+      props.onLoad(props.match.params.slug)
     }
-  }
-
-  componentDidMount() {
-    if (this.props.match.params.slug) {
-      this.props.onLoad(this.props.match.params.slug);
+    props.onLoad(null)
+    return () => {
+      props.onUnload()
     }
-    this.props.onLoad(null);
-  }
+  }, [props.match])
 
-  componentWillUnmount() {
-    this.props.onUnload();
-  }
+  return (
+    <div className='editor-page'>
+      <div className='container page'>
+        <div className='row'>
+          <div className='col-md-10 offset-md-1 col-xs-12'>
+            <ListErrors errors={props.errors} />
 
-  render() {
-    return (
-      <div className="editor-page">
-        <div className="container page">
-          <div className="row">
-            <div className="col-md-10 offset-md-1 col-xs-12">
-              <ListErrors errors={this.props.errors} />
-
-              <form>
-                <fieldset>
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control form-control-lg"
-                      type="text"
-                      placeholder="Article Title"
-                      value={this.state.title}
-                      onChange={this.updateFieldEvent('title')}
-                    />
-                  </fieldset>
-
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control"
-                      type="text"
-                      placeholder="What's this article about?"
-                      value={this.state.description}
-                      onChange={this.updateFieldEvent('description')}
-                    />
-                  </fieldset>
-
-                  <fieldset className="form-group">
-                    <textarea
-                      className="form-control"
-                      rows="8"
-                      placeholder="Write your article (in markdown)"
-                      value={this.state.body}
-                      onChange={this.updateFieldEvent('body')}
-                    />
-                  </fieldset>
-
-                  <fieldset className="form-group">
-                    <input
-                      className="form-control"
-                      type="text"
-                      placeholder="Enter tags"
-                      value={this.state.tagInput}
-                      onChange={this.updateFieldEvent('tagInput')}
-                      onKeyUp={this.watchForEnter}
-                    />
-
-                    <div className="tag-list">
-                      {this.state.tagList.map(tag => {
-                        return (
-                          <span className="tag-default tag-pill" key={tag}>
-                            <i
-                              className="ion-close-round"
-                              onClick={this.removeTagHandler(tag)}
-                            />
-                            {tag}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </fieldset>
-
-                  <button
-                    className="btn btn-lg pull-xs-right btn-primary"
-                    type="button"
-                    disabled={this.props.inProgress}
-                    onClick={this.submitForm}
-                  >
-                    Publish Article
-                  </button>
+            <form>
+              <fieldset>
+                <fieldset className='form-group'>
+                  <input
+                    className='form-control form-control-lg'
+                    type='text'
+                    placeholder='Article Title'
+                    value={state.title}
+                    onChange={updateFieldEvent('title')}
+                  />
                 </fieldset>
-              </form>
-            </div>
+
+                <fieldset className='form-group'>
+                  <input
+                    className='form-control'
+                    type='text'
+                    placeholder="What's this article about?"
+                    value={state.description}
+                    onChange={updateFieldEvent('description')}
+                  />
+                </fieldset>
+
+                <fieldset className='form-group'>
+                  <textarea
+                    className='form-control'
+                    rows='8'
+                    placeholder='Write your article (in markdown)'
+                    value={state.body}
+                    onChange={updateFieldEvent('body')}
+                  />
+                </fieldset>
+
+                <fieldset className='form-group'>
+                  <input
+                    className='form-control'
+                    type='text'
+                    placeholder='Enter tags'
+                    value={state.tagInput}
+                    onChange={updateFieldEvent('tagInput')}
+                    onKeyUp={watchForEnter}
+                  />
+
+                  <div className='tag-list'>
+                    {state.tagList.map(tag => {
+                      return (
+                        <span className='tag-default tag-pill' key={tag}>
+                          <i
+                            className='ion-close-round'
+                            onClick={removeTagHandler(tag)}
+                          />
+                          {tag}
+                        </span>
+                      )
+                    })}
+                  </div>
+                </fieldset>
+
+                <button
+                  className='btn btn-lg pull-xs-right btn-primary'
+                  type='button'
+                  disabled={props.inProgress}
+                  onClick={submitForm}
+                >
+                  Publish Article
+                </button>
+              </fieldset>
+            </form>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  )
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Editor);
+export default connect(mapStateToProps, mapDispatchToProps)(Editor)

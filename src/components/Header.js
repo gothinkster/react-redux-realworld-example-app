@@ -1,91 +1,90 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 const LoggedOutView = React.memo(props => {
   if (!props.currentUser) {
     return (
-      <ul className="nav navbar-nav pull-xs-right">
+      <ul className='nav navbar-nav pull-xs-right'>
 
-        <li className="nav-item">
-          <Link to="/" className="nav-link">
+        <li className='nav-item'>
+          <Link to='/' className='nav-link'>
             Home
           </Link>
         </li>
 
-        <li className="nav-item">
-          <Link to="/login" className="nav-link">
+        <li className='nav-item'>
+          <Link to='/login' className='nav-link'>
             Sign in
           </Link>
         </li>
 
-        <li className="nav-item">
-          <Link to="/register" className="nav-link">
+        <li className='nav-item'>
+          <Link to='/register' className='nav-link'>
             Sign up
           </Link>
         </li>
 
       </ul>
-    );
+    )
   }
-  return null;
-});
+  return null
+})
 
 const LoggedInView = React.memo(props => {
   if (props.currentUser) {
     return (
-      <ul className="nav navbar-nav pull-xs-right">
+      <ul className='nav navbar-nav pull-xs-right'>
 
-        <li className="nav-item">
-          <Link to="/" className="nav-link">
+        <li className='nav-item'>
+          <Link to='/' className='nav-link'>
             Home
           </Link>
         </li>
 
-        <li className="nav-item">
-          <Link to="/editor" className="nav-link">
-            <i className="ion-compose"></i>&nbsp;New Post
+        <li className='nav-item'>
+          <Link to='/editor' className='nav-link'>
+            <i className='ion-compose' />&nbsp;New Post
           </Link>
         </li>
 
-        <li className="nav-item">
-          <Link to="/settings" className="nav-link">
-            <i className="ion-gear-a"></i>&nbsp;Settings
+        <li className='nav-item'>
+          <Link to='/settings' className='nav-link'>
+            <i className='ion-gear-a' />&nbsp;Settings
           </Link>
         </li>
 
-        <li className="nav-item">
+        <li className='nav-item'>
           <Link
             to={`/@${props.currentUser.username}`}
-            className="nav-link">
-            <img src={props.currentUser.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'} className="user-pic" alt={props.currentUser.username} />
+            className='nav-link'
+          >
+            <img src={props.currentUser.image || 'https://static.productionready.io/images/smiley-cyrus.jpg'} className='user-pic' alt={props.currentUser.username} />
             {props.currentUser.username}
           </Link>
         </li>
 
       </ul>
-    );
+    )
   }
 
-  return null;
-});
+  return null
+})
 
-class Header extends React.PureComponent {
-  render() {
-    return (
-      <nav className="navbar navbar-light">
-        <div className="container">
+function Header (props) {
+  return (
+    <nav className='navbar navbar-light'>
+      <div className='container'>
 
-          <Link to="/" className="navbar-brand">
-            {this.props.appName.toLowerCase()}
-          </Link>
+        <Link to='/' className='navbar-brand'>
+          {props.appName.toLowerCase()}
+        </Link>
 
-          <LoggedOutView currentUser={this.props.currentUser} />
+        <LoggedOutView currentUser={props.currentUser} />
 
-          <LoggedInView currentUser={this.props.currentUser} />
-        </div>
-      </nav>
-    );
-  }
+        <LoggedInView currentUser={props.currentUser} />
+      </div>
+    </nav>
+  )
 }
 
-export default Header;
+export default Header

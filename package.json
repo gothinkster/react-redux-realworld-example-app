@@ -12,6 +12,7 @@
     "node-fetch": "^2.6.1",
     "react-scripts": "^4.0.3",
     "redux-devtools-extension": "^2.13.9",
+    "standard": "^16.0.3",
     "start-server-and-test": "^1.12.5"
   },
   "dependencies": {

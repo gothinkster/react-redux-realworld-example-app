@@ -41,7 +41,8 @@ const ListPagination = React.memo(props => {
               <li
                 className={isCurrent ? 'page-item active' : 'page-item'}
                 onClick={onClick}
-                key={v.toString()}>
+                key={v.toString()}
+              >
 
                 <button type='button' className='page-link'>{v + 1}</button>
 

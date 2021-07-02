@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit'
 
 import {
   ARTICLE_FAVORITED,
@@ -10,15 +10,15 @@ import {
   CHANGE_TAB,
   PROFILE_PAGE_LOADED,
   PROFILE_FAVORITES_PAGE_LOADED,
-  PROFILE_FAVORITES_PAGE_UNLOADED,
-} from '../constants/actionTypes';
-import agent from '../agent';
-import { profilePageUnloaded } from './profile';
+  PROFILE_FAVORITES_PAGE_UNLOADED
+} from '../constants/actionTypes'
+import agent from '../agent'
+import { profilePageUnloaded } from './profile'
 
 export const getByAuthor = createAsyncThunk(
   'articleList/getByAuthor',
   ({ author, page }) => agent.Articles.byAuthor(author, page)
-);
+)
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -32,18 +32,18 @@ export default (state = {}, action) => {
               ...article,
               favorited: action.payload.article.favorited,
               favoritesCount: action.payload.article.favoritesCount
-            };
+            }
           }
-          return article;
+          return article
         })
-      };
+      }
     case SET_PAGE:
       return {
         ...state,
         articles: action.payload.articles,
         articlesCount: action.payload.articlesCount,
         currentPage: action.page
-      };
+      }
     case APPLY_TAG_FILTER:
       return {
         ...state,
@@ -53,7 +53,7 @@ export default (state = {}, action) => {
         tab: null,
         tag: action.tag,
         currentPage: 0
-      };
+      }
     case HOME_PAGE_LOADED:
       return {
         ...state,
@@ -63,9 +63,9 @@ export default (state = {}, action) => {
         articlesCount: action.payload && action.payload[1].articlesCount,
         currentPage: 0,
         tab: action.tab
-      };
+      }
     case HOME_PAGE_UNLOADED:
-      return {};
+      return {}
     case CHANGE_TAB:
       return {
         ...state,
@@ -75,7 +75,7 @@ export default (state = {}, action) => {
         tab: action.tab,
         currentPage: 0,
         tag: null
-      };
+      }
     case PROFILE_PAGE_LOADED:
     case PROFILE_FAVORITES_PAGE_LOADED:
       return {
@@ -84,11 +84,11 @@ export default (state = {}, action) => {
         articles: action.payload[1].articles,
         articlesCount: action.payload[1].articlesCount,
         currentPage: 0
-      };
+      }
     case profilePageUnloaded.type:
     case PROFILE_FAVORITES_PAGE_UNLOADED:
-      return {};
+      return {}
     default:
-      return state;
+      return state
   }
-};
+}

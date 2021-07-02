@@ -18,7 +18,8 @@ const Tags = React.memo(props => {
                 type='button'
                 className='tag-default tag-pill'
                 key={tag}
-                onClick={handleClick}>
+                onClick={handleClick}
+              >
                 {tag}
               </button>
             )

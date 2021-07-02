@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom';
-import React from 'react';
+import { Link } from 'react-router-dom'
+import React from 'react'
 
-import CommentInput from './CommentInput';
-import CommentList from './CommentList';
-import ListErrors from '../ListErrors';
+import CommentInput from './CommentInput'
+import CommentList from './CommentList'
+import ListErrors from '../ListErrors'
 
 const CommentContainer = props => {
   if (props.currentUser) {
     return (
-      <div className="col-xs-12 col-md-8 offset-md-2">
+      <div className='col-xs-12 col-md-8 offset-md-2'>
         <div>
           <ListErrors errors={props.errors} />
           <CommentInput slug={props.slug} currentUser={props.currentUser} />
@@ -17,26 +17,28 @@ const CommentContainer = props => {
         <CommentList
           comments={props.comments}
           slug={props.slug}
-          currentUser={props.currentUser} />
+          currentUser={props.currentUser}
+        />
       </div>
-    );
+    )
   } else {
     return (
-      <div className="col-xs-12 col-md-8 offset-md-2">
+      <div className='col-xs-12 col-md-8 offset-md-2'>
         <p>
-          <Link to="/login">Sign in</Link>
+          <Link to='/login'>Sign in</Link>
           &nbsp;or&nbsp;
-          <Link to="/register">sign up</Link>
+          <Link to='/register'>sign up</Link>
           &nbsp;to add comments on this article.
         </p>
 
         <CommentList
           comments={props.comments}
           slug={props.slug}
-          currentUser={props.currentUser} />
+          currentUser={props.currentUser}
+        />
       </div>
-    );
+    )
   }
-};
+}
 
-export default React.memo(CommentContainer);
+export default React.memo(CommentContainer)

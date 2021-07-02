@@ -32,13 +32,13 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: REDIRECT })
 })
 
-function App(props) {
+function App (props) {
   useEffect(() => {
-    if (!!props.redirectTo) {
+    if (props.redirectTo) {
       store.dispatch(push(props.redirectTo))
       props.onRedirect()
     }
-  }, [])
+  }, [props.redirectTo, props.onRedirect])
 
   useEffect(() => {
     const token = window.localStorage.getItem('jwt')
@@ -48,36 +48,37 @@ function App(props) {
     props.onLoad(token ? agent.Auth.current() : null, token)
   }, [])
 
-  
-    if (props.appLoaded) {
-      return (
-        <div>
-          <Header
-            appName={props.appName}
-            currentUser={props.currentUser} />
-            <Suspense fallback={<p>Loading...</p>}>
-              <Switch>
-                <Route exact path='/' component={Home} />
-                <Route path='/login' component={Login} />
-                <Route path='/register' component={Register} />
-                <Route path='/editor/:slug' component={Editor} />
-                <Route path='/editor' component={Editor} />
-                <Route path='/article/:id' component={Article} />
-                <Route path='/settings' component={Settings} />
-                <Route path='/@:username/favorites' component={ProfileFavorites} />
-                <Route path='/@:username' component={Profile} />
-              </Switch>
-            </Suspense>
-        </div>
-      )
-    }
+  if (props.appLoaded) {
     return (
       <div>
         <Header
           appName={props.appName}
-          currentUser={props.currentUser} />
+          currentUser={props.currentUser}
+        />
+        <Suspense fallback={<p>Loading...</p>}>
+          <Switch>
+            <Route exact path='/' component={Home} />
+            <Route path='/login' component={Login} />
+            <Route path='/register' component={Register} />
+            <Route path='/editor/:slug' component={Editor} />
+            <Route path='/editor' component={Editor} />
+            <Route path='/article/:id' component={Article} />
+            <Route path='/settings' component={Settings} />
+            <Route path='/@:username/favorites' component={ProfileFavorites} />
+            <Route path='/@:username' component={Profile} />
+          </Switch>
+        </Suspense>
       </div>
     )
+  }
+  return (
+    <div>
+      <Header
+        appName={props.appName}
+        currentUser={props.currentUser}
+      />
+    </div>
+  )
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
