@@ -83,27 +83,27 @@ const articleListSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(favoriteArticle.fulfilled, (state, action) => {
-      state.articles = state.articles.map(
-        article => article.slug === action.payload.article.slug
-      )
-        ? {
-            ...article,
-            favorited: action.payload.article.favorited,
-            favoritesCount: action.payload.article.favoritesCount,
-          }
-        : article;
+      state.articles = state.articles.map(article =>
+        article.slug === action.payload.article.slug
+          ? {
+              ...article,
+              favorited: action.payload.article.favorited,
+              favoritesCount: action.payload.article.favoritesCount,
+            }
+          : article
+      );
     });
 
     builder.addCase(unfavoriteArticle.fulfilled, (state, action) => {
-      state.articles = state.articles.map(
-        article => article.slug === action.payload.article.slug
-      )
-        ? {
-            ...article,
-            favorited: action.payload.article.favorited,
-            favoritesCount: action.payload.article.favoritesCount,
-          }
-        : article;
+      state.articles = state.articles.map(article =>
+        article.slug === action.payload.article.slug
+          ? {
+              ...article,
+              favorited: action.payload.article.favorited,
+              favoritesCount: action.payload.article.favoritesCount,
+            }
+          : article
+      );
     });
 
     builder.addCase(getAllTags.fulfilled, (state, action) => {
