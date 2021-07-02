@@ -26,17 +26,23 @@ const mapDispatchToProps = dispatch => ({
   onUnload: () => dispatch(articlePageUnloaded()),
 });
 
-class Editor extends React.PureComponent {
+class Editor extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.state = props.match.params.slug ? {
       articleSlug: props.articleSlug,
       title: props.title ?? '',
       description: props.description ?? '',
       body: props.body ?? '',
       tagInput: '',
       tagList: props.tagList ?? [],
+    } : {
+      title: '',
+      description: '',
+      body: '',
+      tagInput: '',
+      tagList: [],
     };
   }
 
@@ -75,18 +81,19 @@ class Editor extends React.PureComponent {
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.slug !== this.props.match.params.slug) {
       if (this.props.match.params.slug) {
-        this.props.onUnload();
         this.props.onLoad(this.props.match.params.slug);
+      } else {
+        this.props.onUnload();
       }
-      this.props.onLoad(null);
     }
   }
 
   componentDidMount() {
     if (this.props.match.params.slug) {
       this.props.onLoad(this.props.match.params.slug);
+    } else {
+      this.props.onUnload();
     }
-    this.props.onLoad(null);
   }
 
   componentWillUnmount() {
