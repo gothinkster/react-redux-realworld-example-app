@@ -1,38 +1,53 @@
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ListErrors from './ListErrors';
 import { register, registerPageUnloaded } from '../reducers/auth';
 
-const mapStateToProps = state => ({ ...state.auth });
-
-const mapDispatchToProps = dispatch => ({
-  onSubmit: (username, email, password) =>
-    dispatch(register({ username, email, password })),
-  onUnload: () => dispatch(registerPageUnloaded()),
-});
-
-function Register(props) {
+/**
+ * Register form component
+ *
+ * @param {import('react-router-dom').RouteComponentProps} props
+ * @example
+ * <Register />
+ */
+function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const dispatch = useDispatch();
+  const { errors, inProgress } = useSelector(state => state.auth);
 
-  useEffect(() => {
-    return () => {
-      props.onUnload();
-    };
-  }, []);
+  useEffect(() => () => dispatch(registerPageUnloaded()), []);
 
-  const changeUsername = event => setUsername(event.target.value);
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const changeUsername = event => {
+    setUsername(event.target.value);
+  };
 
-  const changeEmail = event => setEmail(event.target.value);
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const changeEmail = event => {
+    setEmail(event.target.value);
+  };
 
-  const changePassword = event => setPassword(event.target.value);
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const changePassword = event => {
+    setPassword(event.target.value);
+  };
 
+  /**
+   * @type {React.FormEventHandler<HTMLFormElement>}
+   */
   const submitForm = event => {
     event.preventDefault();
-    props.onSubmit(username, email, password);
+    dispatch(register({ username, email, password }));
   };
 
   return (
@@ -45,7 +60,7 @@ function Register(props) {
               <Link to="/login">Have an account?</Link>
             </p>
 
-            <ListErrors errors={props.errors} />
+            <ListErrors errors={errors} />
 
             <form onSubmit={submitForm}>
               <fieldset>
@@ -87,7 +102,7 @@ function Register(props) {
                 <button
                   className="btn btn-lg btn-primary pull-xs-right"
                   type="submit"
-                  disabled={props.inProgress}
+                  disabled={inProgress}
                 >
                   Sign up
                 </button>
@@ -100,4 +115,4 @@ function Register(props) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default Register;
