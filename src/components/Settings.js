@@ -1,41 +1,92 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ListErrors from './ListErrors';
 import { logout } from '../reducers/common';
 import { saveSettings, settingsPageUnloaded } from '../reducers/settings';
 
-function SettingsForm(props) {
-  const { currentUser } = props;
-  const [state, setState] = useState({
-    image:
-      currentUser?.image ??
-      'https://static.productionready.io/images/smiley-cyrus.jpg',
-    username: currentUser?.username ?? '',
-    bio: currentUser?.bio ?? '',
-    email: currentUser?.email ?? '',
-    password: currentUser?.password ?? '',
-  });
+/**
+ * Settings form component
+ *
+ * @param {Object} props
+ * @param {Object} props.currentUser
+ * @param {String} props.currentUser.image
+ * @param {String} props.currentUser.username
+ * @param {String} props.currentUser.bio
+ * @param {String} props.currentUser.email
+ * @param {Boolean} [props.inProgress=false]
+ * @param {(user: Partial<currentUser>) => Promise<any>} props.onSaveSettings
+ * @example
+ * <SettingsForm
+ *    currentUser={{
+ *      username: 'warren_boyd',
+ *      email: 'warren.boyd@mailinator.com',
+ *      image: 'https://static.productionready.io/images/smiley-cyrus.jpg',
+ *      bio: null,
+ *    }}
+ *    onSaveSettings={user => dispatch(saveSettings(user))}
+ * />
+ */
+export function SettingsForm({ currentUser, inProgress, onSaveSettings }) {
+  const [image, setImage] = useState(
+    currentUser?.image ??
+      'https://static.productionready.io/images/smiley-cyrus.jpg'
+  );
+  const [username, setUsername] = useState(currentUser?.username ?? '');
+  const [bio, setBio] = useState(currentUser?.bio ?? '');
+  const [email, setEmail] = useState(currentUser?.email ?? '');
+  const [password, setPassword] = useState('');
 
-  const updateState = event => {
-    setState(oldState => ({
-      ...oldState,
-      [event.target.name]: event.target.value,
-    }));
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const changeImage = event => {
+    setImage(event.target.value);
+  };
+
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const changeUsername = event => {
+    setUsername(event.target.value);
+  };
+
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const changeBio = event => {
+    setBio(event.target.value);
+  };
+
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const changeEmail = event => {
+    setEmail(event.target.value);
+  };
+
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const changePassword = event => {
+    setPassword(event.target.value);
   };
 
   const submitForm = event => {
     event.preventDefault();
 
-    const user = Object.assign({}, state);
-    if (!user.password) {
-      delete user.password;
+    const user = {
+      image,
+      username,
+      bio,
+      email,
+    };
+    if (password) {
+      user.password = password;
     }
 
-    props.onSubmitForm(user);
+    onSaveSettings(user);
   };
-
-  const { image, username, bio, email } = state;
 
   return (
     <form onSubmit={submitForm}>
@@ -47,7 +98,7 @@ function SettingsForm(props) {
             placeholder="URL of profile picture"
             name="image"
             value={image}
-            onChange={updateState}
+            onChange={changeImage}
           />
         </fieldset>
 
@@ -58,7 +109,7 @@ function SettingsForm(props) {
             placeholder="Username"
             name="username"
             value={username}
-            onChange={updateState}
+            onChange={changeUsername}
           />
         </fieldset>
 
@@ -69,7 +120,7 @@ function SettingsForm(props) {
             placeholder="Short bio about you"
             name="bio"
             value={bio}
-            onChange={updateState}
+            onChange={changeBio}
           />
         </fieldset>
 
@@ -81,7 +132,7 @@ function SettingsForm(props) {
             placeholder="Email"
             name="email"
             value={email}
-            onChange={updateState}
+            onChange={changeEmail}
           />
         </fieldset>
 
@@ -92,15 +143,15 @@ function SettingsForm(props) {
             autoComplete="current-password"
             placeholder="New Password"
             name="password"
-            value={state.password}
-            onChange={updateState}
+            value={password}
+            onChange={changePassword}
           />
         </fieldset>
 
         <button
           className="btn btn-lg btn-primary pull-xs-right"
           type="submit"
-          disabled={state.inProgress}
+          disabled={inProgress}
         >
           Update Settings
         </button>
@@ -109,21 +160,26 @@ function SettingsForm(props) {
   );
 }
 
-const mapStateToProps = state => ({
-  ...state.settings,
-  currentUser: state.common.currentUser,
-});
+/**
+ * Settings screen component
+ *
+ * @example
+ * <Settings />
+ */
+function Settings() {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector(state => state.common);
+  const { errors, inProgress } = useSelector(state => state.settings);
 
-const mapDispatchToProps = dispatch => ({
-  onClickLogout: () => dispatch(logout()),
-  onSubmitForm: user => dispatch(saveSettings(user)),
-  onUnload: () => dispatch(settingsPageUnloaded()),
-});
+  const dispatchSaveSettings = async user => {
+    await dispatch(saveSettings(user));
+  };
 
-function Settings(props) {
-  useEffect(() => () => {
-    props.onUnload();
-  }, []);
+  const logoutUser = () => {
+    dispatch(logout());
+  };
+
+  useEffect(() => () => dispatch(settingsPageUnloaded()), []);
 
   return (
     <div className="settings-page">
@@ -132,19 +188,17 @@ function Settings(props) {
           <div className="col-md-6 offset-md-3 col-xs-12">
             <h1 className="text-xs-center">Your Settings</h1>
 
-            <ListErrors errors={props.errors} />
+            <ListErrors errors={errors} />
 
             <SettingsForm
-              currentUser={props.currentUser}
-              onSubmitForm={props.onSubmitForm}
+              currentUser={currentUser}
+              inProgress={inProgress}
+              onSaveSettings={dispatchSaveSettings}
             />
 
             <hr />
 
-            <button
-              className="btn btn-outline-danger"
-              onClick={props.onClickLogout}
-            >
+            <button className="btn btn-outline-danger" onClick={logoutUser}>
               Or click here to logout.
             </button>
           </div>
@@ -154,4 +208,4 @@ function Settings(props) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default Settings;
