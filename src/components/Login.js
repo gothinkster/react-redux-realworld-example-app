@@ -1,38 +1,45 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ListErrors from './ListErrors';
 import { login, loginPageUnloaded } from '../reducers/auth';
 
-const mapStateToProps = state => state.auth;
-
-const mapDispatchToProps = dispatch => ({
-  onSubmit: (email, password) => dispatch(login({ email, password })),
-  onUnload: () => dispatch(loginPageUnloaded()),
-});
-
-function Login(props) {
+/**
+ * Login form component
+ *
+ * @param {import('react-router-dom').RouteComponentProps} props
+ * @example
+ * <Login />
+ */
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassWord] = useState('');
+  const dispatch = useDispatch();
+  const { errors, inProgress } = useSelector(state => state.auth);
 
-  useEffect(() => {
-    return () => {
-      props.onUnload();
-    };
-  }, []);
+  useEffect(() => () => dispatch(loginPageUnloaded()), []);
 
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
   const changeEmail = event => {
     setEmail(event.target.value);
   };
 
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
   const changePassword = event => {
     setPassWord(event.target.value);
   };
 
+  /**
+   * @type {React.FormEventHandler<HTMLFormElement>}
+   */
   const submitForm = event => {
     event.preventDefault();
-    props.onSubmit(email, password);
+    dispatch(login({ email, password }));
   };
 
   return (
@@ -45,7 +52,7 @@ function Login(props) {
               <Link to="/register">Need an account?</Link>
             </p>
 
-            <ListErrors errors={props.errors} />
+            <ListErrors errors={errors} />
 
             <form onSubmit={submitForm}>
               <fieldset>
@@ -76,7 +83,7 @@ function Login(props) {
                 <button
                   className="btn btn-lg btn-primary pull-xs-right"
                   type="submit"
-                  disabled={props.inProgress}
+                  disabled={inProgress}
                 >
                   Sign in
                 </button>
@@ -89,4 +96,4 @@ function Login(props) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;
