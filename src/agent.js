@@ -113,7 +113,7 @@ const agent = async (url, body, method = 'GET') => {
   try {
     result = await response.json();
   } catch (error) {
-    result = { errors: { [response.status]: response.statusText } };
+    result = { errors: { [response.status]: [response.statusText] } };
   }
 
   if (!response.ok) throw result;
