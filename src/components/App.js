@@ -7,13 +7,36 @@ import Header from './Header';
 import { appLoad, clearRedirect } from '../reducers/common';
 import { store } from '../store';
 import Home from '../components/Home';
-const Article = lazy(() => import('../components/Article' /* webpackChunkName: "Article", webpackPrefetch: true  */));
-const Editor = lazy(() => import('../components/Editor' /* webpackChunkName: "Editor", webpackPrefetch: true  */));
-const Login = lazy(() => import('../components/Login' /* webpackChunkName: "Login", webpackPrefetch: true  */));
-const Profile = lazy(() => import('../components/Profile' /* webpackChunkName: "Profile", webpackPrefetch: true  */));
-const ProfileFavorites = lazy(() => import('../components/ProfileFavorites' /* webpackChunkName: "ProfileFavorites", webpackPrefetch: true  */));
-const Register = lazy(() => import('../components/Register' /* webpackChunkName: "Register", webpackPrefetch: true  */));
-const Settings = lazy(() => import('../components/Settings' /* webpackChunkName: "Settings", webpackPrefetch: true  */));
+const Article = lazy(() =>
+  import(
+    '../components/Article' /* webpackChunkName: "Article", webpackPrefetch: true  */
+  )
+);
+const Editor = lazy(() =>
+  import(
+    '../components/Editor' /* webpackChunkName: "Editor", webpackPrefetch: true  */
+  )
+);
+const Login = lazy(() =>
+  import(
+    '../components/Login' /* webpackChunkName: "Login", webpackPrefetch: true  */
+  )
+);
+const Profile = lazy(() =>
+  import(
+    '../components/Profile' /* webpackChunkName: "Profile", webpackPrefetch: true  */
+  )
+);
+const Register = lazy(() =>
+  import(
+    '../components/Register' /* webpackChunkName: "Register", webpackPrefetch: true  */
+  )
+);
+const Settings = lazy(() =>
+  import(
+    '../components/Settings' /* webpackChunkName: "Settings", webpackPrefetch: true  */
+  )
+);
 
 const mapStateToProps = state => {
   return {
@@ -55,7 +78,7 @@ function App(props) {
             <Route path="/editor" component={Editor} />
             <Route path="/article/:id" component={Article} />
             <Route path="/settings" component={Settings} />
-            <Route path="/@:username/favorites" component={ProfileFavorites} />
+            <Route path="/@:username/favorites" component={Profile} />
             <Route path="/@:username" component={Profile} />
           </Switch>
         </Suspense>

@@ -136,7 +136,7 @@ const articleListSlice = createSlice({
       articles: action.payload.articles,
       articlesCount: action.payload.articlesCount,
       currentPage: action.meta.arg?.page ?? 0,
-      favorited: action.meta.arg?.favorited,
+      favorited: action.meta.arg?.username,
       articlesPerPage: 5,
     }));
 
