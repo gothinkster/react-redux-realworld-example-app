@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ListErrors from './ListErrors';
 import {
@@ -9,83 +9,126 @@ import {
   articlePageUnloaded,
 } from '../reducers/article';
 
-const mapStateToProps = state => ({
-  articleSlug: state.article.article?.slug,
-  title: state.article.article?.title,
-  description: state.article.article?.description,
-  body: state.article.article?.body,
-  tagList: state.article.article?.tagList,
-  inProgress: state.article.inProgress,
-  errors: state.article.errors,
-});
+/**
+ * Editor component
+ * @param {import('react-router-dom').RouteComponentProps<{ slug?: string }>} props
+ * @example
+ * <Editor />
+ */
+function Editor({ match }) {
+  const dispatch = useDispatch();
+  const { article, errors, inProgress } = useSelector(state => state.article);
+  const { slug } = match.params;
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [body, setBody] = useState('');
+  const [tagInput, setTagInput] = useState('');
+  const [tagList, setTagList] = useState([]);
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: slug => dispatch(getArticle(slug)),
-  onSubmit: (articleSlug, article) =>
-    dispatch(articleSlug ? updateArticle(article) : createArticle(article)),
-  onUnload: () => dispatch(articlePageUnloaded()),
-});
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const changeTitle = event => {
+    setTitle(event.target.value);
+  };
 
-function Editor(props) {
-  const [state, setState] = useState({
-    articleSlug: props.articleSlug,
-    title: props.title ?? '',
-    description: props.description ?? '',
-    body: props.body ?? '',
-    tagInput: '',
-    tagList: props.tagList ?? [],
-  });
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const changeDescription = event => {
+    setDescription(event.target.value);
+  };
 
-  const updateFieldEvent = key => event =>
-    setState(prevState => ({
-      ...prevState,
-      [key]: event.target.value,
-    }));
+  /**
+   * @type {React.ChangeEventHandler<HTMLAreaElement>}
+   */
+  const changeBody = event => {
+    setBody(event.target.value);
+  };
 
-  const watchForEnter = event => {
-    if (event.keyCode === 13) {
-      event.preventDefault();
+  /**
+   * @type {React.ChangeEventHandler<HTMLInputElement>}
+   */
+  const changeTagInput = event => {
+    setTagInput(event.target.value);
+  };
 
-      setState(prevState => ({
-        ...prevState,
-        tagList: [...prevState.tagList, prevState.tagInput],
-        tagInput: '',
-      }));
+  /**
+   * Reset the form values
+   */
+  const reset = () => {
+    if (slug && article) {
+      setTitle(article.title);
+      setDescription(article.description);
+      setBody(article.body);
+      setTagList(article.tagList);
+    } else {
+      setTitle('');
+      setDescription('');
+      setBody('');
+      setTagInput('');
+      setTagList([]);
     }
   };
 
-  const removeTagHandler = tag => () => {
-    setState(prevState => ({
-      ...prevState,
-      tagList: prevState.tagList.filter(_tag => _tag !== tag),
-    }));
+  /**
+   * Add a tag to tagList
+   * @type {React.KeyboardEventHandler<HTMLInputElement>}
+   */
+  const addTag = event => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+
+      if (tagInput && !tagList.includes(tagInput))
+        setTagList([...tagList, tagInput]);
+
+      setTagInput('');
+    }
   };
 
+  /**
+   * Remove a tag from tagList
+   *
+   * @param {String} tag
+   * @returns {React.MouseEventHandler}
+   */
+  const removeTag = tag => () => {
+    setTagList(tagList.filter(_tag => _tag !== tag));
+  };
+
+  /**
+   * @type {React.MouseEventHandler<HTMLButtonElement>}
+   */
   const submitForm = event => {
     event.preventDefault();
-    const { tagInput, articleSlug, ...article } = state;
+    const article = {
+      slug,
+      title,
+      description,
+      body,
+      tagList,
+    };
 
-    props.onSubmit(articleSlug, article);
+    dispatch(slug ? updateArticle(article) : createArticle(article));
   };
 
   useEffect(() => {
-    if (props.match.params.slug) {
-      props.onLoad(props.match.params.slug);
-    } else {
-      props.onUnload();
+    reset();
+    if (slug) {
+      dispatch(getArticle(slug));
     }
+  }, [slug]);
 
-    return () => {
-      props.onUnload();
-    };
-  }, [props.match]);
+  useEffect(reset, [article]);
+
+  useEffect(() => () => dispatch(articlePageUnloaded()), []);
 
   return (
     <div className="editor-page">
       <div className="container page">
         <div className="row">
           <div className="col-md-10 offset-md-1 col-xs-12">
-            <ListErrors errors={props.errors} />
+            <ListErrors errors={errors} />
 
             <form>
               <fieldset>
@@ -94,8 +137,8 @@ function Editor(props) {
                     className="form-control form-control-lg"
                     type="text"
                     placeholder="Article Title"
-                    value={state.title}
-                    onChange={updateFieldEvent('title')}
+                    value={title}
+                    onChange={changeTitle}
                   />
                 </fieldset>
 
@@ -104,8 +147,8 @@ function Editor(props) {
                     className="form-control"
                     type="text"
                     placeholder="What's this article about?"
-                    value={state.description}
-                    onChange={updateFieldEvent('description')}
+                    value={description}
+                    onChange={changeDescription}
                   />
                 </fieldset>
 
@@ -114,8 +157,8 @@ function Editor(props) {
                     className="form-control"
                     rows="8"
                     placeholder="Write your article (in markdown)"
-                    value={state.body}
-                    onChange={updateFieldEvent('body')}
+                    value={body}
+                    onChange={changeBody}
                   />
                 </fieldset>
 
@@ -124,18 +167,18 @@ function Editor(props) {
                     className="form-control"
                     type="text"
                     placeholder="Enter tags"
-                    value={state.tagInput}
-                    onChange={updateFieldEvent('tagInput')}
-                    onKeyUp={watchForEnter}
+                    value={tagInput}
+                    onChange={changeTagInput}
+                    onKeyUp={addTag}
                   />
 
                   <div className="tag-list">
-                    {state.tagList.map(tag => {
+                    {tagList.map(tag => {
                       return (
                         <span className="tag-default tag-pill" key={tag}>
                           <i
                             className="ion-close-round"
-                            onClick={removeTagHandler(tag)}
+                            onClick={removeTag(tag)}
                           />
                           {tag}
                         </span>
@@ -147,7 +190,7 @@ function Editor(props) {
                 <button
                   className="btn btn-lg pull-xs-right btn-primary"
                   type="button"
-                  disabled={props.inProgress}
+                  disabled={inProgress}
                   onClick={submitForm}
                 >
                   Publish Article
@@ -161,4 +204,4 @@ function Editor(props) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Editor);
+export default Editor;
