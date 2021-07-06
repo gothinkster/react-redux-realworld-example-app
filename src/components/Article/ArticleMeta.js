@@ -1,15 +1,28 @@
-import ArticleActions from './ArticleActions';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import React, { memo } from 'react';
 
-const ArticleMeta = props => {
-  const article = props.article;
+import ArticleActions from './ArticleActions';
+
+/**
+ * Show information about the current article
+ *
+ * @example
+ * <ArticleMeta />
+ */
+function ArticleMeta() {
+  const currentUser = useSelector(state => state.common.currentUser);
+  const article = useSelector(state => state.article.article);
+  const isAuthor = currentUser?.username === article?.author.username;
+
+  if (!article) return null;
+
   return (
     <div className="article-meta">
       <Link to={`/@${article.author.username}`}>
         <img
           src={
-            article.author.image ||
+            article.author.image ??
             'https://static.productionready.io/images/smiley-cyrus.jpg'
           }
           alt={article.author.username}
@@ -20,14 +33,15 @@ const ArticleMeta = props => {
         <Link to={`/@${article.author.username}`} className="author">
           {article.author.username}
         </Link>
-        <span className="date">
+
+        <time className="date" dateTime={article.createdAt}>
           {new Date(article.createdAt).toDateString()}
-        </span>
+        </time>
       </div>
 
-      <ArticleActions canModify={props.canModify} article={article} />
+      {isAuthor ? <ArticleActions /> : null}
     </div>
   );
-};
+}
 
-export default memo(ArticleMeta);
+export default ArticleMeta;

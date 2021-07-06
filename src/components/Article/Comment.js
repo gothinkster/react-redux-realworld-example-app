@@ -1,38 +1,61 @@
-import DeleteButton from './DeleteButton';
-import { Link } from 'react-router-dom';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-const Comment = props => {
-  const comment = props.comment;
-  const show =
-    props.currentUser && props.currentUser.username === comment.author.username;
+import DeleteButton from './DeleteButton';
+
+/**
+ *
+ * @param {Object} props
+ * @param {Object} props.comment
+ * @example
+ * <Comment
+ *    comment={{
+ *      id: "1",
+ *      createdAt: "2016-02-18T03:22:56.637Z",
+ *      updatedAt: "2016-02-18T03:22:56.637Z",
+ *      body: "It takes a Jacobian",
+ *      author: {
+ *        username: "jake",
+ *        bio: "I work at statefarm",
+ *        image: "https://i.stack.imgur.com/xHWG8.jpg",
+ *        following: false,
+ *      },
+ *    }}
+ * />
+ */
+function Comment({ comment }) {
+  const currentUser = useSelector(state => state.common.currentUser);
+  const isAuthor = currentUser?.username === comment.author.username;
+
   return (
     <div className="card">
       <div className="card-block">
         <p className="card-text">{comment.body}</p>
       </div>
+
       <div className="card-footer">
         <Link to={`/@${comment.author.username}`} className="comment-author">
           <img
-            src={
-              comment.author.image ||
-              'https://static.productionready.io/images/smiley-cyrus.jpg'
-            }
             className="comment-author-img"
             alt={comment.author.username}
+            src={
+              comment.author.image ??
+              'https://static.productionready.io/images/smiley-cyrus.jpg'
+            }
           />
         </Link>
         &nbsp;
         <Link to={`/@${comment.author.username}`} className="comment-author">
           {comment.author.username}
         </Link>
-        <span className="date-posted">
+        <time className="date-posted" dateTime={comment.createdAt}>
           {new Date(comment.createdAt).toDateString()}
-        </span>
-        <DeleteButton show={show} slug={props.slug} commentId={comment.id} />
+        </time>
+        {isAuthor ? <DeleteButton commentId={comment.id} /> : null}
       </div>
     </div>
   );
-};
+}
 
-export default React.memo(Comment);
+export default Comment;

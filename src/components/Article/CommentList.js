@@ -1,21 +1,36 @@
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import { getCommentsForArticle } from '../../reducers/article';
 import Comment from './Comment';
-import React from 'react';
 
-const CommentList = props => {
+/**
+ * List all comments of an article
+ *
+ * @example
+ * <CommentList />
+ */
+function CommentList() {
+  const dispatch = useDispatch();
+  const comments = useSelector(state => state.article.comments);
+  const { slug } = useParams();
+
+  useEffect(() => {
+    const fetchComments = dispatch(getCommentsForArticle(slug));
+
+    return () => {
+      fetchComments.abort();
+    };
+  }, [slug]);
+
   return (
-    <div>
-      {props.comments.map(comment => {
-        return (
-          <Comment
-            comment={comment}
-            currentUser={props.currentUser}
-            slug={props.slug}
-            key={comment.id}
-          />
-        );
-      })}
-    </div>
+    <>
+      {comments.map(comment => (
+        <Comment key={comment.id} comment={comment} />
+      ))}
+    </>
   );
-};
+}
 
-export default React.memo(CommentList);
+export default CommentList;

@@ -53,12 +53,6 @@ export const updateArticle = createAsyncThunk(
   { serializeError }
 );
 
-export const articlePageLoaded = slug => dispatch =>
-  Promise.all([
-    dispatch(getArticle(slug)),
-    dispatch(getCommentsForArticle(slug)),
-  ]);
-
 const initialState = {
   article: undefined,
   comments: [],

@@ -1,47 +1,57 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import { addComment } from '../../reducers/article';
 
-const mapDispatchToProps = dispatch => ({
-  onSubmit: payload => dispatch(addComment(payload)),
-});
+/**
+ * Add comment form
+ *
+ * @example
+ * <CommentInput />
+ */
+function CommentInput() {
+  const dispatch = useDispatch();
+  const currentUser = useSelector(state => state.common.currentUser);
+  const { slug } = useParams();
+  const [comment, setComment] = useState('');
 
-function CommentInput(props) {
-  const [body, setBody] = useState('');
-
-  const handleBodyUpdated = ev => {
-    setBody(ev.target.value);
+  /**
+   * @type {React.ChangeEventHandler<HTMLTextAreaElement>}
+   */
+  const changeComment = event => {
+    setComment(event.target.value);
   };
 
-  const createComment = ev => {
-    ev.preventDefault();
-    props.onSubmit({
-      slug: props.slug,
-      comment: body,
-    });
-    setBody('');
+  /**
+   * @type {React.FormEventHandler<HTMLFormElement>}
+   */
+  const saveComment = event => {
+    event.preventDefault();
+    dispatch(addComment({ slug, comment: comment }));
+    setComment('');
   };
 
   return (
-    <form className="card comment-form" onSubmit={createComment}>
+    <form className="card comment-form" onSubmit={saveComment}>
       <div className="card-block">
         <textarea
           className="form-control"
           placeholder="Write a comment..."
-          value={body}
-          onChange={handleBodyUpdated}
           rows="3"
+          value={comment}
+          onChange={changeComment}
         />
       </div>
+
       <div className="card-footer">
         <img
+          className="comment-author-img"
+          alt={currentUser.username}
           src={
-            props.currentUser.image ||
+            currentUser?.image ??
             'https://static.productionready.io/images/smiley-cyrus.jpg'
           }
-          className="comment-author-img"
-          alt={props.currentUser.username}
         />
         <button className="btn btn-sm btn-primary" type="submit">
           Post Comment
@@ -51,4 +61,4 @@ function CommentInput(props) {
   );
 }
 
-export default connect(() => ({}), mapDispatchToProps)(React.memo(CommentInput));
+export default CommentInput;
