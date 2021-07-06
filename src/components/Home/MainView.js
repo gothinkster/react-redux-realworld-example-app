@@ -1,92 +1,118 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ArticleList from '../ArticleList';
 import { changeTab } from '../../reducers/articleList';
 
-const YourFeedTab = React.memo(props => {
-  if (!props.token) return null;
+/**
+ * Your feed tab
+ *
+ * @example
+ * <YourFeedTab />
+ */
+function YourFeedTab() {
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.common.token);
+  const currentTab = useSelector(state => state.articleList.tab);
+  const isActiveTab = currentTab === 'feed';
 
-  const clickHandler = event => {
-    event.preventDefault();
-    props.onTabClick('feed');
+  if (!token) {
+    return null;
+  }
+
+  const dispatchChangeTab = () => {
+    dispatch(changeTab('feed'));
   };
 
   return (
     <li className="nav-item">
       <button
         type="button"
-        className={props.tab === 'feed' ? 'nav-link active' : 'nav-link'}
-        onClick={clickHandler}
+        className={isActiveTab ? 'nav-link active' : 'nav-link'}
+        onClick={dispatchChangeTab}
       >
         Your Feed
       </button>
     </li>
   );
-});
+}
 
-const GlobalFeedTab = React.memo(props => {
-  const clickHandler = event => {
-    event.preventDefault();
-    props.onTabClick('all');
+/**
+ * Global feed tab
+ *
+ * @example
+ * <GlobalFeedTab />
+ */
+function GlobalFeedTab() {
+  const dispatch = useDispatch();
+  const currentTab = useSelector(state => state.articleList.tab);
+  const isActiveTab = currentTab === 'all';
+
+  /**
+   * Change to all tab
+   * @type{React.MouseEventHandler}
+   */
+  const dispatchChangeTab = () => {
+    dispatch(changeTab('all'));
   };
 
   return (
     <li className="nav-item">
       <button
         type="button"
-        className={props.tab === 'all' ? 'nav-link active' : 'nav-link'}
-        onClick={clickHandler}
+        className={isActiveTab ? 'nav-link active' : 'nav-link'}
+        onClick={dispatchChangeTab}
       >
         Global Feed
       </button>
     </li>
   );
-});
+}
 
-const TagFilterTab = React.memo(props => {
-  if (!props.tag) {
+/**
+ * Tag tab
+ *
+ * @example
+ * <TagFilterTab />
+ */
+function TagFilterTab() {
+  const tag = useSelector(state => state.articleList.tag);
+
+  if (!tag) {
     return null;
   }
 
   return (
     <li className="nav-item">
       <button type="button" className="nav-link active">
-        <i className="ion-pound" /> {props.tag}
+        <i className="ion-pound" /> {tag}
       </button>
     </li>
   );
-});
+}
 
-const mapStateToProps = state => ({
-  ...state.articleList,
-  token: state.common.token,
-});
-
-const mapDispatchToProps = dispatch => ({
-  onTabClick: tab => dispatch(changeTab(tab)),
-});
-
-const MainView = React.memo(props => {
+/**
+ * Show the tab navigation and the list of articles
+ *
+ * @example
+ * <MainView />
+ */
+function MainView() {
   return (
     <div className="col-md-9">
       <div className="feed-toggle">
         <ul className="nav nav-pills outline-active">
-          <YourFeedTab
-            token={props.token}
-            tab={props.tab}
-            onTabClick={props.onTabClick}
-          />
+          <YourFeedTab />
 
-          <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
+          <GlobalFeedTab />
 
-          <TagFilterTab tag={props.tag} />
+          <TagFilterTab />
         </ul>
       </div>
 
       <ArticleList />
     </div>
   );
-});
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(React.memo(MainView));
+export default MainView;

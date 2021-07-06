@@ -1,9 +1,20 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-const Banner = ({ appName, token }) => {
+/**
+ * Shows a banner for new users
+ *
+ * @example
+ * <Banner />
+ */
+function Banner() {
+  const appName = useSelector(state => state.common.appName);
+  const token = useSelector(state => state.common.token);
+
   if (token) {
     return null;
   }
+
   return (
     <div className="banner">
       <div className="container">
@@ -12,6 +23,6 @@ const Banner = ({ appName, token }) => {
       </div>
     </div>
   );
-};
+}
 
-export default React.memo(Banner);
+export default Banner;

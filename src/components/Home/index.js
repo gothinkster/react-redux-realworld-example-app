@@ -1,41 +1,34 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { changeTab, homePageUnloaded } from '../../reducers/articleList';
 import Banner from './Banner';
 import MainView from './MainView';
 import Tags from './Tags';
-import {
-  homePageLoaded,
-  homePageUnloaded,
-  getArticlesByTag,
-} from '../../reducers/articleList';
 
-const mapStateToProps = state => ({
-  tags: state.articleList.tags,
-  appName: state.common.appName,
-  token: state.common.token,
-});
+/**
+ * Home screen component
+ *
+ * @example
+ * <Home />
+ */
+function Home() {
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.common.token);
 
-const mapDispatchToProps = dispatch => ({
-  onClickTag: tag => dispatch(getArticlesByTag({ tag })),
-  onLoad: tab => dispatch(homePageLoaded(tab)),
-  onUnload: () => dispatch(homePageUnloaded()),
-});
-
-function Home(props) {
   useEffect(() => {
-    const tab = props.token ? 'feed' : 'all';
-
-    props.onLoad(tab);
+    const defaultTab = token ? 'feed' : 'all';
+    const fetchArticles = dispatch(changeTab(defaultTab));
 
     return () => {
-      props.onUnload();
+      dispatch(homePageUnloaded());
+      fetchArticles.abort();
     };
   }, []);
 
   return (
     <div className="home-page">
-      <Banner token={props.token} appName={props.appName} />
+      <Banner />
 
       <div className="container page">
         <div className="row">
@@ -45,7 +38,7 @@ function Home(props) {
             <div className="sidebar">
               <p>Popular Tags</p>
 
-              <Tags tags={props.tags} onClickTag={props.onClickTag} />
+              <Tags />
             </div>
           </div>
         </div>
@@ -54,4 +47,4 @@ function Home(props) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

@@ -3,18 +3,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import agent from '../agent';
 import { profilePageUnloaded } from './profile';
 
-export const homePageLoaded = tab => dispatch =>
-  Promise.all([
-    dispatch(articleListSlice.actions.changeTab(tab)),
-    dispatch(getAllTags()),
-    dispatch(getAllArticles()),
-  ]);
-
-export const changeTab = tab => dispatch =>
-  Promise.all([
-    dispatch(articleListSlice.actions.changeTab(tab)),
-    dispatch(getAllArticles()),
-  ]);
+export const changeTab = tab => dispatch => {
+  dispatch(articleListSlice.actions.changeTab(tab));
+  return dispatch(getAllArticles());
+};
 
 export const getArticlesByAuthor = createAsyncThunk(
   'articleList/getArticlesByAuthor',
@@ -79,6 +71,7 @@ const articleListSlice = createSlice({
     homePageUnloaded: () => initialState,
     changeTab: (state, action) => {
       state.tab = action.payload;
+      delete state.tag;
     },
   },
   extraReducers: builder => {
@@ -116,12 +109,13 @@ const articleListSlice = createSlice({
       state.currentPage = action.meta.arg?.page ?? 0;
     });
 
-    builder.addCase(getArticlesByTag.fulfilled, (_, action) => ({
+    builder.addCase(getArticlesByTag.fulfilled, (state, action) => ({
       articles: action.payload.articles,
       articlesCount: action.payload.articlesCount,
       currentPage: action.meta.arg?.page ?? 0,
       tag: action.meta.arg?.tag,
       articlesPerPage: 10,
+      tags: state.tags,
     }));
 
     builder.addCase(getArticlesByAuthor.fulfilled, (_, action) => ({
