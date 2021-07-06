@@ -1,88 +1,103 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const LoggedOutView = React.memo(props => {
-  if (!props.currentUser) {
-    return (
-      <ul className="nav navbar-nav pull-xs-right">
-        <li className="nav-item">
-          <Link to="/" className="nav-link">
-            Home
-          </Link>
-        </li>
+/**
+ * Navbar when there isn't a logged user
+ * 
+ * @example
+ * <LoggedOutNavbar />
+ */
+function LoggedOutNavbar() {
+  return (
+    <ul className="nav navbar-nav pull-xs-right">
+      <li className="nav-item">
+        <Link to="/" className="nav-link">
+          Home
+        </Link>
+      </li>
 
-        <li className="nav-item">
-          <Link to="/login" className="nav-link">
-            Sign in
-          </Link>
-        </li>
+      <li className="nav-item">
+        <Link to="/login" className="nav-link">
+          Sign in
+        </Link>
+      </li>
 
-        <li className="nav-item">
-          <Link to="/register" className="nav-link">
-            Sign up
-          </Link>
-        </li>
-      </ul>
-    );
-  }
-  return null;
-});
+      <li className="nav-item">
+        <Link to="/register" className="nav-link">
+          Sign up
+        </Link>
+      </li>
+    </ul>
+  );
+}
 
-const LoggedInView = React.memo(props => {
-  if (props.currentUser) {
-    return (
-      <ul className="nav navbar-nav pull-xs-right">
-        <li className="nav-item">
-          <Link to="/" className="nav-link">
-            Home
-          </Link>
-        </li>
+/**
+ * Navbar when there is a logged user
+ * 
+ * @example
+ * <LoggedInNavbar />
+ */
+function LoggedInNavbar() {
+  const currentUser = useSelector(state => state.common.currentUser);
 
-        <li className="nav-item">
-          <Link to="/editor" className="nav-link">
-            <i className="ion-compose" />
-            &nbsp;New Post
-          </Link>
-        </li>
+  return (
+    <ul className="nav navbar-nav pull-xs-right">
+      <li className="nav-item">
+        <Link to="/" className="nav-link">
+          Home
+        </Link>
+      </li>
 
-        <li className="nav-item">
-          <Link to="/settings" className="nav-link">
-            <i className="ion-gear-a" />
-            &nbsp;Settings
-          </Link>
-        </li>
+      <li className="nav-item">
+        <Link to="/editor" className="nav-link">
+          <i className="ion-compose" />
+          &nbsp;New Post
+        </Link>
+      </li>
 
-        <li className="nav-item">
-          <Link to={`/@${props.currentUser.username}`} className="nav-link">
-            <img
-              src={
-                props.currentUser.image ||
-                'https://static.productionready.io/images/smiley-cyrus.jpg'
-              }
-              className="user-pic"
-              alt={props.currentUser.username}
-            />
-            {props.currentUser.username}
-          </Link>
-        </li>
-      </ul>
-    );
-  }
+      <li className="nav-item">
+        <Link to="/settings" className="nav-link">
+          <i className="ion-gear-a" />
+          &nbsp;Settings
+        </Link>
+      </li>
 
-  return null;
-});
+      <li className="nav-item">
+        <Link to={`/@${currentUser?.username}`} className="nav-link">
+          <img
+            src={
+              currentUser?.image ||
+              'https://static.productionready.io/images/smiley-cyrus.jpg'
+            }
+            className="user-pic"
+            alt={currentUser?.username}
+          />
+          {currentUser?.username}
+        </Link>
+      </li>
+    </ul>
+  );
+}
 
-function Header(props) {
+/**
+ * App header
+ *
+ * @example
+ * <Header />
+ */
+function Header() {
+  const token = useSelector(state => state.common.token);
+  const appName = useSelector(state => state.common.appName);
+
   return (
     <nav className="navbar navbar-light">
       <div className="container">
         <Link to="/" className="navbar-brand">
-          {props.appName.toLowerCase()}
+          {appName.toLowerCase()}
         </Link>
 
-        <LoggedOutView currentUser={props.currentUser} />
-
-        <LoggedInView currentUser={props.currentUser} />
+        {token ? <LoggedInNavbar /> : <LoggedOutNavbar />}
       </div>
     </nav>
   );

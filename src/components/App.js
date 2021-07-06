@@ -1,12 +1,12 @@
-import React, { lazy, Suspense, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import React, { lazy, Suspense, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 
-import Header from './Header';
-import { appLoad, clearRedirect } from '../reducers/common';
-import { store } from '../store';
 import Home from '../components/Home';
+import { appLoad, clearRedirect } from '../reducers/common';
+import Header from './Header';
+
 const Article = lazy(() =>
   import(
     '../components/Article' /* webpackChunkName: "Article", webpackPrefetch: true  */
@@ -38,37 +38,27 @@ const Settings = lazy(() =>
   )
 );
 
-const mapStateToProps = state => {
-  return {
-    appLoaded: state.common.appLoaded,
-    appName: state.common.appName,
-    currentUser: state.common.currentUser,
-    redirectTo: state.common.redirectTo,
-  };
-};
+function App() {
+  const dispatch = useDispatch()
+  const redirectTo = useSelector(state => state.common.redirectTo)
+  const appLoaded = useSelector(state => state.common.appLoaded)
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: token => dispatch(appLoad(token)),
-  onRedirect: () => dispatch(clearRedirect()),
-});
-
-function App(props) {
   useEffect(() => {
-    if (props.redirectTo) {
-      store.dispatch(push(props.redirectTo));
-      props.onRedirect();
+    if (redirectTo) {
+      dispatch(push(redirectTo));
+      dispatch(clearRedirect());
     }
-  }, [props.redirectTo, props.onRedirect]);
+  }, [redirectTo]);
 
   useEffect(() => {
     const token = window.localStorage.getItem('jwt');
-    props.onLoad(token);
+    dispatch(appLoad(token));
   }, []);
 
-  if (props.appLoaded) {
+  if (appLoaded) {
     return (
-      <div>
-        <Header appName={props.appName} currentUser={props.currentUser} />
+      <>
+        <Header />
         <Suspense fallback={<p>Loading...</p>}>
           <Switch>
             <Route exact path="/" component={Home} />
@@ -82,14 +72,15 @@ function App(props) {
             <Route path="/@:username" component={Profile} />
           </Switch>
         </Suspense>
-      </div>
+      </>
     );
   }
   return (
-    <div>
-      <Header appName={props.appName} currentUser={props.currentUser} />
-    </div>
+    <>
+      <Header />
+      <p>Loading...</p>
+    </>
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
