@@ -1,29 +1,35 @@
+import React from 'react';
+import { useSelector } from 'react-redux';
+
 import ArticlePreview from './ArticlePreview';
 import ListPagination from './ListPagination';
-import React from 'react';
 
-const ArticleList = React.memo(props => {
-  if (!props.articles) {
+/**
+ * List all articles and show pagination
+ *
+ * @example
+ * <ArticleList />
+ */
+function ArticleList() {
+  const articles = useSelector(state => state.articleList.articles);
+
+  if (!articles) {
     return <div className="article-preview">Loading...</div>;
   }
 
-  if (props.articles.length === 0) {
+  if (articles.length === 0) {
     return <div className="article-preview">No articles are here... yet.</div>;
   }
 
   return (
-    <div>
-      {props.articles.map(article => {
-        return <ArticlePreview article={article} key={article.slug} />;
-      })}
+    <>
+      {articles.map(article => (
+        <ArticlePreview article={article} key={article.slug} />
+      ))}
 
-      <ListPagination
-        articlesCount={props.articlesCount}
-        currentPage={props.currentPage}
-        articlesPerPage={props.articlesPerPage}
-      />
-    </div>
+      <ListPagination />
+    </>
   );
-});
+}
 
 export default ArticleList;

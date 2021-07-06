@@ -84,13 +84,7 @@ const MainView = React.memo(props => {
         </ul>
       </div>
 
-      <ArticleList
-        articles={props.articles}
-        loading={props.loading}
-        articlesCount={props.articlesCount}
-        currentPage={props.currentPage}
-        articlesPerPage={props.articlesPerPage}
-      />
+      <ArticleList />
     </div>
   );
 });

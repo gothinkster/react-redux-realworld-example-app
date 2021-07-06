@@ -1,29 +1,51 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { favoriteArticle, unfavoriteArticle } from '../reducers/articleList';
 
 const FAVORITED_CLASS = 'btn btn-sm btn-primary';
 const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
 
-const mapDispatchToProps = dispatch => ({
-  favorite: slug => dispatch(favoriteArticle(slug)),
-  unfavorite: slug => dispatch(unfavoriteArticle(slug)),
-});
-
-const ArticlePreview = React.memo(props => {
-  const article = props.article;
+/**
+ * Show a preview of an article
+ *
+ * @param {Object} props
+ * @param {Object} props.article
+ * @example
+ * <ArticlePreview
+ *    article={{
+ *      slug: 'how-to-train-your-dragon',
+ *      title: 'How to train your dragon',
+ *      description: 'Ever wonder how?',
+ *      body: 'It takes a Jacobian',
+ *      tagList: ['dragons', 'training'],
+ *      createdAt: '2016-02-18T03:22:56.637Z',
+ *      updatedAt: '2016-02-18T03:48:35.824Z',
+ *      favorited: false,
+ *      favoritesCount: 0,
+ *      author: {
+ *        username: 'jake',
+ *        bio: 'I work at statefarm',
+ *        image: 'https://i.stack.imgur.com/xHWG8.jpg',
+ *        following: false,
+ *      },
+ *    }}
+ * />
+ */
+function ArticlePreview({ article }) {
+  const dispatch = useDispatch();
   const favoriteButtonClass = article.favorited
     ? FAVORITED_CLASS
     : NOT_FAVORITED_CLASS;
 
   const handleClick = event => {
     event.preventDefault();
+
     if (article.favorited) {
-      props.unfavorite(article.slug);
+      dispatch(unfavoriteArticle(article.slug));
     } else {
-      props.favorite(article.slug);
+      dispatch(favoriteArticle(article.slug));
     }
   };
 
@@ -44,9 +66,9 @@ const ArticlePreview = React.memo(props => {
           <Link className="author" to={`/@${article.author.username}`}>
             {article.author.username}
           </Link>
-          <span className="date">
+          <time className="date" dateTime={article.createdAt}>
             {new Date(article.createdAt).toDateString()}
-          </span>
+          </time>
         </div>
 
         <div className="pull-xs-right">
@@ -61,17 +83,15 @@ const ArticlePreview = React.memo(props => {
         <p>{article.description}</p>
         <span>Read more...</span>
         <ul className="tag-list">
-          {article.tagList.map(tag => {
-            return (
-              <li className="tag-default tag-pill tag-outline" key={tag}>
-                {tag}
-              </li>
-            );
-          })}
+          {article.tagList.map(tag => (
+            <li className="tag-default tag-pill tag-outline" key={tag}>
+              {tag}
+            </li>
+          ))}
         </ul>
       </Link>
     </div>
   );
-});
+}
 
-export default connect(() => ({}), mapDispatchToProps)(ArticlePreview);
+export default ArticlePreview;

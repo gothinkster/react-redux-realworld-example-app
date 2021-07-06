@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ArticleList from './ArticleList';
@@ -171,9 +171,6 @@ function ProfileTabs({ username, isFavorites }) {
 function Profile({ location, match }) {
   const dispatch = useDispatch();
   const profile = useSelector(state => state.profile);
-  const { articles, articlesCount, currentPage, articlesPerPage } = useSelector(
-    state => state.articleList
-  );
   const { username } = match.params;
   const isFavoritePage = location.pathname.endsWith('/favorites');
 
@@ -209,12 +206,7 @@ function Profile({ location, match }) {
               isFavorites={isFavoritePage}
             />
 
-            <ArticleList
-              articles={articles}
-              articlesCount={articlesCount}
-              currentPage={currentPage}
-              articlesPerPage={articlesPerPage}
-            />
+            <ArticleList />
           </div>
         </div>
       </div>
