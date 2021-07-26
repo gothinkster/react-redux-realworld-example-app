@@ -13,10 +13,9 @@ const localStorageMiddleware = (store) => (next) => (action) => {
       window.localStorage.removeItem('jwt');
       agent.setToken(undefined);
       break;
-
-    default:
-      return next(action);
   }
+
+  return next(action);
 };
 
 export { localStorageMiddleware };
