@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeTab, homePageUnloaded } from '../../reducers/articleList';
 import Banner from './Banner';
 import MainView from './MainView';
-import Tags from './Tags';
+import TagsSidebar from '../../features/tags/TagsSidebar';
 
 /**
  * Home screen component
@@ -14,7 +14,7 @@ import Tags from './Tags';
  */
 function Home() {
   const dispatch = useDispatch();
-  const token = useSelector(state => state.common.token);
+  const token = useSelector((state) => state.common.token);
 
   useEffect(() => {
     const defaultTab = token ? 'feed' : 'all';
@@ -35,11 +35,7 @@ function Home() {
           <MainView />
 
           <div className="col-md-3">
-            <div className="sidebar">
-              <p>Popular Tags</p>
-
-              <Tags />
-            </div>
+            <TagsSidebar />
           </div>
         </div>
       </div>

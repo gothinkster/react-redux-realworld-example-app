@@ -2,19 +2,15 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getArticlesByTag } from '../../reducers/articleList';
-import {
-  getAllTags,
-  selectIsLoading,
-  selectTags,
-} from '../../features/tags/tagsSlice';
+import { getAllTags, selectIsLoading, selectTags } from './tagsSlice';
 
 /**
- * Show all tags
+ * Show all tags in the sidebar
  *
  * @example
- * <Tags />
+ * <TagsSidebar />
  */
-function Tags() {
+function TagsSidebar() {
   const dispatch = useDispatch();
   const tags = useSelector(selectTags);
   const isLoading = useSelector(selectIsLoading);
@@ -25,11 +21,7 @@ function Tags() {
     return () => {
       fetchTags.abort();
     };
-  }, []);
-
-  if (!tags || tags.length < 1) {
-    return <div>Loading Tags...</div>;
-  }
+  }, [dispatch]);
 
   /**
    * Dispatch get all articles by a tag
@@ -42,19 +34,27 @@ function Tags() {
   };
 
   return (
-    <div className="tag-list">
-      {tags.map((tag) => (
-        <button
-          type="button"
-          className="tag-default tag-pill"
-          key={tag}
-          onClick={handleClickTag(tag)}
-        >
-          {tag}
-        </button>
-      ))}
+    <div className="sidebar">
+      <p>Popular Tags</p>
+
+      <div className="tag-list">
+        {isLoading ? (
+          <p>Loading Tags...</p>
+        ) : (
+          tags.map((tag) => (
+            <button
+              type="button"
+              className="tag-default tag-pill"
+              key={tag}
+              onClick={handleClickTag(tag)}
+            >
+              {tag}
+            </button>
+          ))
+        )}
+      </div>
     </div>
   );
 }
 
-export default Tags;
+export default TagsSidebar;
