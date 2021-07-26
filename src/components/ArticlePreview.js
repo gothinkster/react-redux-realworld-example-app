@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import { favoriteArticle, unfavoriteArticle } from '../reducers/articleList';
+import TagsList from '../features/tags/TagsList';
 
 const FAVORITED_CLASS = 'btn btn-sm btn-primary';
 const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
@@ -39,7 +40,7 @@ function ArticlePreview({ article }) {
     ? FAVORITED_CLASS
     : NOT_FAVORITED_CLASS;
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     event.preventDefault();
 
     if (article.favorited) {
@@ -82,13 +83,7 @@ function ArticlePreview({ article }) {
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <span>Read more...</span>
-        <ul className="tag-list">
-          {article.tagList.map(tag => (
-            <li className="tag-default tag-pill tag-outline" key={tag}>
-              {tag}
-            </li>
-          ))}
-        </ul>
+        <TagsList tags={article.tagList} />
       </Link>
     </div>
   );

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import snarkdown from 'snarkdown';
 import xss from 'xss';
 
+import TagsList from '../../features/tags/TagsList';
 import { articlePageUnloaded, getArticle } from '../../reducers/article';
 import ArticleMeta from './ArticleMeta';
 
@@ -22,8 +23,8 @@ const CommentContainer = lazy(
  */
 function Article({ match }) {
   const dispatch = useDispatch();
-  const article = useSelector(state => state.article.article);
-  const inProgress = useSelector(state => state.article.inProgress);
+  const article = useSelector((state) => state.article.article);
+  const inProgress = useSelector((state) => state.article.inProgress);
 
   const renderMarkdown = () => ({ __html: xss(snarkdown(article.body)) });
 
@@ -64,15 +65,7 @@ function Article({ match }) {
           <div className="col-xs-12">
             <article dangerouslySetInnerHTML={renderMarkdown()} />
 
-            <ul className="tag-list">
-              {article.tagList.map(tag => {
-                return (
-                  <li className="tag-default tag-pill tag-outline" key={tag}>
-                    {tag}
-                  </li>
-                );
-              })}
-            </ul>
+            <TagsList tags={article.tagList} />
           </div>
         </div>
 
