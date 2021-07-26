@@ -1,0 +1,38 @@
+import { configureStore } from '@reduxjs/toolkit';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+
+import tagsReducer from '../features/tags/tagsSlice';
+import history from './history';
+import { localStorageMiddleware } from './middleware';
+import articleReducer from '../reducers/article';
+import articlesReducer from '../reducers/articleList';
+import authReducer from '../reducers/auth';
+import commonReducer from '../reducers/common';
+import profileReducer from '../reducers/profile';
+import settingsReducer from '../reducers/settings';
+
+export function makeStore(preloadedState) {
+  return configureStore({
+    reducer: {
+      article: articleReducer,
+      articleList: articlesReducer,
+      auth: authReducer,
+      common: commonReducer,
+      profile: profileReducer,
+      settings: settingsReducer,
+      tags: tagsReducer,
+      router: connectRouter(history),
+    },
+    devTools: true,
+    preloadedState,
+    middleware: (getDefaultMiddleware) => [
+      ...getDefaultMiddleware(),
+      routerMiddleware(history),
+      localStorageMiddleware,
+    ],
+  });
+}
+
+const store = makeStore();
+
+export default store;

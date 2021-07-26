@@ -1,8 +1,8 @@
-import agent from './agent';
-import { login, register } from './reducers/auth';
-import { logout } from './reducers/common';
+import agent from '../agent';
+import { login, register } from '../reducers/auth';
+import { logout } from '../reducers/common';
 
-const localStorageMiddleware = store => next => action => {
+const localStorageMiddleware = (store) => (next) => (action) => {
   switch (action.type) {
     case register.fulfilled.type:
     case login.fulfilled.type:
