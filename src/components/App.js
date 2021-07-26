@@ -17,19 +17,14 @@ const Editor = lazy(() =>
     '../components/Editor' /* webpackChunkName: "Editor", webpackPrefetch: true  */
   )
 );
-const Login = lazy(() =>
+const AuthScreen = lazy(() =>
   import(
-    '../components/Login' /* webpackChunkName: "Login", webpackPrefetch: true  */
+    '../features/auth/AuthScreen' /* webpackChunkName: "AuthScreen", webpackPrefetch: true  */
   )
 );
 const Profile = lazy(() =>
   import(
     '../components/Profile' /* webpackChunkName: "Profile", webpackPrefetch: true  */
-  )
-);
-const Register = lazy(() =>
-  import(
-    '../components/Register' /* webpackChunkName: "Register", webpackPrefetch: true  */
   )
 );
 const Settings = lazy(() =>
@@ -39,9 +34,9 @@ const Settings = lazy(() =>
 );
 
 function App() {
-  const dispatch = useDispatch()
-  const redirectTo = useSelector(state => state.common.redirectTo)
-  const appLoaded = useSelector(state => state.common.appLoaded)
+  const dispatch = useDispatch();
+  const redirectTo = useSelector((state) => state.common.redirectTo);
+  const appLoaded = useSelector((state) => state.common.appLoaded);
 
   useEffect(() => {
     if (redirectTo) {
@@ -62,8 +57,8 @@ function App() {
         <Suspense fallback={<p>Loading...</p>}>
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
+            <Route path="/login" component={AuthScreen} />
+            <Route path="/register" component={AuthScreen} />
             <Route path="/editor/:slug" component={Editor} />
             <Route path="/editor" component={Editor} />
             <Route path="/article/:slug" component={Article} />
