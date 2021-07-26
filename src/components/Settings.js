@@ -2,8 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ListErrors from './ListErrors';
-import { logout, selectUser } from '../features/auth/authSlice';
-import { saveSettings, settingsPageUnloaded } from '../reducers/settings';
+import {
+  logout,
+  selectUser,
+  updateUser,
+  selectErrors,
+  selectIsLoading,
+} from '../features/auth/authSlice';
 
 /**
  * Settings form component
@@ -14,7 +19,6 @@ import { saveSettings, settingsPageUnloaded } from '../reducers/settings';
  * @param {String} props.currentUser.username
  * @param {String} props.currentUser.bio
  * @param {String} props.currentUser.email
- * @param {Boolean} [props.inProgress=false]
  * @param {(user: Partial<currentUser>) => Promise<any>} props.onSaveSettings
  * @example
  * <SettingsForm
@@ -27,7 +31,7 @@ import { saveSettings, settingsPageUnloaded } from '../reducers/settings';
  *    onSaveSettings={user => dispatch(saveSettings(user))}
  * />
  */
-export function SettingsForm({ currentUser, inProgress, onSaveSettings }) {
+function SettingsForm({ currentUser, onSaveSettings }) {
   const [image, setImage] = useState(
     currentUser?.image ??
       'https://static.productionready.io/images/smiley-cyrus.jpg'
@@ -36,6 +40,7 @@ export function SettingsForm({ currentUser, inProgress, onSaveSettings }) {
   const [bio, setBio] = useState(currentUser?.bio ?? '');
   const [email, setEmail] = useState(currentUser?.email ?? '');
   const [password, setPassword] = useState('');
+  const isLoading = useSelector(selectIsLoading);
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
@@ -151,7 +156,7 @@ export function SettingsForm({ currentUser, inProgress, onSaveSettings }) {
         <button
           className="btn btn-lg btn-primary pull-xs-right"
           type="submit"
-          disabled={inProgress}
+          disabled={isLoading}
         >
           Update Settings
         </button>
@@ -169,10 +174,10 @@ export function SettingsForm({ currentUser, inProgress, onSaveSettings }) {
 function Settings() {
   const dispatch = useDispatch();
   const currentUser = useSelector(selectUser);
-  const { errors, inProgress } = useSelector((state) => state.settings);
+  const errors = useSelector(selectErrors);
 
   const dispatchSaveSettings = async (user) => {
-    await dispatch(saveSettings(user));
+    await dispatch(updateUser(user));
   };
 
   const logoutUser = () => {
@@ -192,7 +197,6 @@ function Settings() {
 
             <SettingsForm
               currentUser={currentUser}
-              inProgress={inProgress}
               onSaveSettings={dispatchSaveSettings}
             />
 

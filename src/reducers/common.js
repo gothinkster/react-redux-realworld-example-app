@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import agent from '../agent';
 import { articlePageUnloaded, createArticle, updateArticle } from './article';
-import { saveSettings, settingsPageUnloaded } from './settings';
 import { profilePageUnloaded } from './profile';
 import { homePageUnloaded } from './articleList';
 import {
@@ -11,6 +10,7 @@ import {
   logout,
   register,
   setToken,
+  updateUser,
 } from '../features/auth/authSlice';
 
 export const deleteArticle = createAsyncThunk(
@@ -51,7 +51,7 @@ const commonSlice = createSlice({
       state.redirectTo = '/';
     });
 
-    builder.addCase(saveSettings.fulfilled, (state, action) => {
+    builder.addCase(updateUser.fulfilled, (state, action) => {
       state.redirectTo = '/';
     });
 
@@ -81,7 +81,6 @@ const commonSlice = createSlice({
           articlePageUnloaded.type,
           homePageUnloaded.type,
           profilePageUnloaded.type,
-          settingsPageUnloaded.type,
         ].includes(action.type),
       (state) => {
         state.viewChangeCounter++;

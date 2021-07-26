@@ -9,7 +9,6 @@ import articleReducer from '../reducers/article';
 import articlesReducer from '../reducers/articleList';
 import commonReducer from '../reducers/common';
 import profileReducer from '../reducers/profile';
-import settingsReducer from '../reducers/settings';
 
 export function makeStore(preloadedState) {
   return configureStore({
@@ -19,7 +18,6 @@ export function makeStore(preloadedState) {
       auth: authReducer,
       common: commonReducer,
       profile: profileReducer,
-      settings: settingsReducer,
       tags: tagsReducer,
       router: connectRouter(history),
     },
