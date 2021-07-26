@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import agent from '../agent';
 import { profilePageUnloaded } from './profile';
 
-export const changeTab = tab => dispatch => {
+export const changeTab = (tab) => (dispatch) => {
   dispatch(articleListSlice.actions.changeTab(tab));
   return dispatch(getAllArticles());
 };
@@ -37,11 +37,6 @@ export const getFavoriteArticles = createAsyncThunk(
   ({ username, page } = {}) => agent.Articles.favoritedBy(username, page)
 );
 
-export const getAllTags = createAsyncThunk(
-  'articleList/getAllTags',
-  agent.Tags.getAll
-);
-
 export const favoriteArticle = createAsyncThunk(
   'articleList/favoriteArticle',
   agent.Articles.favorite
@@ -57,7 +52,6 @@ const initialState = {
   articlesCount: 0,
   currentPage: 0,
   articlesPerPage: 10,
-  tags: [],
   tab: undefined,
   tag: undefined,
   author: undefined,
@@ -74,9 +68,9 @@ const articleListSlice = createSlice({
       delete state.tag;
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder.addCase(favoriteArticle.fulfilled, (state, action) => {
-      state.articles = state.articles.map(article =>
+      state.articles = state.articles.map((article) =>
         article.slug === action.payload.article.slug
           ? {
               ...article,
@@ -88,7 +82,7 @@ const articleListSlice = createSlice({
     });
 
     builder.addCase(unfavoriteArticle.fulfilled, (state, action) => {
-      state.articles = state.articles.map(article =>
+      state.articles = state.articles.map((article) =>
         article.slug === action.payload.article.slug
           ? {
               ...article,
@@ -97,10 +91,6 @@ const articleListSlice = createSlice({
             }
           : article
       );
-    });
-
-    builder.addCase(getAllTags.fulfilled, (state, action) => {
-      state.tags = action.payload.tags;
     });
 
     builder.addCase(getAllArticles.fulfilled, (state, action) => {
@@ -115,7 +105,6 @@ const articleListSlice = createSlice({
       currentPage: action.meta.arg?.page ?? 0,
       tag: action.meta.arg?.tag,
       articlesPerPage: 10,
-      tags: state.tags,
     }));
 
     builder.addCase(getArticlesByAuthor.fulfilled, (_, action) => ({
@@ -135,7 +124,7 @@ const articleListSlice = createSlice({
     }));
 
     builder.addMatcher(
-      action => [profilePageUnloaded.type].includes(action.type),
+      (action) => [profilePageUnloaded.type].includes(action.type),
       () => initialState
     );
   },

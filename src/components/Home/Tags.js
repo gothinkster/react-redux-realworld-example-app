@@ -1,7 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getArticlesByTag, getAllTags } from '../../reducers/articleList';
+import { getArticlesByTag } from '../../reducers/articleList';
+import {
+  getAllTags,
+  selectIsLoading,
+  selectTags,
+} from '../../features/tags/tagsSlice';
 
 /**
  * Show all tags
@@ -11,7 +16,8 @@ import { getArticlesByTag, getAllTags } from '../../reducers/articleList';
  */
 function Tags() {
   const dispatch = useDispatch();
-  const tags = useSelector(state => state.articleList.tags);
+  const tags = useSelector(selectTags);
+  const isLoading = useSelector(selectIsLoading);
 
   useEffect(() => {
     const fetchTags = dispatch(getAllTags());
@@ -31,13 +37,13 @@ function Tags() {
    * @param {String} tag
    * @returns {React.MouseEventHandler}
    */
-  const handleClickTag = tag => () => {
+  const handleClickTag = (tag) => () => {
     dispatch(getArticlesByTag({ tag }));
   };
 
   return (
     <div className="tag-list">
-      {tags.map(tag => (
+      {tags.map((tag) => (
         <button
           type="button"
           className="tag-default tag-pill"
