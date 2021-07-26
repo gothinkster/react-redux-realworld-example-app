@@ -1,25 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
-import ListErrors from './ListErrors';
+import ListErrors from '../../components/ListErrors';
 import {
   logout,
+  selectErrors,
+  selectIsAuthenticated,
+  selectIsLoading,
   selectUser,
   updateUser,
-  selectErrors,
-  selectIsLoading,
-} from '../features/auth/authSlice';
+} from './authSlice';
 
 /**
  * Settings form component
  *
  * @param {Object} props
- * @param {Object} props.currentUser
- * @param {String} props.currentUser.image
- * @param {String} props.currentUser.username
- * @param {String} props.currentUser.bio
- * @param {String} props.currentUser.email
- * @param {(user: Partial<currentUser>) => Promise<any>} props.onSaveSettings
+ * @param {import('./authSlice').User} props.currentUser
+ * @param {(user: Partial<import('./authSlice').User>) => Promise<any>} props.onSaveSettings
  * @example
  * <SettingsForm
  *    currentUser={{
@@ -28,7 +26,7 @@ import {
  *      image: 'https://static.productionready.io/images/smiley-cyrus.jpg',
  *      bio: null,
  *    }}
- *    onSaveSettings={user => dispatch(saveSettings(user))}
+ *    onSaveSettings={user => dispatch(updateUser(user))}
  * />
  */
 function SettingsForm({ currentUser, onSaveSettings }) {
@@ -77,7 +75,10 @@ function SettingsForm({ currentUser, onSaveSettings }) {
     setPassword(event.target.value);
   };
 
-  const submitForm = (event) => {
+  /**
+   * @type {React.FormEventHandler<HTMLFormElement>}
+   */
+  const saveSettings = (event) => {
     event.preventDefault();
 
     const user = {
@@ -86,6 +87,7 @@ function SettingsForm({ currentUser, onSaveSettings }) {
       bio,
       email,
     };
+
     if (password) {
       user.password = password;
     }
@@ -94,8 +96,8 @@ function SettingsForm({ currentUser, onSaveSettings }) {
   };
 
   return (
-    <form onSubmit={submitForm}>
-      <fieldset>
+    <form onSubmit={saveSettings}>
+      <fieldset disabled={isLoading}>
         <fieldset className="form-group">
           <input
             className="form-control"
@@ -121,7 +123,7 @@ function SettingsForm({ currentUser, onSaveSettings }) {
         <fieldset className="form-group">
           <textarea
             className="form-control form-control-lg"
-            rows="8"
+            rows={8}
             placeholder="Short bio about you"
             name="bio"
             value={bio}
@@ -132,7 +134,7 @@ function SettingsForm({ currentUser, onSaveSettings }) {
         <fieldset className="form-group">
           <input
             className="form-control form-control-lg"
-            autoComplete="username"
+            autoComplete="current-email"
             type="email"
             placeholder="Email"
             name="email"
@@ -153,11 +155,7 @@ function SettingsForm({ currentUser, onSaveSettings }) {
           />
         </fieldset>
 
-        <button
-          className="btn btn-lg btn-primary pull-xs-right"
-          type="submit"
-          disabled={isLoading}
-        >
+        <button className="btn btn-lg btn-primary pull-xs-right" type="submit">
           Update Settings
         </button>
       </fieldset>
@@ -169,22 +167,25 @@ function SettingsForm({ currentUser, onSaveSettings }) {
  * Settings screen component
  *
  * @example
- * <Settings />
+ * <SettingsScreen />
  */
-function Settings() {
+function SettingsScreen() {
   const dispatch = useDispatch();
   const currentUser = useSelector(selectUser);
   const errors = useSelector(selectErrors);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
-  const dispatchSaveSettings = async (user) => {
-    await dispatch(updateUser(user));
+  const saveSettings = (user) => {
+    void dispatch(updateUser(user));
   };
 
   const logoutUser = () => {
     dispatch(logout());
   };
 
-  useEffect(() => () => dispatch(settingsPageUnloaded()), []);
+  if (!isAuthenticated) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div className="settings-page">
@@ -197,7 +198,7 @@ function Settings() {
 
             <SettingsForm
               currentUser={currentUser}
-              onSaveSettings={dispatchSaveSettings}
+              onSaveSettings={saveSettings}
             />
 
             <hr />
@@ -212,4 +213,4 @@ function Settings() {
   );
 }
 
-export default Settings;
+export default SettingsScreen;

@@ -27,9 +27,9 @@ const Profile = lazy(() =>
     '../components/Profile' /* webpackChunkName: "Profile", webpackPrefetch: true  */
   )
 );
-const Settings = lazy(() =>
+const SettingsScreen = lazy(() =>
   import(
-    '../components/Settings' /* webpackChunkName: "Settings", webpackPrefetch: true  */
+    '../features/auth/SettingsScreen' /* webpackChunkName: "SettingsScreen", webpackPrefetch: true  */
   )
 );
 
@@ -62,7 +62,7 @@ function App() {
             <Route path="/editor/:slug" component={Editor} />
             <Route path="/editor" component={Editor} />
             <Route path="/article/:slug" component={Article} />
-            <Route path="/settings" component={Settings} />
+            <Route path="/settings" component={SettingsScreen} />
             <Route path="/@:username/favorites" component={Profile} />
             <Route path="/@:username" component={Profile} />
           </Switch>
