@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ListErrors from './ListErrors';
-import { register, registerPageUnloaded } from '../reducers/auth';
+import {
+  register,
+  selectErrors,
+  selectIsLoading,
+} from '../features/auth/authSlice';
 
 /**
  * Register form component
@@ -17,35 +21,34 @@ function Register() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const dispatch = useDispatch();
-  const { errors, inProgress } = useSelector(state => state.auth);
-
-  useEffect(() => () => dispatch(registerPageUnloaded()), []);
+  const errors = useSelector(selectErrors);
+  const isLoading = useSelector(selectIsLoading);
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
-  const changeUsername = event => {
+  const changeUsername = (event) => {
     setUsername(event.target.value);
   };
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
-  const changeEmail = event => {
+  const changeEmail = (event) => {
     setEmail(event.target.value);
   };
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
-  const changePassword = event => {
+  const changePassword = (event) => {
     setPassword(event.target.value);
   };
 
   /**
    * @type {React.FormEventHandler<HTMLFormElement>}
    */
-  const submitForm = event => {
+  const submitForm = (event) => {
     event.preventDefault();
     dispatch(register({ username, email, password }));
   };
@@ -102,7 +105,7 @@ function Register() {
                 <button
                   className="btn btn-lg btn-primary pull-xs-right"
                   type="submit"
-                  disabled={inProgress}
+                  disabled={isLoading}
                 >
                   Sign up
                 </button>

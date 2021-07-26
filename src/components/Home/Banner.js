@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { selectIsAuthenticated } from '../../features/auth/authSlice';
+
 /**
  * Shows a banner for new users
  *
@@ -8,10 +10,10 @@ import { useSelector } from 'react-redux';
  * <Banner />
  */
 function Banner() {
-  const appName = useSelector(state => state.common.appName);
-  const token = useSelector(state => state.common.token);
+  const appName = useSelector((state) => state.common.appName);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
-  if (token) {
+  if (isAuthenticated) {
     return null;
   }
 

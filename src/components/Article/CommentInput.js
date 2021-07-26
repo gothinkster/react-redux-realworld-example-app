@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
+import { selectUser } from '../../features/auth/authSlice';
 import { addComment } from '../../reducers/article';
 
 /**
@@ -12,21 +13,21 @@ import { addComment } from '../../reducers/article';
  */
 function CommentInput() {
   const dispatch = useDispatch();
-  const currentUser = useSelector(state => state.common.currentUser);
+  const currentUser = useSelector(selectUser);
   const { slug } = useParams();
   const [comment, setComment] = useState('');
 
   /**
    * @type {React.ChangeEventHandler<HTMLTextAreaElement>}
    */
-  const changeComment = event => {
+  const changeComment = (event) => {
     setComment(event.target.value);
   };
 
   /**
    * @type {React.FormEventHandler<HTMLFormElement>}
    */
-  const saveComment = event => {
+  const saveComment = (event) => {
     event.preventDefault();
     dispatch(addComment({ slug, comment: comment }));
     setComment('');

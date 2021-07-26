@@ -13,6 +13,7 @@ import {
   getProfile,
   profilePageUnloaded,
 } from '../reducers/profile';
+import { selectUser } from '../features/auth/authSlice';
 
 /**
  * Go to profile settings
@@ -43,7 +44,7 @@ function EditProfileSettings() {
 function FollowUserButton({ username, following }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const currentUser = useSelector(state => state.common.currentUser);
+  const currentUser = useSelector(selectUser);
   let classes = 'btn btn-sm action-btn';
   let textMessage;
 
@@ -93,7 +94,7 @@ function FollowUserButton({ username, following }) {
  * />
  */
 function UserInfo({ profile }) {
-  const currentUser = useSelector(state => state.common.currentUser);
+  const currentUser = useSelector(selectUser);
   const isCurrentUser = profile.username === currentUser?.username;
 
   return (
@@ -170,7 +171,7 @@ function ProfileTabs({ username, isFavorites }) {
  */
 function Profile({ location, match }) {
   const dispatch = useDispatch();
-  const profile = useSelector(state => state.profile);
+  const profile = useSelector((state) => state.profile);
   const { username } = match.params;
   const isFavoritePage = location.pathname.endsWith('/favorites');
 

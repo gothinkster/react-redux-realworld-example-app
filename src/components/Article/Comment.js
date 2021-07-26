@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { selectUser } from '../../features/auth/authSlice';
 import DeleteButton from './DeleteButton';
 
 /**
@@ -25,7 +26,7 @@ import DeleteButton from './DeleteButton';
  * />
  */
 function Comment({ comment }) {
-  const currentUser = useSelector(state => state.common.currentUser);
+  const currentUser = useSelector(selectUser);
   const isAuthor = currentUser?.username === comment.author.username;
 
   return (

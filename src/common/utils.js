@@ -13,3 +13,13 @@ export const Status = {
   /** The error state */
   FAILURE: 'failure',
 };
+
+/**
+ * Check if error is an ApiError
+ *
+ * @param {object} error
+ * @returns {boolean} error is ApiError
+ */
+export function isApiError(error) {
+  return typeof error === 'object' && error !== null && 'errors' in error;
+}

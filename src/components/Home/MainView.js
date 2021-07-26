@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import ArticleList from '../ArticleList';
 import { changeTab } from '../../reducers/articleList';
+import { selectIsAuthenticated } from '../../features/auth/authSlice';
 
 /**
  * Your feed tab
@@ -12,11 +13,11 @@ import { changeTab } from '../../reducers/articleList';
  */
 function YourFeedTab() {
   const dispatch = useDispatch();
-  const token = useSelector(state => state.common.token);
-  const currentTab = useSelector(state => state.articleList.tab);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const currentTab = useSelector((state) => state.articleList.tab);
   const isActiveTab = currentTab === 'feed';
 
-  if (!token) {
+  if (!isAuthenticated) {
     return null;
   }
 
@@ -45,7 +46,7 @@ function YourFeedTab() {
  */
 function GlobalFeedTab() {
   const dispatch = useDispatch();
-  const currentTab = useSelector(state => state.articleList.tab);
+  const currentTab = useSelector((state) => state.articleList.tab);
   const isActiveTab = currentTab === 'all';
 
   /**
@@ -76,7 +77,7 @@ function GlobalFeedTab() {
  * <TagFilterTab />
  */
 function TagFilterTab() {
-  const tag = useSelector(state => state.articleList.tag);
+  const tag = useSelector((state) => state.articleList.tag);
 
   if (!tag) {
     return null;

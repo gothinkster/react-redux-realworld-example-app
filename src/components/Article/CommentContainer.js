@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import CommentInput from './CommentInput';
 import CommentList from './CommentList';
 import ListErrors from '../ListErrors';
+import { selectIsAuthenticated } from '../../features/auth/authSlice';
 
 /**
  * Comments for an article
@@ -13,12 +14,12 @@ import ListErrors from '../ListErrors';
  * <CommentContainer />
  */
 function CommentContainer() {
-  const currentUser = useSelector(state => state.common.currentUser);
-  const commentErrors = useSelector(state => state.article.commentErrors);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const commentErrors = useSelector((state) => state.article.commentErrors);
 
   return (
     <div className="row">
-      {currentUser ? (
+      {isAuthenticated ? (
         <div className="col-xs-12 col-md-8 offset-md-2">
           <ListErrors errors={commentErrors} />
 

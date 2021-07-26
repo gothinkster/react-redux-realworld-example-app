@@ -5,6 +5,7 @@ import { changeTab, homePageUnloaded } from '../../reducers/articleList';
 import Banner from './Banner';
 import MainView from './MainView';
 import TagsSidebar from '../../features/tags/TagsSidebar';
+import { selectIsAuthenticated } from '../../features/auth/authSlice';
 
 /**
  * Home screen component
@@ -14,10 +15,10 @@ import TagsSidebar from '../../features/tags/TagsSidebar';
  */
 function Home() {
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.common.token);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   useEffect(() => {
-    const defaultTab = token ? 'feed' : 'all';
+    const defaultTab = isAuthenticated ? 'feed' : 'all';
     const fetchArticles = dispatch(changeTab(defaultTab));
 
     return () => {

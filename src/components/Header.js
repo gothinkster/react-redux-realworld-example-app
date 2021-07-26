@@ -2,9 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
+import { selectIsAuthenticated, selectUser } from '../features/auth/authSlice';
+
 /**
  * Navbar when there isn't a logged user
- * 
+ *
  * @example
  * <LoggedOutNavbar />
  */
@@ -34,12 +36,12 @@ function LoggedOutNavbar() {
 
 /**
  * Navbar when there is a logged user
- * 
+ *
  * @example
  * <LoggedInNavbar />
  */
 function LoggedInNavbar() {
-  const currentUser = useSelector(state => state.common.currentUser);
+  const currentUser = useSelector(selectUser);
 
   return (
     <ul className="nav navbar-nav pull-xs-right">
@@ -87,8 +89,8 @@ function LoggedInNavbar() {
  * <Header />
  */
 function Header() {
-  const token = useSelector(state => state.common.token);
-  const appName = useSelector(state => state.common.appName);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const appName = useSelector((state) => state.common.appName);
 
   return (
     <nav className="navbar navbar-light">
@@ -97,7 +99,7 @@ function Header() {
           {appName.toLowerCase()}
         </Link>
 
-        {token ? <LoggedInNavbar /> : <LoggedOutNavbar />}
+        {isAuthenticated ? <LoggedInNavbar /> : <LoggedOutNavbar />}
       </div>
     </nav>
   );

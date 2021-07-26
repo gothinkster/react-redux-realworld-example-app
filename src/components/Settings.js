@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ListErrors from './ListErrors';
-import { logout } from '../reducers/common';
+import { logout, selectUser } from '../features/auth/authSlice';
 import { saveSettings, settingsPageUnloaded } from '../reducers/settings';
 
 /**
@@ -40,39 +40,39 @@ export function SettingsForm({ currentUser, inProgress, onSaveSettings }) {
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
-  const changeImage = event => {
+  const changeImage = (event) => {
     setImage(event.target.value);
   };
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
-  const changeUsername = event => {
+  const changeUsername = (event) => {
     setUsername(event.target.value);
   };
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
-  const changeBio = event => {
+  const changeBio = (event) => {
     setBio(event.target.value);
   };
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
-  const changeEmail = event => {
+  const changeEmail = (event) => {
     setEmail(event.target.value);
   };
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
-  const changePassword = event => {
+  const changePassword = (event) => {
     setPassword(event.target.value);
   };
 
-  const submitForm = event => {
+  const submitForm = (event) => {
     event.preventDefault();
 
     const user = {
@@ -168,10 +168,10 @@ export function SettingsForm({ currentUser, inProgress, onSaveSettings }) {
  */
 function Settings() {
   const dispatch = useDispatch();
-  const { currentUser } = useSelector(state => state.common);
-  const { errors, inProgress } = useSelector(state => state.settings);
+  const currentUser = useSelector(selectUser);
+  const { errors, inProgress } = useSelector((state) => state.settings);
 
-  const dispatchSaveSettings = async user => {
+  const dispatchSaveSettings = async (user) => {
     await dispatch(saveSettings(user));
   };
 

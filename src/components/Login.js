@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ListErrors from './ListErrors';
-import { login, loginPageUnloaded } from '../reducers/auth';
+import {
+  login,
+  selectErrors,
+  selectIsLoading,
+} from '../features/auth/authSlice';
 
 /**
  * Login form component
@@ -16,28 +20,27 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassWord] = useState('');
   const dispatch = useDispatch();
-  const { errors, inProgress } = useSelector(state => state.auth);
-
-  useEffect(() => () => dispatch(loginPageUnloaded()), []);
+  const errors = useSelector(selectErrors);
+  const isLoading = useSelector(selectIsLoading);
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
-  const changeEmail = event => {
+  const changeEmail = (event) => {
     setEmail(event.target.value);
   };
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
-  const changePassword = event => {
+  const changePassword = (event) => {
     setPassWord(event.target.value);
   };
 
   /**
    * @type {React.FormEventHandler<HTMLFormElement>}
    */
-  const submitForm = event => {
+  const submitForm = (event) => {
     event.preventDefault();
     dispatch(login({ email, password }));
   };
@@ -83,7 +86,7 @@ function Login() {
                 <button
                   className="btn btn-lg btn-primary pull-xs-right"
                   type="submit"
-                  disabled={inProgress}
+                  disabled={isLoading}
                 >
                   Sign in
                 </button>
