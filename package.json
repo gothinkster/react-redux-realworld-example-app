@@ -9,9 +9,11 @@
     "cross-env": "^7.0.3",
     "cypress": "^7.5.0",
     "faker": "^5.5.3",
+    "husky": "^7.0.0",
     "node-fetch": "^2.6.1",
+    "prettier": "^2.3.2",
+    "pretty-quick": "^3.1.1",
     "react-scripts": "^4.0.3",
-    "standard": "^16.0.3",
     "start-server-and-test": "^1.12.5"
   },
   "dependencies": {
@@ -35,7 +37,8 @@
     "eject": "react-scripts eject",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "test:e2e": "start-test start:e2e :4100 cy:run"
+    "test:e2e": "start-test start:e2e :4100 cy:run",
+    "prepare": "husky install"
   },
   "browserslist": [
     ">0.2%",
