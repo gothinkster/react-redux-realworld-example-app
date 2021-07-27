@@ -4,8 +4,13 @@ import {
   createSlice,
 } from '@reduxjs/toolkit';
 
-import { Status, isApiError } from '../../common/utils';
 import agent from '../../agent';
+import {
+  failureReducer,
+  isApiError,
+  loadingReducer,
+  Status,
+} from '../../common/utils';
 
 /**
  * @typedef {object} User
@@ -140,13 +145,6 @@ const initialState = {
 
 /**
  * @param {import('@reduxjs/toolkit').Draft<AuthState>} state
- */
-function loadingReducer(state) {
-  state.status = Status.LOADING;
-}
-
-/**
- * @param {import('@reduxjs/toolkit').Draft<AuthState>} state
  * @param {import('@reduxjs/toolkit').PayloadAction<{token: string, user: User}>} action
  */
 function successReducer(state, action) {
@@ -156,14 +154,6 @@ function successReducer(state, action) {
   delete state.errors;
 }
 
-/**
- * @param {import('@reduxjs/toolkit').Draft<AuthState>} state
- * @param {import('@reduxjs/toolkit').PayloadAction<{errors: Record<string, string[]}>} action
- */
-function failureReducer(state, action) {
-  state.status = Status.FAILURE;
-  state.errors = action.payload.errors;
-}
 const authSlice = createSlice({
   name: 'auth',
   initialState,

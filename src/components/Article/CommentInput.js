@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { selectUser } from '../../features/auth/authSlice';
-import { addComment } from '../../reducers/article';
+import { createComment } from '../../features/comments/commentsSlice';
 
 /**
  * Add comment form
@@ -29,7 +29,7 @@ function CommentInput() {
    */
   const saveComment = (event) => {
     event.preventDefault();
-    dispatch(addComment({ slug, comment: comment }));
+    dispatch(createComment({ articleSlug: slug, comment: { body: comment } }));
     setComment('');
   };
 

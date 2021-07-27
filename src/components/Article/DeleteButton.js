@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { deleteComment } from '../../reducers/article';
+import { removeComment } from '../../features/comments/commentsSlice';
 
 /**
  * Delete a comment button
@@ -17,7 +17,7 @@ function DeleteButton({ commentId }) {
   const { slug } = useParams();
 
   const removeArticle = () => {
-    dispatch(deleteComment({ slug, commentId }));
+    dispatch(removeComment({ articleSlug: slug, commentId }));
   };
 
   return (

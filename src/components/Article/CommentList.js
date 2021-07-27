@@ -2,7 +2,10 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { getCommentsForArticle } from '../../reducers/article';
+import {
+  getCommentsForArticle,
+  selectAllComments,
+} from '../../features/comments/commentsSlice';
 import Comment from './Comment';
 
 /**
@@ -13,7 +16,7 @@ import Comment from './Comment';
  */
 function CommentList() {
   const dispatch = useDispatch();
-  const comments = useSelector(state => state.article.comments);
+  const comments = useSelector(selectAllComments);
   const { slug } = useParams();
 
   useEffect(() => {
@@ -26,7 +29,7 @@ function CommentList() {
 
   return (
     <>
-      {comments.map(comment => (
+      {comments.map((comment) => (
         <Comment key={comment.id} comment={comment} />
       ))}
     </>

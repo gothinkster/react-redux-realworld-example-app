@@ -6,6 +6,7 @@ import CommentInput from './CommentInput';
 import CommentList from './CommentList';
 import ListErrors from '../ListErrors';
 import { selectIsAuthenticated } from '../../features/auth/authSlice';
+import { selectErrors } from '../../features/comments/commentsSlice';
 
 /**
  * Comments for an article
@@ -15,7 +16,7 @@ import { selectIsAuthenticated } from '../../features/auth/authSlice';
  */
 function CommentContainer() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const commentErrors = useSelector((state) => state.article.commentErrors);
+  const commentErrors = useSelector(selectErrors);
 
   return (
     <div className="row">

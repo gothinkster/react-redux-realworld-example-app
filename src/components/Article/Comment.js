@@ -12,7 +12,7 @@ import DeleteButton from './DeleteButton';
  * @example
  * <Comment
  *    comment={{
- *      id: "1",
+ *      id: 1,
  *      createdAt: "2016-02-18T03:22:56.637Z",
  *      updatedAt: "2016-02-18T03:22:56.637Z",
  *      body: "It takes a Jacobian",
