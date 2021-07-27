@@ -7,11 +7,11 @@ import TagsList from '../../features/tags/TagsList';
 import { articlePageUnloaded, getArticle } from '../../reducers/article';
 import ArticleMeta from './ArticleMeta';
 
-const CommentContainer = lazy(
+const CommentSection = lazy(
   () =>
     import(
-      './CommentContainer'
-    ) /* webpackChunkName: "CommentContainer", webpackPrefetch: true  */
+      '../../features/comments/CommentSection'
+    ) /* webpackChunkName: "CommentSection", webpackPrefetch: true  */
 );
 
 /**
@@ -72,7 +72,7 @@ function Article({ match }) {
         <hr />
 
         <Suspense fallback={<p>Loading comments</p>}>
-          <CommentContainer />
+          <CommentSection />
         </Suspense>
       </div>
     </div>
