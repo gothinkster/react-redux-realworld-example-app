@@ -66,7 +66,7 @@ function Comment({ comment }) {
   const isAuthor = useSelector(selectIsAuthor(comment.id));
 
   return (
-    <div className="card">
+    <div className="card" data-testid="comment">
       <div className="card-block">
         <p className="card-text">{comment.body}</p>
       </div>
