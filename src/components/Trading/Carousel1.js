@@ -28,8 +28,8 @@ const Item = styled.div`
 
   return (
     <>
-      <h1 style={{ textAlign: "center" }}>Example to setup your carousel in react</h1>
-      <div className="App">
+
+      <div>
         <Carousel breakPoints={breakPoints}>
           <Item><Blur src={Img} /></Item>
           <Item><Blur src={Img} /></Item>
