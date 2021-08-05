@@ -13,7 +13,7 @@ function Carousel1() {
   return(
     <>
     
-    <div className="App">
+    <div>
       <Carousel breakPoints={breakPoints}>
         
      <BlurImg></BlurImg>
