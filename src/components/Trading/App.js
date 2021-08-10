@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Cards from './Components/Cards';
-import Decks from './Components/Decks'
+import Cards from '../../components/Trading/Cards';
+
 
 class App extends Component {
   state = {
