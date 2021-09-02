@@ -1,0 +1,24 @@
+pipeline {
+  agent {
+      node {
+    label 'mac'
+      }
+  }
+  stages {
+      stage('Install deps') { 
+    steps {
+      sh 'npm install'
+    }
+      }
+      stage('Build staging artifacts') { 
+    steps {
+      sh 'npm build' 
+    }
+      }
+      stage('Build production artifacts') { 
+    steps {
+      sh 'npm build' 
+    }
+      }
+  }
+}
