@@ -1,26 +1,30 @@
-import DeleteButton from './DeleteButton';
-import { Link } from 'react-router-dom';
-import React from 'react';
+import DeleteButton from "./DeleteButton";
+import { Link } from "react-router-dom";
+import React from "react";
 
-const Comment = props => {
+const Comment = (props) => {
   const comment = props.comment;
-  const show = props.currentUser &&
-    props.currentUser.username === comment.author.username;
+  const show =
+    props.currentUser && props.currentUser.username === comment.author.username;
   return (
     <div className="card">
       <div className="card-block">
         <p className="card-text">{comment.body}</p>
       </div>
       <div className="card-footer">
-        <Link
-          to={`/@${comment.author.username}`}
-          className="comment-author">
-          <img src={comment.author.image} className="comment-author-img" alt={comment.author.username} />
+        <Link to={`/@${comment.author.username}`} className="comment-author">
+          <img
+            src={
+              comment.author.image !== ""
+                ? comment.author.image
+                : "https://icons.iconarchive.com/icons/google/noto-emoji-smileys/512/10001-grinning-face-icon.png"
+            }
+            className="comment-author-img"
+            alt={comment.author.username}
+          />
         </Link>
         &nbsp;
-        <Link
-          to={`/@${comment.author.username}`}
-          className="comment-author">
+        <Link to={`/@${comment.author.username}`} className="comment-author">
           {comment.author.username}
         </Link>
         <span className="date-posted">
