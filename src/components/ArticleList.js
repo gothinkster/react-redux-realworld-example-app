@@ -1,22 +1,9 @@
 import ArticlePreview from './ArticlePreview';
 import ListPagination from './ListPagination';
 import React from 'react';
+import Loader from './HOC/Loader';
 
 const ArticleList = props => {
-  if (!props.articles) {
-    return (
-      <div className="article-preview">Loading...</div>
-    );
-  }
-
-  if (props.articles.length === 0) {
-    return (
-      <div className="article-preview">
-        No articles are here... yet.
-      </div>
-    );
-  }
-
   return (
     <div>
       {
@@ -35,4 +22,4 @@ const ArticleList = props => {
   );
 };
 
-export default ArticleList;
+export default Loader(ArticleList);
