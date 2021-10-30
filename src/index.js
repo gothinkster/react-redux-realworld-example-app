@@ -1,20 +1,21 @@
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import React from 'react';
-import { store, history} from './store';
+import App from "./components/App";
+import { Provider } from "react-redux";
+import ReactDOM from "react-dom";
+import React from "react";
+import store from "./store";
+import Home from "./components/Home";
+import Login from "./components/Login";
 
-import { Route, Switch } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
+import { Router, Route, IndexRoute, hashHistory } from "react-router";
 
-import App from './components/App';
-
-ReactDOM.render((
+ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <Switch>
-        <Route path="/" component={App} />
-      </Switch>
-    </ConnectedRouter>
-  </Provider>
-
-), document.getElementById('root'));
+    <Router history={hashHistory}>
+      <Route path="/" component={App}>
+        <IndexRoute component={Home} />
+        <Route path="login" component={Login} />
+      </Route>
+    </Router>
+  </Provider>,
+  document.getElementById("root")
+);
