@@ -1,10 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import FontAwesome from 'react-fontawesome';
+import SideNav from '../components/sideNav';
+import '../components/styles.css';
 
-const LoggedOutView = props => {
+
+
+
+
+
+ const LoggedOutView = props => {
   if (!props.currentUser) {
     return (
-      <ul className="nav navbar-nav pull-xs-right">
+      <ul className="nav navbar-nav pull-xs-right logout_view" >
 
         <li className="nav-item">
           <Link to="/" className="nav-link">
@@ -30,10 +38,11 @@ const LoggedOutView = props => {
   return null;
 };
 
-const LoggedInView = props => {
+ const LoggedInView = props => {
   if (props.currentUser) {
     return (
-      <ul className="nav navbar-nav pull-xs-right">
+      <ul className="nav navbar-nav pull-xs-right logedin_view" >
+        
 
         <li className="nav-item">
           <Link to="/" className="nav-link">
@@ -70,15 +79,27 @@ const LoggedInView = props => {
 };
 
 class Header extends React.Component {
+
+  state={
+    showNav:false
+  }
+
+  toggleNavBar=(action)=>{
+    this.setState({
+      showNav:action
+    })
+  }
+
   render() {
     return (
       <nav className="navbar navbar-light">
+        
         <div className="container">
-
+          <SideNav showNav={this.state.showNav} onHideSideNav={()=>this.toggleNavBar(false)} appName={this.props.appName} currentUser={this.props.currentUser}/>
+          <FontAwesome name="bars" onClick={()=>this.toggleNavBar(true)} className="nav_harmburg navbar-brand " style={{marginTop:"1.5%"}}/>
           <Link to="/" className="navbar-brand">
             {this.props.appName.toLowerCase()}
           </Link>
-
           <LoggedOutView currentUser={this.props.currentUser} />
 
           <LoggedInView currentUser={this.props.currentUser} />

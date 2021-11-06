@@ -1,0 +1,49 @@
+
+
+
+.nav_harmburg{
+    display:none ;
+}
+@media only screen and (max-width: 768px) {
+
+
+    .nav_harmburg{
+        display: inline-block;
+    }
+
+.navbar-brand{
+    text-align: center;
+}
+
+.logout_view{
+    display: none;
+  }
+
+.logedin_view{
+    display: none;
+}
+    
+.navbar-brand {
+    margin-right: 1rem!important;
+}
+
+Link i{
+    margin-right: 8%;
+}
+.side_item{
+    margin-left: 2% !important;
+  
+   
+}
+.nav-link{
+    color: black;
+}
+
+.home_item{
+    margin-left: 4%;
+}
+
+
+
+}
+
