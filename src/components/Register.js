@@ -70,8 +70,8 @@ class Register extends React.Component {
                       className="form-control form-control-lg"
                       type="text"
                       placeholder="Username"
-                      value={this.props.username}
-                      onChange={this.changeUsername} />
+                      value={this.props.username || ""}
+                      onChange={this.changeUsername } />
                   </fieldset>
 
                   <fieldset className="form-group">
@@ -79,7 +79,7 @@ class Register extends React.Component {
                       className="form-control form-control-lg"
                       type="email"
                       placeholder="Email"
-                      value={this.props.email}
+                      value={this.props.email || ""}
                       onChange={this.changeEmail} />
                   </fieldset>
 
@@ -88,7 +88,7 @@ class Register extends React.Component {
                       className="form-control form-control-lg"
                       type="password"
                       placeholder="Password"
-                      value={this.props.password}
+                      value={this.props.password || ""}
                       onChange={this.changePassword} />
                   </fieldset>
 
