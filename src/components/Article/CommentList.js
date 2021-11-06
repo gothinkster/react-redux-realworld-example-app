@@ -1,16 +1,16 @@
 import Comment from './Comment';
 import React from 'react';
 
-const CommentList = props => {
+const CommentList = ({ currentUser, comments, slug }) => {
   return (
     <div>
       {
-        props.comments.map(comment => {
+        comments.map(comment => {
           return (
             <Comment
               comment={comment}
-              currentUser={props.currentUser}
-              slug={props.slug}
+              currentUser={currentUser}
+              slug={slug}
               key={comment.id} />
           );
         })

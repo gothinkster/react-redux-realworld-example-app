@@ -12,7 +12,17 @@ import {
   PROFILE_FAVORITES_PAGE_UNLOADED
 } from '../constants/actionTypes';
 
-export default (state = {}, action) => {
+const defaultState = {
+  tags: [],
+  articles: [],
+  articleCount: 0,
+  currentPage: 0,
+  tab: 'all',
+  tag: null,
+  pager: null
+};
+
+export default (state = defaultState, action) => {
   switch (action.type) {
     case ARTICLE_FAVORITED:
     case ARTICLE_UNFAVORITED:
