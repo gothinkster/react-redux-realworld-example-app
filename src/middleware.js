@@ -16,26 +16,31 @@ const promiseMiddleware = store => next => action => {
 
     action.payload.then(
       res => {
-        const currentState = store.getState()
+        const currentState = store.getState();
+
         if (!skipTracking && currentState.viewChangeCounter !== currentView) {
-          return
+          return;
         }
-        console.log('RESULT', res);
+
         action.payload = res;
+
         store.dispatch({ type: ASYNC_END, promise: action.payload });
         store.dispatch(action);
       },
       error => {
-        const currentState = store.getState()
+        const currentState = store.getState();
+
         if (!skipTracking && currentState.viewChangeCounter !== currentView) {
-          return
+          return;
         }
-        console.log('ERROR', error);
+
         action.error = true;
         action.payload = error.response.body;
+
         if (!action.skipTracking) {
           store.dispatch({ type: ASYNC_END, promise: action.payload });
         }
+
         store.dispatch(action);
       }
     );
@@ -65,4 +70,4 @@ function isPromise(v) {
 }
 
 
-export { promiseMiddleware, localStorageMiddleware }
+export { promiseMiddleware, localStorageMiddleware };

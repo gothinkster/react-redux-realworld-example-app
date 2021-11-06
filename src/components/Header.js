@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const LoggedOutView = props => {
-  if (!props.currentUser) {
+const LoggedOutView = ({ currentUser }) => {
+  if (!currentUser) {
     return (
       <ul className="nav navbar-nav pull-xs-right">
 
@@ -27,11 +27,12 @@ const LoggedOutView = props => {
       </ul>
     );
   }
+
   return null;
 };
 
-const LoggedInView = props => {
-  if (props.currentUser) {
+const LoggedInView = ({ currentUser }) => {
+  if (currentUser) {
     return (
       <ul className="nav navbar-nav pull-xs-right">
 
@@ -55,10 +56,10 @@ const LoggedInView = props => {
 
         <li className="nav-item">
           <Link
-            to={`/@${props.currentUser.username}`}
+            to={`/@${currentUser.username}`}
             className="nav-link">
-            <img src={props.currentUser.image} className="user-pic" alt={props.currentUser.username} />
-            {props.currentUser.username}
+            <img src={currentUser.image} className="user-pic" alt={currentUser.username} />
+            {currentUser.username}
           </Link>
         </li>
 
@@ -69,23 +70,21 @@ const LoggedInView = props => {
   return null;
 };
 
-class Header extends React.Component {
-  render() {
-    return (
-      <nav className="navbar navbar-light">
-        <div className="container">
+const Header = ({ appName, currentUser }) => {
+  return (
+    <nav className="navbar navbar-light">
+      <div className="container">
 
-          <Link to="/" className="navbar-brand">
-            {this.props.appName.toLowerCase()}
-          </Link>
+        <Link to="/" className="navbar-brand">
+          {appName.toLowerCase()}
+        </Link>
 
-          <LoggedOutView currentUser={this.props.currentUser} />
+        <LoggedOutView currentUser={currentUser} />
 
-          <LoggedInView currentUser={this.props.currentUser} />
-        </div>
-      </nav>
-    );
-  }
-}
+        <LoggedInView currentUser={currentUser} />
+      </div>
+    </nav>
+  );
+};
 
 export default Header;

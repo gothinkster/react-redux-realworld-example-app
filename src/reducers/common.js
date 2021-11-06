@@ -18,7 +18,10 @@ import {
 } from '../constants/actionTypes';
 
 const defaultState = {
+  appLoaded: false,
   appName: 'Conduit',
+  currentUser: null,
+  redirectTo: '/',
   token: null,
   viewChangeCounter: 0
 };

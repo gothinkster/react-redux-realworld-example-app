@@ -5,7 +5,14 @@ import {
   UNFOLLOW_USER
 } from '../constants/actionTypes';
 
-export default (state = {}, action) => {
+const defaultState = {
+  bio: '',
+  following: false,
+  image: 'https://static.productionready.io/images/smiley-cyrus.jpg',
+  username: ''
+};
+
+export default (state = defaultState, action) => {
   switch (action.type) {
     case PROFILE_PAGE_LOADED:
       return {
