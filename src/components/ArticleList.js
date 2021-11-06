@@ -1,11 +1,13 @@
 import ArticlePreview from './ArticlePreview';
 import ListPagination from './ListPagination';
 import React from 'react';
+import HOCLoader from './HOCLoader/HOCLoader';
 
 const ArticleList = props => {
   if (!props.articles) {
     return (
-      <div className="article-preview">Loading...</div>
+        // <div className="article-preview">Loading...</div> This has been replaced by Custom Spinner from react-spinner library 
+        <HOCLoader/>  
     );
   }
 

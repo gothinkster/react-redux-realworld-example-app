@@ -1,5 +1,6 @@
 import superagentPromise from 'superagent-promise';
 import _superagent from 'superagent';
+import { trackPromise } from 'react-promise-tracker';
 
 const superagent = superagentPromise(_superagent, global.Promise);
 
@@ -38,7 +39,10 @@ const Auth = {
 };
 
 const Tags = {
-  getAll: () => requests.get('/tags')
+
+  //Wrap this with TrackPromise to track our Loading Spinner
+  getAll: () => trackPromise(requests.get('/tags'))
+
 };
 
 const limit = (count, p) => `limit=${count}&offset=${p ? p * count : 0}`;

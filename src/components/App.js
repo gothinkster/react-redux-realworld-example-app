@@ -15,6 +15,7 @@ import Settings from '../components/Settings';
 import { store } from '../store';
 import { push } from 'react-router-redux';
 
+
 const mapStateToProps = state => {
   return {
     appLoaded: state.common.appLoaded,
