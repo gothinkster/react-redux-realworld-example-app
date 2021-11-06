@@ -1,0 +1,46 @@
+#searchInput > label {
+  float: left;
+  width: 25%;
+}
+
+#searchInput > input {
+  width: 75%;
+}
+
+.error {
+  color: #ff0000;
+  font-size: 0.75rem;
+}
+
+.float-right {
+  float: right;
+}
+
+br {
+  line-height: 1.5rem;
+}
+
+.ml-5 {
+  margin-left: 5px;
+}
+
+.mt-5 {
+  margin-top: 5px;
+}
+
+.filter-container {
+  padding-left: 5px;
+}
+
+.toggleUL > li,
+.filter-container {
+  width: 150px;
+  height: 20px;
+  font-size: 0.8rem;
+  display: inline-block;
+  padding-top: 5px;
+}
+
+.blockBtn {
+  display: block;
+}

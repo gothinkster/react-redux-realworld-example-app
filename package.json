@@ -4,6 +4,17 @@
   "private": true,
   "devDependencies": {
     "cross-env": "^5.1.4",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.6.0",
+    "enzyme-to-json": "^3.3.4",
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "husky": "^1.1.2",
+    "prettier": "1.14.3",
+    "pretty-quick": "^1.8.0",
     "react-scripts": "1.1.1"
   },
   "dependencies": {
@@ -19,6 +30,7 @@
     "redux": "^3.6.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.1",
+    "redux-mock-store": "^1.5.3",
     "superagent": "^3.8.2",
     "superagent-promise": "^1.1.0"
   },
@@ -26,6 +38,7 @@
     "start": "cross-env PORT=4100 react-scripts start",
     "build": "react-scripts build",
     "test": "cross-env PORT=4100 react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "precommit": "pretty-quick --staged"
   }
 }

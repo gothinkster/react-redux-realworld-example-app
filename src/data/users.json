@@ -1,0 +1,14 @@
+[
+  {
+    "id": "38948",
+    "email": "charlie.wyman@ruralsourcing.com",
+    "password": "badPassword",
+    "createdAt": "2018-10-04T18:28:15.856Z",
+    "updatedAt": "2018-10-05T17:29:19.133Z",
+    "username": "ck-RSI",
+    "bio": null,
+    "image": "",
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Mzg5NDgsInVzZXJuYW1lIjoiY2stUlNJIiwiZXhwIjoxNTQ0MDE2MTc0fQ.VGl0fX8_s46V6V9plu4BovLaZkdwCgsi1iZmVoSLsvo",
+    "favorites": []
+  }
+]

@@ -1,96 +1,126 @@
-import ArticleList from '../ArticleList';
-import React from 'react';
-import agent from '../../agent';
-import { connect } from 'react-redux';
-import { CHANGE_TAB } from '../../constants/actionTypes';
-
-const YourFeedTab = props => {
-  if (props.token) {
-    const clickHandler = ev => {
-      ev.preventDefault();
-      props.onTabClick('feed', agent.Articles.feed, agent.Articles.feed());
-    }
-
-    return (
-      <li className="nav-item">
-        <a  href=""
-            className={ props.tab === 'feed' ? 'nav-link active' : 'nav-link' }
-            onClick={clickHandler}>
-          Your Feed
-        </a>
-      </li>
-    );
-  }
-  return null;
-};
-
-const GlobalFeedTab = props => {
-  const clickHandler = ev => {
-    ev.preventDefault();
-    props.onTabClick('all', agent.Articles.all, agent.Articles.all());
-  };
-  return (
-    <li className="nav-item">
-      <a
-        href=""
-        className={ props.tab === 'all' ? 'nav-link active' : 'nav-link' }
-        onClick={clickHandler}>
-        Global Feed
-      </a>
-    </li>
-  );
-};
-
-const TagFilterTab = props => {
-  if (!props.tag) {
-    return null;
-  }
-
-  return (
-    <li className="nav-item">
-      <a href="" className="nav-link active">
-        <i className="ion-pound"></i> {props.tag}
-      </a>
-    </li>
-  );
-};
+import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import ArticleList from "../ArticleList";
+import TypeFilter from "./typeFilter";
+import { fetchArticles } from "../../services/article";
+import Filters from "./filters";
+import SearchBar from "./searchBar";
+import { LOAD } from "../../constants/actionTypes";
 
 const mapStateToProps = state => ({
   ...state.articleList,
-  tags: state.home.tags,
-  token: state.common.token
+  tags: state.articleList.tags,
+  typeFilter: state.articleList.typeFilter,
+  token: state.common.token,
+  articles: state.articleList.articles
 });
 
 const mapDispatchToProps = dispatch => ({
-  onTabClick: (tab, pager, payload) => dispatch({ type: CHANGE_TAB, tab, pager, payload })
+  load: payload => dispatch({ type: LOAD, payload })
 });
 
-const MainView = props => {
-  return (
-    <div className="col-md-9">
-      <div className="feed-toggle">
-        <ul className="nav nav-pills outline-active">
+class MainView extends React.Component {
+  constructor() {
+    super();
 
-          <YourFeedTab
-            token={props.token}
-            tab={props.tab}
-            onTabClick={props.onTabClick} />
+    this.filterArticlesByTag = this.filterArticlesByTag.bind(this);
+    this.filterByType = this.filterByType.bind(this);
+  }
 
-          <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
+  componentDidMount() {
+    this.getAllArticles();
+  }
 
-          <TagFilterTab tag={props.tag} />
+  getAllArticles() {
+    fetchArticles().then(result => {
+      const { articles } = result;
+      if (result) {
+        this.props.load(articles);
+      }
+    });
+  }
 
-        </ul>
+  checkTags(article, tags) {
+    for (let tag of tags) {
+      for (let articleTag of article.tags) {
+        if (tag.selected && tag.name === articleTag) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  filterArticlesByTag(articles) {
+    const { tags } = this.props;
+    if (tags.length) {
+      return articles.filter(article => {
+        return this.checkTags(article, tags) === true;
+      });
+    } else {
+      return articles;
+    }
+  }
+
+  filterByType(articles) {
+    const { typeFilter } = this.props;
+
+    if (typeFilter === "All") {
+      return articles;
+    }
+
+    if (typeFilter === "Stack Overflow") {
+      return articles.filter(article => {
+        return article.type === "Stack Overflow Post";
+      });
+    }
+
+    if (typeFilter === "Tutorial") {
+      return articles.filter(article => {
+        return article.type !== "Stack Overflow Post";
+      });
+    }
+  }
+
+  filterArticles() {
+    const { articles } = this.props;
+    return this.filterByType(this.filterArticlesByTag(articles));
+  }
+
+  render() {
+    const { pager, currentPage } = this.props;
+    return (
+      <div className="col-md-12">
+        <TypeFilter />
+        <SearchBar />
+        <Filters />
+        <ArticleList
+          pager={pager}
+          articles={this.filterArticles()}
+          currentPage={currentPage}
+        />
       </div>
+    );
+  }
+}
 
-      <ArticleList
-        pager={props.pager}
-        articles={props.articles}
-        loading={props.loading}
-        articlesCount={props.articlesCount}
-        currentPage={props.currentPage} />
-    </div>
-  );
+MainView.propTypes = {
+  articles: PropTypes.array,
+  token: PropTypes.string,
+  tags: PropTypes.array,
+  pager: PropTypes.func,
+  currentPage: PropTypes.number,
+  typeFilter: PropTypes.string,
+  load: PropTypes.func
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainView);
+MainView.defaultProps = {
+  tags: [],
+  articles: []
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MainView);
