@@ -1,0 +1,40 @@
+{
+  "jake": {
+    "email": "jake@jake.jake",
+    "token": "1200cf8ad3.28a60559cf.5e7c5f46ee",
+    "username": "jake",
+    "bio": "I work at statefarm",
+    "image": "https://i.stack.imgur.com/xHWG8.jpg"
+  },
+  "nietzsche": {
+    "email": "nietzsche@nietzsche-ipsum.com",
+    "token": "40a8a36c43.da3a787b87.0ebcb2d769",
+    "username": "nietzsche",
+    "bio": "Contradict strong faith victorious merciful",
+    "image": "http://nietzsche-ipsum.com/nietzsche.jpg"
+  },
+  "jesus.mcdonalid47": {
+    "email": "jesus.mcdonalid47@example.com",
+    "token": "d3f98b5a2f.7b1324c6e4.7475c89e59",
+    "username": "jesus.mcdonalid47",
+    "bio": "Web 2.0 startup names, just for the heck of it",
+    "image": "https://randomuser.me/api/portraits/men/92.jpg",
+    "following": false
+  },
+  "bender": {
+    "email": "bender@fillerama.io",
+    "token": "71b475cbc8.23152cb82e.8aef5fc03e",
+    "username": "bender",
+    "bio": "I'm sorry, guys. I never meant to hurt you. Just to destroy everything you ever believed in",
+    "image": "http://www.unboundworlds.com/wp-content/uploads/2012/03/bender2.jpg",
+    "following": false
+  },
+  "monty.python": {
+    "email": "monty.python@fillerama.io",
+    "token": "a347aca33d.1084fef2aa.341b81a3a6",
+    "username": "monty.python",
+    "bio": "You can't expect to wield supreme power just 'cause some watery tart threw a sword at you!",
+    "image": "https://images-na.ssl-images-amazon.com/images/I/710PzQnaomL._SY445_.jpg",
+    "following": false
+  }
+}
