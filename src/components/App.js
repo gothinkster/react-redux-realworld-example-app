@@ -13,7 +13,7 @@ import ProfileFavorites from '../components/ProfileFavorites';
 import Register from '../components/Register';
 import Settings from '../components/Settings';
 import { store } from '../store';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 
 const mapStateToProps = state => {
   return {

@@ -7,9 +7,9 @@ import editor from './reducers/editor';
 import home from './reducers/home';
 import profile from './reducers/profile';
 import settings from './reducers/settings';
-import { routerReducer } from 'react-router-redux';
+import { connectRouter } from 'connected-react-router'
 
-export default combineReducers({
+export default (history) => combineReducers({
   article,
   articleList,
   auth,
@@ -18,5 +18,5 @@ export default combineReducers({
   home,
   profile,
   settings,
-  router: routerReducer
+  router: connectRouter(history)
 });
