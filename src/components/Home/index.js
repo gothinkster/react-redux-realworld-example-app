@@ -1,6 +1,6 @@
 import Banner from './Banner';
 import MainView from './MainView';
-import React from 'react';
+import React, {useEffect} from 'react';
 import Tags from './Tags';
 import agent from '../../agent';
 import { connect } from 'react-redux';
@@ -27,47 +27,46 @@ const mapDispatchToProps = dispatch => ({
     dispatch({  type: HOME_PAGE_UNLOADED })
 });
 
-class Home extends React.Component {
-  componentWillMount() {
-    const tab = this.props.token ? 'feed' : 'all';
-    const articlesPromise = this.props.token ?
+const Home = props => {
+
+  useEffect(() => {
+    const articlesPromise = props.token ?
       agent.Articles.feed :
       agent.Articles.all;
 
-    this.props.onLoad(tab, articlesPromise, Promise.all([agent.Tags.getAll(), articlesPromise()]));
-  }
+    props.onLoad(
+      props.token ? 'feed' : 'all',
+      articlesPromise,
+      Promise.all([agent.Tags.getAll(), articlesPromise()])
+    );
 
-  componentWillUnmount() {
-    this.props.onUnload();
-  }
+    return () => {
+      props.onUnload();
+    }},
+    []
+  );
 
-  render() {
-    return (
-      <div className="home-page">
+  return (
+    <div className="home-page">
 
-        <Banner token={this.props.token} appName={this.props.appName} />
+      <Banner token={props.token} appName={props.appName} />
 
-        <div className="container page">
-          <div className="row">
-            <MainView />
+      <div className="container page">
+        <div className="row">
+          <MainView />
+          <div className="col-md-3">
+            <div className="sidebar">
+              <p>Popular Tags</p>
 
-            <div className="col-md-3">
-              <div className="sidebar">
-
-                <p>Popular Tags</p>
-
-                <Tags
-                  tags={this.props.tags}
-                  onClickTag={this.props.onClickTag} />
-
-              </div>
+              <Tags
+                tags={props.tags}
+                onClickTag={props.onClickTag} />
             </div>
           </div>
         </div>
-
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

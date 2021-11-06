@@ -1,5 +1,5 @@
-import { Profile, mapStateToProps } from './Profile';
-import React from 'react';
+import { mapStateToProps } from './Profile';
+import React, {useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import agent from '../agent';
 import { connect } from 'react-redux';
@@ -7,6 +7,8 @@ import {
   PROFILE_PAGE_LOADED,
   PROFILE_PAGE_UNLOADED
 } from '../constants/actionTypes';
+import ArticleList from './ArticleList';
+import UserInfo from './UserInfo';
 
 const mapDispatchToProps = dispatch => ({
   onLoad: (pager, payload) =>
@@ -15,39 +17,62 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: PROFILE_PAGE_UNLOADED })
 });
 
-class ProfileFavorites extends Profile {
-  componentWillMount() {
-    this.props.onLoad(page => agent.Articles.favoritedBy(this.props.match.params.username, page), Promise.all([
-      agent.Profile.get(this.props.match.params.username),
-      agent.Articles.favoritedBy(this.props.match.params.username)
+const ProfileFavorites = props => {
+  const {profile} = props;
+
+  useEffect(() => {
+    props.onLoad(page => agent.Articles.favoritedBy(props.match.params.username, page), Promise.all([
+      agent.Profile.get(props.match.params.username),
+      agent.Articles.favoritedBy(props.match.params.username)
     ]));
-  }
+    return () => props.onUnload();
+  }, []);
 
-  componentWillUnmount() {
-    this.props.onUnload();
-  }
+  if (!profile) {return null;}
 
-  renderTabs() {
-    return (
-      <ul className="nav nav-pills outline-active">
-        <li className="nav-item">
-          <Link
-            className="nav-link"
-            to={`/@${this.props.profile.username}`}>
-            My Articles
-          </Link>
-        </li>
+  return (
+    <div className="profile-page">
+      <UserInfo
+        profile={profile}
+        currentUser={props.currentUser}
+        onFollow={props.onFollow}
+        onUnfollow={props.onUnfollow}
+      />
 
-        <li className="nav-item">
-          <Link
-            className="nav-link active"
-            to={`/@${this.props.profile.username}/favorites`}>
-            Favorited Articles
-          </Link>
-        </li>
-      </ul>
-    );
-  }
+      <div className="container">
+        <div className="row">
+          <div className="col-xs-12 col-md-10 offset-md-1">
+            <div className="articles-toggle">
+              <ul className="nav nav-pills outline-active">
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    to={`/@${props.profile.username}`}>
+                    My Articles
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link
+                    className="nav-link active"
+                    to={`/@${props.profile.username}/favorites`}>
+                    Favorited Articles
+                  </Link>
+                </li>
+              </ul>
+
+            </div>
+
+            <ArticleList
+              pager={props.pager}
+              articles={props.articles}
+              articlesCount={props.articlesCount}
+              state={props.currentPage} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileFavorites);
