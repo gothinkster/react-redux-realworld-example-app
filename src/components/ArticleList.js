@@ -1,13 +1,15 @@
 import ArticlePreview from './ArticlePreview';
 import ListPagination from './ListPagination';
+import { connect } from 'react-redux'
 import React from 'react';
+import Loader from './Loader';
 
-const ArticleList = props => {
-  if (!props.articles) {
-    return (
-      <div className="article-preview">Loading...</div>
-    );
-  }
+function ArticleList(props) {
+  const { setLoading, loading } = props;
+
+  loading ? setLoading(true) : setLoading(false)
+
+  if (!props.articles) return (<div></div>)
 
   if (props.articles.length === 0) {
     return (
@@ -35,4 +37,9 @@ const ArticleList = props => {
   );
 };
 
-export default ArticleList;
+const mapStateToProps = (state) => ({
+  loading: state.articleList.loading
+})
+
+
+export default connect(mapStateToProps)(Loader(ArticleList));
