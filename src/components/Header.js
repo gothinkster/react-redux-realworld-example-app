@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import HamburgerMenu from 'react-hamburger-menu';
+import '../main.css';
 
 const LoggedOutView = props => {
   if (!props.currentUser) {
@@ -70,18 +72,44 @@ const LoggedInView = props => {
 };
 
 class Header extends React.Component {
+  state = {
+      open: false,
+  }
+
+  handleClick() {
+    this.setState({
+      open: !this.state.open,
+    });
+  }
+
   render() {
+    const {open} = this.state;
+    const customNavAdditionalClass = open ? '' : 'd-none';
+
     return (
       <nav className="navbar navbar-light">
-        <div className="container">
+        <div className="container top-menu">
+          <HamburgerMenu
+            isOpen={this.state.open}
+            menuClicked={this.handleClick.bind(this)}
+            width={30}
+            height={18}
+            strokeWidth={1}
+            rotate={0}
+            color='black'
+            borderRadius={0}
+            animationDuration={0.5}
+            className="hamburger-menu"
+          />
 
           <Link to="/" className="navbar-brand">
             {this.props.appName.toLowerCase()}
           </Link>
 
-          <LoggedOutView currentUser={this.props.currentUser} />
-
-          <LoggedInView currentUser={this.props.currentUser} />
+          <div className={`custom-nav ${customNavAdditionalClass}`}>
+              <LoggedOutView currentUser={this.props.currentUser} />
+             <LoggedInView currentUser={this.props.currentUser} />
+          </div>
         </div>
       </nav>
     );

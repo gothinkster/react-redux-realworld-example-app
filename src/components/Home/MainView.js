@@ -3,6 +3,7 @@ import React from 'react';
 import agent from '../../agent';
 import { connect } from 'react-redux';
 import { CHANGE_TAB } from '../../constants/actionTypes';
+import LoadingContext from "../../context/loadingContext";
 
 const YourFeedTab = props => {
   if (props.token) {
@@ -83,12 +84,16 @@ const MainView = props => {
         </ul>
       </div>
 
-      <ArticleList
-        pager={props.pager}
-        articles={props.articles}
-        loading={props.loading}
-        articlesCount={props.articlesCount}
-        currentPage={props.currentPage} />
+      <LoadingContext.Provider value={{
+          loading: !Boolean(props.articles)
+      }}>
+        <ArticleList
+          pager={props.pager}
+          articles={props.articles}
+          loading={props.loading}
+          articlesCount={props.articlesCount}
+          currentPage={props.currentPage} />
+      </LoadingContext.Provider>
     </div>
   );
 };
