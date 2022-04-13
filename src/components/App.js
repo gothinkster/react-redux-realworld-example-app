@@ -57,12 +57,15 @@ function App() {
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route path="/login" element={<AuthScreen />} />
-            <Route path="/register" element={<AuthScreen />} />
+            <Route path="/register" element={<AuthScreen isRegisterScreen />} />
             <Route path="/editor/:slug" element={<Editor />} />
             <Route path="/editor" element={<Editor />} />
             <Route path="/article/:slug" element={<Article />} />
             <Route path="/settings" element={<SettingsScreen />} />
-            <Route path="/@:username/favorites" element={<Profile />} />
+            <Route
+              path="/@:username/favorites"
+              element={<Profile isFavoritePage />}
+            />
             <Route path="/@:username" element={<Profile />} />
           </Routes>
         </Suspense>

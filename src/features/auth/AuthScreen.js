@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ListErrors from '../../components/ListErrors';
@@ -11,16 +11,13 @@ import { login, register, selectErrors, selectIsLoading } from './authSlice';
  * @example
  * <AuthScreen />
  */
-function AuthScreen() {
+function AuthScreen({ isRegisterScreen }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const dispatch = useDispatch();
   const errors = useSelector(selectErrors);
   const inProgress = useSelector(selectIsLoading);
-  const match = useMatch('/register');
-
-  const isRegisterScreen = match && match.pathname === '/register';
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}

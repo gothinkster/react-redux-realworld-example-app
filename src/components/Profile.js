@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
 import ArticleList from './ArticleList';
 import {
   getArticlesByAuthor,
@@ -169,11 +168,10 @@ function ProfileTabs({ username, isFavorites }) {
  * @example
  * <Profile />
  */
-function Profile({ location }) {
+function Profile({ location, isFavoritePage }) {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile);
   const { username } = useParams();
-  const isFavoritePage = location.pathname.endsWith('/favorites');
 
   useEffect(() => {
     const fetchProfile = dispatch(getProfile(username));
