@@ -21,6 +21,7 @@ const ArticleList = React.memo(props => {
     <div>
       {
         props.articles.map(article => {
+          console.log({article})
           return (
             <ArticlePreview article={article} key={article.slug} />
           );
