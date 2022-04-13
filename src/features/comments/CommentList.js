@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
@@ -113,7 +113,7 @@ function CommentList() {
     return () => {
       fetchComments.abort();
     };
-  }, [slug, dispatch]);
+  }, [slug]);
 
   if (isLoading) {
     return <p>Loading comments</p>;
@@ -128,4 +128,4 @@ function CommentList() {
   );
 }
 
-export default CommentList;
+export default memo(CommentList);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { selectUser } from '../../features/auth/authSlice';
@@ -45,4 +45,4 @@ function ArticleMeta() {
   );
 }
 
-export default ArticleMeta;
+export default memo(ArticleMeta);

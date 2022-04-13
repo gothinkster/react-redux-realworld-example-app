@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
@@ -100,4 +100,4 @@ function CommentSection() {
   );
 }
 
-export default CommentSection;
+export default memo(CommentSection);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -89,4 +89,4 @@ function ArticlePreview({ article }) {
   );
 }
 
-export default ArticlePreview;
+export default memo(ArticlePreview);

@@ -1,5 +1,5 @@
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import React from 'react';
+import React, { memo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { deleteArticle } from '../../reducers/common';
@@ -36,4 +36,4 @@ function ArticleActions() {
   );
 }
 
-export default ArticleActions;
+export default memo(ArticleActions);

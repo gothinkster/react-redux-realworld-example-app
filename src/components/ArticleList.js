@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
 
 import ArticlePreview from './ArticlePreview';
@@ -32,4 +32,4 @@ function ArticleList() {
   );
 }
 
-export default ArticleList;
+export default memo(ArticleList);

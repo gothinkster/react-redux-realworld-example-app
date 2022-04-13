@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getAllArticles } from '../reducers/articleList';
@@ -53,4 +53,4 @@ function ListPagination() {
   );
 }
 
-export default ListPagination;
+export default memo(ListPagination);

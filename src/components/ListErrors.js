@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 /**
  * List errors component
@@ -33,4 +33,4 @@ function ListErrors({ errors }) {
   );
 }
 
-export default ListErrors;
+export default memo(ListErrors);

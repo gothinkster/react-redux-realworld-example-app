@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import ArticleList from './ArticleList';
@@ -213,4 +213,4 @@ function Profile({ location, isFavoritePage }) {
   );
 }
 
-export default Profile;
+export default memo(Profile);

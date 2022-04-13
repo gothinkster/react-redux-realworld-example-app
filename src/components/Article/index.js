@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, memo, Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import snarkdown from 'snarkdown';
@@ -79,4 +79,4 @@ function Article({ match }) {
   );
 }
 
-export default Article;
+export default memo(Article);

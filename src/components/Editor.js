@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ListErrors from './ListErrors';
@@ -206,4 +206,4 @@ function Editor({ match }) {
   );
 }
 
-export default Editor;
+export default memo(Editor);

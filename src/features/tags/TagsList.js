@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 /**
  * List article's tags
@@ -20,4 +20,4 @@ function TagsList({ tags }) {
   );
 }
 
-export default TagsList;
+export default memo(TagsList);

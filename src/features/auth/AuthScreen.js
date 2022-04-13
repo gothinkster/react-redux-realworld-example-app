@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -124,4 +124,4 @@ function AuthScreen({ isRegisterScreen }) {
   );
 }
 
-export default AuthScreen;
+export default memo(AuthScreen);

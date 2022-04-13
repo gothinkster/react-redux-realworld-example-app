@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getArticlesByTag } from '../../reducers/articleList';
@@ -21,7 +21,7 @@ function TagsSidebar() {
     return () => {
       fetchTags.abort();
     };
-  }, [dispatch]);
+  }, []);
 
   /**
    * Dispatch get all articles by a tag
@@ -57,4 +57,4 @@ function TagsSidebar() {
   );
 }
 
-export default TagsSidebar;
+export default memo(TagsSidebar);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
@@ -213,4 +213,4 @@ function SettingsScreen() {
   );
 }
 
-export default SettingsScreen;
+export default memo(SettingsScreen);
