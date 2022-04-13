@@ -8,27 +8,27 @@ import Header from './Header';
 
 const Article = lazy(() =>
   import(
-    '../components/Article' /* webpackChunkName: "Article", webpackPrefetch: true  */
+    /* webpackChunkName: "Article", webpackPrefetch: true  */ '../components/Article'
   )
 );
 const Editor = lazy(() =>
   import(
-    '../components/Editor' /* webpackChunkName: "Editor", webpackPrefetch: true  */
+    /* webpackChunkName: "Editor", webpackPrefetch: true  */ '../components/Editor'
   )
 );
 const AuthScreen = lazy(() =>
   import(
-    '../features/auth/AuthScreen' /* webpackChunkName: "AuthScreen", webpackPrefetch: true  */
+    /* webpackChunkName: "AuthScreen", webpackPrefetch: true  */ '../features/auth/AuthScreen'
   )
 );
 const Profile = lazy(() =>
   import(
-    '../components/Profile' /* webpackChunkName: "Profile", webpackPrefetch: true  */
+    /* webpackChunkName: "Profile", webpackPrefetch: true  */ '../components/Profile'
   )
 );
 const SettingsScreen = lazy(() =>
   import(
-    '../features/auth/SettingsScreen' /* webpackChunkName: "SettingsScreen", webpackPrefetch: true  */
+    /* webpackChunkName: "SettingsScreen", webpackPrefetch: true  */ '../features/auth/SettingsScreen'
   )
 );
 

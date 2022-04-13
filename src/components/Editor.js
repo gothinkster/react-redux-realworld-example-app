@@ -8,7 +8,7 @@ import {
   updateArticle,
   articlePageUnloaded,
 } from '../reducers/article';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 /**
  * Editor component
@@ -25,7 +25,7 @@ function Editor({ match }) {
   const [body, setBody] = useState('');
   const [tagInput, setTagInput] = useState('');
   const [tagList, setTagList] = useState([]);
-
+  const navigate = useNavigate();
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
@@ -111,6 +111,7 @@ function Editor({ match }) {
     };
 
     dispatch(slug ? updateArticle(article) : createArticle(article));
+    navigate('/');
   };
 
   useEffect(() => {

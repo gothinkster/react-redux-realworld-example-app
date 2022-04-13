@@ -115,7 +115,7 @@ function CommentList() {
     };
   }, [slug, dispatch]);
 
-  if (isLoading && comments.length === 0) {
+  if (isLoading) {
     return <p>Loading comments</p>;
   }
 
