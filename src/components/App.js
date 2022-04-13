@@ -1,89 +1,80 @@
-import agent from '../agent'
-import Header from './Header'
-import React, { lazy, Suspense } from 'react'
-import { connect } from 'react-redux'
-import { APP_LOAD, REDIRECT } from '../constants/actionTypes'
-import { Route, Routes } from 'react-router-dom'
-import { store } from '../store'
-// const Home = lazy(() => import('../components/Home'/* webpackChunkName: "Home", webpackPreload: true  */))
-import Home from '../components/Home'
-const Article = lazy(() => import('../components/Article' /* webpackChunkName: "Article", webpackPrefetch: true  */))
-const Editor = lazy(() => import('../components/Editor'/* webpackChunkName: "Editor", webpackPrefetch: true  */))
-const Login = lazy(() => import('../components/Login'/* webpackChunkName: "Login", webpackPrefetch: true  */))
-const Profile = lazy(() => import('../components/Profile'/* webpackChunkName: "Profile", webpackPrefetch: true  */))
-const ProfileFavorites = lazy(() => import('../components/ProfileFavorites'/* webpackChunkName: "ProfileFavorites", webpackPrefetch: true  */))
-const Register = lazy(() => import('../components/Register'/* webpackChunkName: "Register", webpackPrefetch: true  */))
-const Settings = lazy(() => import('../components/Settings'/* webpackChunkName: "Settings", webpackPrefetch: true  */))
+import React, { lazy, Suspense, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
 
-const mapStateToProps = state => {
-  return {
-    appLoaded: state.common.appLoaded,
-    appName: state.common.appName,
-    currentUser: state.common.currentUser,
-    redirectTo: state.common.redirectTo
-  }
-}
+import Home from '../components/Home';
+import { appLoad, clearRedirect } from '../reducers/common';
+import Header from './Header';
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: (payload, token) =>
-    dispatch({ type: APP_LOAD, payload, token, skipTracking: true }),
-  onRedirect: () =>
-    dispatch({ type: REDIRECT })
-})
+const Article = lazy(() =>
+  import(
+    '../components/Article' /* webpackChunkName: "Article", webpackPrefetch: true  */
+  )
+);
+const Editor = lazy(() =>
+  import(
+    '../components/Editor' /* webpackChunkName: "Editor", webpackPrefetch: true  */
+  )
+);
+const AuthScreen = lazy(() =>
+  import(
+    '../features/auth/AuthScreen' /* webpackChunkName: "AuthScreen", webpackPrefetch: true  */
+  )
+);
+const Profile = lazy(() =>
+  import(
+    '../components/Profile' /* webpackChunkName: "Profile", webpackPrefetch: true  */
+  )
+);
+const SettingsScreen = lazy(() =>
+  import(
+    '../features/auth/SettingsScreen' /* webpackChunkName: "SettingsScreen", webpackPrefetch: true  */
+  )
+);
 
-class App extends React.PureComponent {
-  componentDidUpdate (prevProps) {
-    if (this.props.redirectTo && this.props.redirectTo !== prevProps.redirectTo) {
-      // this.context.router.replace(this.props.redirectTo);
-      store.dispatch(push(this.props.redirectTo))
-      this.props.onRedirect()
+function App() {
+  const dispatch = useDispatch();
+  const redirectTo = useSelector((state) => state.common.redirectTo);
+  const appLoaded = useSelector((state) => state.common.appLoaded);
+
+  useEffect(() => {
+    if (redirectTo) {
+      // dispatch(push(redirectTo));
+      dispatch(clearRedirect());
     }
-  }
+  }, [redirectTo]);
 
-  componentDidMount () {
-    const token = window.localStorage.getItem('jwt')
-    if (token) {
-      agent.setToken(token)
-    }
+  useEffect(() => {
+    const token = window.localStorage.getItem('jwt');
+    dispatch(appLoad(token));
+  }, []);
 
-    this.props.onLoad(token ? agent.Auth.current() : null, token)
-  }
-
-  render () {
-    if (this.props.appLoaded) {
-      return (
-        <div>
-          <Header
-            appName={this.props.appName}
-            currentUser={this.props.currentUser} />
-            <Suspense fallback={<p>Loading...</p>}>
-              <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/login' element={<Login />} />
-                <Route path='/register' element={<Register />} />
-                <Route path='/editor/:slug' element={<Editor />} />
-                <Route path='/editor' element={<Editor />} />
-                <Route path='/article/:id' element={<Article />} />
-                <Route path='/settings' element={<Settings />} />
-                <Route path='/@:username/favorites' element={<ProfileFavorites />} />
-                <Route path='/@:username' element={<Profile />} />
-              </Routes>
-            </Suspense>
-        </div>
-      )
-    }
+  if (appLoaded) {
     return (
-      <div>
-        <Header
-          appName={this.props.appName}
-          currentUser={this.props.currentUser} />
-      </div>
-    )
+      <>
+        <Header />
+        <Suspense fallback={<p>Loading...</p>}>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/login" element={<AuthScreen />} />
+            <Route path="/register" element={<AuthScreen />} />
+            <Route path="/editor/:slug" element={<Editor />} />
+            <Route path="/editor" element={<Editor />} />
+            <Route path="/article/:slug" element={<Article />} />
+            <Route path="/settings" element={<SettingsScreen />} />
+            <Route path="/@:username/favorites" element={<Profile />} />
+            <Route path="/@:username" element={<Profile />} />
+          </Routes>
+        </Suspense>
+      </>
+    );
   }
+  return (
+    <>
+      <Header />
+      <p>Loading...</p>
+    </>
+  );
 }
 
-// App.contextTypes = {
-//   router: PropTypes.object.isRequired
-// };
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default App;
