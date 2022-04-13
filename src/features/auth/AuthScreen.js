@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ListErrors from '../../components/ListErrors';
@@ -18,7 +19,7 @@ function AuthScreen({ isRegisterScreen }) {
   const dispatch = useDispatch();
   const errors = useSelector(selectErrors);
   const inProgress = useSelector(selectIsLoading);
-
+  const navigate = useNavigate();
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
    */
@@ -50,6 +51,11 @@ function AuthScreen({ isRegisterScreen }) {
         ? register({ username, email, password })
         : login({ email, password })
     );
+    if (isRegisterScreen) {
+      navigate('/login');
+    } else {
+      navigate('/');
+    }
   };
 
   return (
