@@ -18,7 +18,9 @@ function AuthScreen() {
   const dispatch = useDispatch();
   const errors = useSelector(selectErrors);
   const inProgress = useSelector(selectIsLoading);
-  const isRegisterScreen = useMatch('/register')?.isExact;
+  const match = useMatch('/register');
+
+  const isRegisterScreen = match && match.pathname === '/register';
 
   /**
    * @type {React.ChangeEventHandler<HTMLInputElement>}
