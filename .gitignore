@@ -5,6 +5,7 @@ node_modules
 
 # testing
 coverage
+.nyc_output
 
 # production
 build
@@ -14,3 +15,8 @@ build
 .env
 npm-debug.log
 .idea
+
+.eslintcache
+
+cypress/videos
+cypress/screenshots

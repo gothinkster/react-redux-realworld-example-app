@@ -1,86 +1,83 @@
-import agent from '../agent';
-import Header from './Header';
-import React from 'react';
-import { connect } from 'react-redux';
-import { APP_LOAD, REDIRECT } from '../constants/actionTypes';
-import { Route, Switch } from 'react-router-dom';
-import Article from '../components/Article';
-import Editor from '../components/Editor';
+import React, { lazy, Suspense, useEffect, memo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
+
 import Home from '../components/Home';
-import Login from '../components/Login';
-import Profile from '../components/Profile';
-import ProfileFavorites from '../components/ProfileFavorites';
-import Register from '../components/Register';
-import Settings from '../components/Settings';
-import { store } from '../store';
-import { push } from 'react-router-redux';
+import { appLoad, clearRedirect } from '../reducers/common';
+import Header from './Header';
 
-const mapStateToProps = state => {
-  return {
-    appLoaded: state.common.appLoaded,
-    appName: state.common.appName,
-    currentUser: state.common.currentUser,
-    redirectTo: state.common.redirectTo
-  }};
+const Article = lazy(() =>
+  import(
+    /* webpackChunkName: "Article", webpackPrefetch: true  */ '../components/Article'
+  )
+);
+const Editor = lazy(() =>
+  import(
+    /* webpackChunkName: "Editor", webpackPrefetch: true  */ '../components/Editor'
+  )
+);
+const AuthScreen = lazy(() =>
+  import(
+    /* webpackChunkName: "AuthScreen", webpackPrefetch: true  */ '../features/auth/AuthScreen'
+  )
+);
+const Profile = lazy(() =>
+  import(
+    /* webpackChunkName: "Profile", webpackPrefetch: true  */ '../components/Profile'
+  )
+);
+const SettingsScreen = lazy(() =>
+  import(
+    /* webpackChunkName: "SettingsScreen", webpackPrefetch: true  */ '../features/auth/SettingsScreen'
+  )
+);
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: (payload, token) =>
-    dispatch({ type: APP_LOAD, payload, token, skipTracking: true }),
-  onRedirect: () =>
-    dispatch({ type: REDIRECT })
-});
+function App() {
+  const dispatch = useDispatch();
+  const redirectTo = useSelector((state) => state.common.redirectTo);
+  const appLoaded = useSelector((state) => state.common.appLoaded);
 
-class App extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.redirectTo) {
-      // this.context.router.replace(nextProps.redirectTo);
-      store.dispatch(push(nextProps.redirectTo));
-      this.props.onRedirect();
+  useEffect(() => {
+    if (redirectTo) {
+      // dispatch(push(redirectTo));
+      dispatch(clearRedirect());
     }
-  }
+  }, [redirectTo]);
 
-  componentWillMount() {
+  useEffect(() => {
     const token = window.localStorage.getItem('jwt');
-    if (token) {
-      agent.setToken(token);
-    }
+    dispatch(appLoad(token));
+  }, []);
 
-    this.props.onLoad(token ? agent.Auth.current() : null, token);
-  }
-
-  render() {
-    if (this.props.appLoaded) {
-      return (
-        <div>
-          <Header
-            appName={this.props.appName}
-            currentUser={this.props.currentUser} />
-            <Switch>
-            <Route exact path="/" component={Home}/>
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
-            <Route path="/editor/:slug" component={Editor} />
-            <Route path="/editor" component={Editor} />
-            <Route path="/article/:id" component={Article} />
-            <Route path="/settings" component={Settings} />
-            <Route path="/@:username/favorites" component={ProfileFavorites} />
-            <Route path="/@:username" component={Profile} />
-            </Switch>
-        </div>
-      );
-    }
+  if (appLoaded) {
     return (
-      <div>
-        <Header
-          appName={this.props.appName}
-          currentUser={this.props.currentUser} />
-      </div>
+      <>
+        <Header />
+        <Suspense fallback={<p>Loading...</p>}>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route path="/login" element={<AuthScreen />} />
+            <Route path="/register" element={<AuthScreen isRegisterScreen />} />
+            <Route path="/editor/:slug" element={<Editor />} />
+            <Route path="/editor" element={<Editor />} />
+            <Route path="/article/:slug" element={<Article />} />
+            <Route path="/settings" element={<SettingsScreen />} />
+            <Route
+              path="/@:username/favorites"
+              element={<Profile isFavoritePage />}
+            />
+            <Route path="/@:username" element={<Profile />} />
+          </Routes>
+        </Suspense>
+      </>
     );
   }
+  return (
+    <>
+      <Header />
+      <p>Loading...</p>
+    </>
+  );
 }
 
-// App.contextTypes = {
-//   router: PropTypes.object.isRequired
-// };
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default memo(App);

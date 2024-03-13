@@ -1,58 +1,56 @@
-import React from 'react';
-import agent from '../agent';
-import { connect } from 'react-redux';
-import { SET_PAGE } from '../constants/actionTypes';
+import React, { memo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-const mapDispatchToProps = dispatch => ({
-  onSetPage: (page, payload) =>
-    dispatch({ type: SET_PAGE, page, payload })
-});
+import { getAllArticles } from '../reducers/articleList';
 
-const ListPagination = props => {
-  if (props.articlesCount <= 10) {
+/**
+ * Show a list with the available pages
+ *
+ * @example
+ * <ListPagination />
+ */
+function ListPagination() {
+  const dispatch = useDispatch();
+  const articlesCount = useSelector((state) => state.articleList.articlesCount);
+  const currentPage = useSelector((state) => state.articleList.currentPage);
+  const articlesPerPage = useSelector(
+    (state) => state.articleList.articlesPerPage
+  );
+
+  if (articlesCount <= articlesPerPage) {
     return null;
   }
 
-  const range = [];
-  for (let i = 0; i < Math.ceil(props.articlesCount / 10); ++i) {
-    range.push(i);
-  }
+  const pages = Array.from(
+    { length: Math.ceil(articlesCount / articlesPerPage) },
+    (_, number) => number
+  );
 
-  const setPage = page => {
-    if(props.pager) {
-      props.onSetPage(page, props.pager(page));
-    }else {
-      props.onSetPage(page, agent.Articles.all(page))
-    }
+  const handleClickPage = (page) => () => {
+    dispatch(getAllArticles({ page }));
   };
 
   return (
     <nav>
       <ul className="pagination">
+        {pages.map((page) => {
+          const isActivePage = page === currentPage;
 
-        {
-          range.map(v => {
-            const isCurrent = v === props.currentPage;
-            const onClick = ev => {
-              ev.preventDefault();
-              setPage(v);
-            };
-            return (
-              <li
-                className={ isCurrent ? 'page-item active' : 'page-item' }
-                onClick={onClick}
-                key={v.toString()}>
-
-                <a className="page-link" href="">{v + 1}</a>
-
-              </li>
-            );
-          })
-        }
-
+          return (
+            <li
+              className={isActivePage ? 'page-item active' : 'page-item'}
+              onClick={handleClickPage(page)}
+              key={page.toString()}
+            >
+              <button type="button" className="page-link">
+                {page + 1}
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );
-};
+}
 
-export default connect(() => ({}), mapDispatchToProps)(ListPagination);
+export default memo(ListPagination);

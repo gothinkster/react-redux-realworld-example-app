@@ -1,35 +1,52 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
-import agent from '../agent';
-import { connect } from 'react-redux';
-import { ARTICLE_FAVORITED, ARTICLE_UNFAVORITED } from '../constants/actionTypes';
+import { useDispatch } from 'react-redux';
+
+import { favoriteArticle, unfavoriteArticle } from '../reducers/articleList';
+import TagsList from '../features/tags/TagsList';
 
 const FAVORITED_CLASS = 'btn btn-sm btn-primary';
 const NOT_FAVORITED_CLASS = 'btn btn-sm btn-outline-primary';
 
-const mapDispatchToProps = dispatch => ({
-  favorite: slug => dispatch({
-    type: ARTICLE_FAVORITED,
-    payload: agent.Articles.favorite(slug)
-  }),
-  unfavorite: slug => dispatch({
-    type: ARTICLE_UNFAVORITED,
-    payload: agent.Articles.unfavorite(slug)
-  })
-});
+/**
+ * Show a preview of an article
+ *
+ * @param {Object} props
+ * @param {Object} props.article
+ * @example
+ * <ArticlePreview
+ *    article={{
+ *      slug: 'how-to-train-your-dragon',
+ *      title: 'How to train your dragon',
+ *      description: 'Ever wonder how?',
+ *      body: 'It takes a Jacobian',
+ *      tagList: ['dragons', 'training'],
+ *      createdAt: '2016-02-18T03:22:56.637Z',
+ *      updatedAt: '2016-02-18T03:48:35.824Z',
+ *      favorited: false,
+ *      favoritesCount: 0,
+ *      author: {
+ *        username: 'jake',
+ *        bio: 'I work at statefarm',
+ *        image: 'https://i.stack.imgur.com/xHWG8.jpg',
+ *        following: false,
+ *      },
+ *    }}
+ * />
+ */
+function ArticlePreview({ article }) {
+  const dispatch = useDispatch();
+  const favoriteButtonClass = article.favorited
+    ? FAVORITED_CLASS
+    : NOT_FAVORITED_CLASS;
 
-const ArticlePreview = props => {
-  const article = props.article;
-  const favoriteButtonClass = article.favorited ?
-    FAVORITED_CLASS :
-    NOT_FAVORITED_CLASS;
+  const handleClick = (event) => {
+    event.preventDefault();
 
-  const handleClick = ev => {
-    ev.preventDefault();
     if (article.favorited) {
-      props.unfavorite(article.slug);
+      dispatch(unfavoriteArticle(article.slug));
     } else {
-      props.favorite(article.slug);
+      dispatch(favoriteArticle(article.slug));
     }
   };
 
@@ -37,21 +54,27 @@ const ArticlePreview = props => {
     <div className="article-preview">
       <div className="article-meta">
         <Link to={`/@${article.author.username}`}>
-          <img src={article.author.image} alt={article.author.username} />
+          <img
+            src={
+              article.author.image ||
+              'https://static.productionready.io/images/smiley-cyrus.jpg'
+            }
+            alt={article.author.username}
+          />
         </Link>
 
         <div className="info">
           <Link className="author" to={`/@${article.author.username}`}>
             {article.author.username}
           </Link>
-          <span className="date">
+          <time className="date" dateTime={article.createdAt}>
             {new Date(article.createdAt).toDateString()}
-          </span>
+          </time>
         </div>
 
         <div className="pull-xs-right">
           <button className={favoriteButtonClass} onClick={handleClick}>
-            <i className="ion-heart"></i> {article.favoritesCount}
+            <i className="ion-heart" /> {article.favoritesCount}
           </button>
         </div>
       </div>
@@ -60,20 +83,10 @@ const ArticlePreview = props => {
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <span>Read more...</span>
-        <ul className="tag-list">
-          {
-            article.tagList.map(tag => {
-              return (
-                <li className="tag-default tag-pill tag-outline" key={tag}>
-                  {tag}
-                </li>
-              )
-            })
-          }
-        </ul>
+        <TagsList tags={article.tagList} />
       </Link>
     </div>
   );
 }
 
-export default connect(() => ({}), mapDispatchToProps)(ArticlePreview);
+export default memo(ArticlePreview);

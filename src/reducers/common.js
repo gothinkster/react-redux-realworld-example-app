@@ -1,70 +1,94 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+import agent from '../agent';
+import { articlePageUnloaded, createArticle, updateArticle } from './article';
+import { profilePageUnloaded } from './profile';
+import { homePageUnloaded } from './articleList';
 import {
-  APP_LOAD,
-  REDIRECT,
-  LOGOUT,
-  ARTICLE_SUBMITTED,
-  SETTINGS_SAVED,
-  LOGIN,
-  REGISTER,
-  DELETE_ARTICLE,
-  ARTICLE_PAGE_UNLOADED,
-  EDITOR_PAGE_UNLOADED,
-  HOME_PAGE_UNLOADED,
-  PROFILE_PAGE_UNLOADED,
-  PROFILE_FAVORITES_PAGE_UNLOADED,
-  SETTINGS_PAGE_UNLOADED,
-  LOGIN_PAGE_UNLOADED,
-  REGISTER_PAGE_UNLOADED
-} from '../constants/actionTypes';
+  getUser,
+  login,
+  logout,
+  register,
+  setToken,
+  updateUser,
+} from '../features/auth/authSlice';
 
-const defaultState = {
-  appName: 'Conduit',
-  token: null,
-  viewChangeCounter: 0
-};
+export const deleteArticle = createAsyncThunk(
+  'common/deleteArticle',
+  agent.Articles.del
+);
 
-export default (state = defaultState, action) => {
-  switch (action.type) {
-    case APP_LOAD:
-      return {
-        ...state,
-        token: action.token || null,
-        appLoaded: true,
-        currentUser: action.payload ? action.payload.user : null
-      };
-    case REDIRECT:
-      return { ...state, redirectTo: null };
-    case LOGOUT:
-      return { ...state, redirectTo: '/', token: null, currentUser: null };
-    case ARTICLE_SUBMITTED:
-      const redirectUrl = `/article/${action.payload.article.slug}`;
-      return { ...state, redirectTo: redirectUrl };
-    case SETTINGS_SAVED:
-      return {
-        ...state,
-        redirectTo: action.error ? null : '/',
-        currentUser: action.error ? null : action.payload.user
-      };
-    case LOGIN:
-    case REGISTER:
-      return {
-        ...state,
-        redirectTo: action.error ? null : '/',
-        token: action.error ? null : action.payload.user.token,
-        currentUser: action.error ? null : action.payload.user
-      };
-    case DELETE_ARTICLE:
-      return { ...state, redirectTo: '/' };
-    case ARTICLE_PAGE_UNLOADED:
-    case EDITOR_PAGE_UNLOADED:
-    case HOME_PAGE_UNLOADED:
-    case PROFILE_PAGE_UNLOADED:
-    case PROFILE_FAVORITES_PAGE_UNLOADED:
-    case SETTINGS_PAGE_UNLOADED:
-    case LOGIN_PAGE_UNLOADED:
-    case REGISTER_PAGE_UNLOADED:
-      return { ...state, viewChangeCounter: state.viewChangeCounter + 1 };
-    default:
-      return state;
+export const appLoad = (token) => (dispatch) => {
+  dispatch(commonSlice.actions.loadApp());
+
+  if (token) {
+    agent.setToken(token);
+    dispatch(setToken(token));
+    return dispatch(getUser());
   }
 };
+
+const initialState = {
+  appName: 'Conduit',
+  appLoaded: false,
+  viewChangeCounter: 0,
+  redirectTo: undefined,
+};
+
+const commonSlice = createSlice({
+  name: 'common',
+  initialState,
+  reducers: {
+    loadApp(state) {
+      state.appLoaded = true;
+    },
+    clearRedirect(state) {
+      delete state.redirectTo;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(deleteArticle.fulfilled, (state) => {
+      state.redirectTo = '/';
+    });
+
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.redirectTo = '/';
+    });
+
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.redirectTo = '/';
+    });
+
+    builder.addCase(register.fulfilled, (state, action) => {
+      state.redirectTo = '/';
+    });
+
+    builder.addCase(logout, (state) => {
+      state.redirectTo = '/';
+    });
+
+    builder.addCase(createArticle.fulfilled, (state, action) => {
+      state.redirectTo = `/article/${action.payload.article.slug}`;
+    });
+
+    builder.addCase(updateArticle.fulfilled, (state, action) => {
+      state.redirectTo = `/article/${action.payload.article.slug}`;
+    });
+
+    builder.addMatcher(
+      (action) =>
+        [
+          articlePageUnloaded.type,
+          homePageUnloaded.type,
+          profilePageUnloaded.type,
+        ].includes(action.type),
+      (state) => {
+        state.viewChangeCounter++;
+      }
+    );
+  },
+});
+
+export const { clearRedirect } = commonSlice.actions;
+
+export default commonSlice.reducer;

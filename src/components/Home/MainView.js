@@ -1,96 +1,119 @@
+import React, { memo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import ArticleList from '../ArticleList';
-import React from 'react';
-import agent from '../../agent';
-import { connect } from 'react-redux';
-import { CHANGE_TAB } from '../../constants/actionTypes';
+import { changeTab } from '../../reducers/articleList';
+import { selectIsAuthenticated } from '../../features/auth/authSlice';
 
-const YourFeedTab = props => {
-  if (props.token) {
-    const clickHandler = ev => {
-      ev.preventDefault();
-      props.onTabClick('feed', agent.Articles.feed, agent.Articles.feed());
-    }
+/**
+ * Your feed tab
+ *
+ * @example
+ * <YourFeedTab />
+ */
+function YourFeedTab() {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const currentTab = useSelector((state) => state.articleList.tab);
+  const isActiveTab = currentTab === 'feed';
 
-    return (
-      <li className="nav-item">
-        <a  href=""
-            className={ props.tab === 'feed' ? 'nav-link active' : 'nav-link' }
-            onClick={clickHandler}>
-          Your Feed
-        </a>
-      </li>
-    );
+  if (!isAuthenticated) {
+    return null;
   }
-  return null;
-};
 
-const GlobalFeedTab = props => {
-  const clickHandler = ev => {
-    ev.preventDefault();
-    props.onTabClick('all', agent.Articles.all, agent.Articles.all());
+  const dispatchChangeTab = () => {
+    dispatch(changeTab('feed'));
   };
+
   return (
     <li className="nav-item">
-      <a
-        href=""
-        className={ props.tab === 'all' ? 'nav-link active' : 'nav-link' }
-        onClick={clickHandler}>
-        Global Feed
-      </a>
+      <button
+        type="button"
+        className={isActiveTab ? 'nav-link active' : 'nav-link'}
+        onClick={dispatchChangeTab}
+      >
+        Your Feed
+      </button>
     </li>
   );
-};
+}
 
-const TagFilterTab = props => {
-  if (!props.tag) {
+/**
+ * Global feed tab
+ *
+ * @example
+ * <GlobalFeedTab />
+ */
+function GlobalFeedTab() {
+  const dispatch = useDispatch();
+  const currentTab = useSelector((state) => state.articleList.tab);
+  const isActiveTab = currentTab === 'all';
+
+  /**
+   * Change to all tab
+   * @type{React.MouseEventHandler}
+   */
+  const dispatchChangeTab = () => {
+    dispatch(changeTab('all'));
+  };
+
+  return (
+    <li className="nav-item">
+      <button
+        type="button"
+        className={isActiveTab ? 'nav-link active' : 'nav-link'}
+        onClick={dispatchChangeTab}
+      >
+        Global Feed
+      </button>
+    </li>
+  );
+}
+
+/**
+ * Tag tab
+ *
+ * @example
+ * <TagFilterTab />
+ */
+function TagFilterTab() {
+  const tag = useSelector((state) => state.articleList.tag);
+
+  if (!tag) {
     return null;
   }
 
   return (
     <li className="nav-item">
-      <a href="" className="nav-link active">
-        <i className="ion-pound"></i> {props.tag}
-      </a>
+      <button type="button" className="nav-link active">
+        <i className="ion-pound" /> {tag}
+      </button>
     </li>
   );
-};
+}
 
-const mapStateToProps = state => ({
-  ...state.articleList,
-  tags: state.home.tags,
-  token: state.common.token
-});
-
-const mapDispatchToProps = dispatch => ({
-  onTabClick: (tab, pager, payload) => dispatch({ type: CHANGE_TAB, tab, pager, payload })
-});
-
-const MainView = props => {
+/**
+ * Show the tab navigation and the list of articles
+ *
+ * @example
+ * <MainView />
+ */
+function MainView() {
   return (
     <div className="col-md-9">
       <div className="feed-toggle">
         <ul className="nav nav-pills outline-active">
+          <YourFeedTab />
 
-          <YourFeedTab
-            token={props.token}
-            tab={props.tab}
-            onTabClick={props.onTabClick} />
+          <GlobalFeedTab />
 
-          <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
-
-          <TagFilterTab tag={props.tag} />
-
+          <TagFilterTab />
         </ul>
       </div>
 
-      <ArticleList
-        pager={props.pager}
-        articles={props.articles}
-        loading={props.loading}
-        articlesCount={props.articlesCount}
-        currentPage={props.currentPage} />
+      <ArticleList />
     </div>
   );
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainView);
+export default memo(MainView);

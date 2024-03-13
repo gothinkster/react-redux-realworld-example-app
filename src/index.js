@@ -1,20 +1,27 @@
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import React from 'react';
-import { store, history} from './store';
 
-import { Route, Switch } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import App from './components/App';
+import store from './app/store';
 
-ReactDOM.render((
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <Switch>
-        <Route path="/" component={App} />
-      </Switch>
-    </ConnectedRouter>
-  </Provider>
+// const _history = createBrowserHistory()
 
-), document.getElementById('root'));
+createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <Router>
+        {/* <ConnectedRouter history={history}> */}
+        <App />
+        {/* </ConnectedRouter> */}
+      </Router>
+    </Provider>
+  </React.StrictMode>
+);
+// https://www.cypress.io/blog/2018/11/14/testing-redux-store/
+/* istanbul ignore else */
+if (window.Cypress) {
+  window.store = store;
+}

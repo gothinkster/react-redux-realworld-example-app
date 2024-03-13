@@ -1,41 +1,39 @@
-import { Link } from 'react-router-dom';
-import React from 'react';
-import agent from '../../agent';
-import { connect } from 'react-redux';
-import { DELETE_ARTICLE } from '../../constants/actionTypes';
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import React, { memo } from 'react';
+import { useDispatch } from 'react-redux';
 
-const mapDispatchToProps = dispatch => ({
-  onClickDelete: payload =>
-    dispatch({ type: DELETE_ARTICLE, payload })
-});
+import { deleteArticle } from '../../reducers/common';
 
-const ArticleActions = props => {
-  const article = props.article;
-  const del = () => {
-    props.onClickDelete(agent.Articles.del(article.slug))
+/**
+ * Show the actions to edit or delete an article
+ *
+ * @example
+ * <ArticleActions />
+ */
+function ArticleActions() {
+  const { slug } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  /**
+   * @type {React.MouseEventHandler}
+   */
+  const removeArticle = () => {
+    dispatch(deleteArticle(slug));
+    navigate('/');
   };
-  if (props.canModify) {
-    return (
-      <span>
-
-        <Link
-          to={`/editor/${article.slug}`}
-          className="btn btn-outline-secondary btn-sm">
-          <i className="ion-edit"></i> Edit Article
-        </Link>
-
-        <button className="btn btn-outline-danger btn-sm" onClick={del}>
-          <i className="ion-trash-a"></i> Delete Article
-        </button>
-
-      </span>
-    );
-  }
 
   return (
     <span>
+      <Link to={`/editor/${slug}`} className="btn btn-outline-secondary btn-sm">
+        <i className="ion-edit"></i> Edit Article
+      </Link>
+
+      <button className="btn btn-outline-danger btn-sm" onClick={removeArticle}>
+        <i className="ion-trash-a"></i> Delete Article
+      </button>
     </span>
   );
-};
+}
 
-export default connect(() => ({}), mapDispatchToProps)(ArticleActions);
+export default memo(ArticleActions);

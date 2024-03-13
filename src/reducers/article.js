@@ -1,35 +1,90 @@
-import {
-  ARTICLE_PAGE_LOADED,
-  ARTICLE_PAGE_UNLOADED,
-  ADD_COMMENT,
-  DELETE_COMMENT
-} from '../constants/actionTypes';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-export default (state = {}, action) => {
-  switch (action.type) {
-    case ARTICLE_PAGE_LOADED:
-      return {
-        ...state,
-        article: action.payload[0].article,
-        comments: action.payload[1].comments
-      };
-    case ARTICLE_PAGE_UNLOADED:
-      return {};
-    case ADD_COMMENT:
-      return {
-        ...state,
-        commentErrors: action.error ? action.payload.errors : null,
-        comments: action.error ?
-          null :
-          (state.comments || []).concat([action.payload.comment])
-      };
-    case DELETE_COMMENT:
-      const commentId = action.commentId
-      return {
-        ...state,
-        comments: state.comments.filter(comment => comment.id !== commentId)
-      };
-    default:
-      return state;
+import agent from '../agent';
+
+function serializeError(error) {
+  if (error instanceof Error) {
+    return {
+      name: error.name,
+      message: error.message,
+      stack: error.stack,
+      code: error.code,
+    };
   }
+
+  if (typeof error === 'object' && error !== null) {
+    return error;
+  }
+
+  return { message: String(error) };
+}
+
+export const getArticle = createAsyncThunk(
+  'article/getArticle',
+  agent.Articles.get
+);
+
+export const createArticle = createAsyncThunk(
+  'article/createArticle',
+  agent.Articles.create,
+  { serializeError }
+);
+
+export const updateArticle = createAsyncThunk(
+  'article/updateArticle',
+  agent.Articles.update,
+  { serializeError }
+);
+
+const initialState = {
+  article: undefined,
+  inProgress: false,
+  errors: undefined,
 };
+
+const articleSlice = createSlice({
+  name: 'article',
+  initialState,
+  reducers: {
+    articlePageUnloaded: () => initialState,
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getArticle.fulfilled, (state, action) => {
+      state.article = action.payload.article;
+      state.inProgress = false;
+    });
+
+    builder.addCase(createArticle.fulfilled, (state) => {
+      state.inProgress = false;
+    });
+
+    builder.addCase(createArticle.rejected, (state, action) => {
+      state.errors = action.error.errors;
+      state.inProgress = false;
+    });
+
+    builder.addCase(updateArticle.fulfilled, (state) => {
+      state.inProgress = false;
+    });
+
+    builder.addCase(updateArticle.rejected, (state, action) => {
+      state.errors = action.error.errors;
+      state.inProgress = false;
+    });
+
+    builder.addMatcher(
+      (action) => action.type.endsWith('/pending'),
+      (state) => {
+        state.inProgress = true;
+      }
+    );
+
+    builder.addDefaultCase((state) => {
+      state.inProgress = false;
+    });
+  },
+});
+
+export const { articlePageUnloaded } = articleSlice.actions;
+
+export default articleSlice.reducer;

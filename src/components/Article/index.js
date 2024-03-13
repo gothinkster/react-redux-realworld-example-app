@@ -1,97 +1,82 @@
+import React, { lazy, memo, Suspense, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import snarkdown from 'snarkdown';
+import xss from 'xss';
+
+import TagsList from '../../features/tags/TagsList';
+import { articlePageUnloaded, getArticle } from '../../reducers/article';
 import ArticleMeta from './ArticleMeta';
-import CommentContainer from './CommentContainer';
-import React from 'react';
-import agent from '../../agent';
-import { connect } from 'react-redux';
-import marked from 'marked';
-import { ARTICLE_PAGE_LOADED, ARTICLE_PAGE_UNLOADED } from '../../constants/actionTypes';
 
-const mapStateToProps = state => ({
-  ...state.article,
-  currentUser: state.common.currentUser
-});
+const CommentSection = lazy(() =>
+  import(
+    /* webpackChunkName: "CommentSection", webpackPrefetch: true  */ '../../features/comments/CommentSection'
+  )
+);
 
-const mapDispatchToProps = dispatch => ({
-  onLoad: payload =>
-    dispatch({ type: ARTICLE_PAGE_LOADED, payload }),
-  onUnload: () =>
-    dispatch({ type: ARTICLE_PAGE_UNLOADED })
-});
+/**
+ * Show one article with its comments
+ *
+ * @param {import('react-router-dom').RouteComponentProps<{ slug: string }>} props
+ * @example
+ * <Article />
+ */
+function Article({ match }) {
+  const dispatch = useDispatch();
+  const article = useSelector((state) => state.article.article);
+  const inProgress = useSelector((state) => state.article.inProgress);
+  const { slug } = useParams();
+  const renderMarkdown = () => ({ __html: xss(snarkdown(article.body)) });
 
-class Article extends React.Component {
-  componentWillMount() {
-    this.props.onLoad(Promise.all([
-      agent.Articles.get(this.props.match.params.id),
-      agent.Comments.forArticle(this.props.match.params.id)
-    ]));
-  }
+  useEffect(() => {
+    const fetchArticle = dispatch(getArticle(slug));
+    return () => {
+      fetchArticle.abort();
+    };
+  }, [match]);
 
-  componentWillUnmount() {
-    this.props.onUnload();
-  }
+  useEffect(() => () => dispatch(articlePageUnloaded()), []);
 
-  render() {
-    if (!this.props.article) {
-      return null;
-    }
-
-    const markup = { __html: marked(this.props.article.body, { sanitize: true }) };
-    const canModify = this.props.currentUser &&
-      this.props.currentUser.username === this.props.article.author.username;
+  if (!article) {
     return (
       <div className="article-page">
-
-        <div className="banner">
-          <div className="container">
-
-            <h1>{this.props.article.title}</h1>
-            <ArticleMeta
-              article={this.props.article}
-              canModify={canModify} />
-
-          </div>
-        </div>
-
         <div className="container page">
-
           <div className="row article-content">
             <div className="col-xs-12">
-
-              <div dangerouslySetInnerHTML={markup}></div>
-
-              <ul className="tag-list">
-                {
-                  this.props.article.tagList.map(tag => {
-                    return (
-                      <li
-                        className="tag-default tag-pill tag-outline"
-                        key={tag}>
-                        {tag}
-                      </li>
-                    );
-                  })
-                }
-              </ul>
-
+              {inProgress && <h1 role="alert">Article is loading</h1>}
             </div>
-          </div>
-
-          <hr />
-
-          <div className="article-actions">
-          </div>
-
-          <div className="row">
-            <CommentContainer
-              comments={this.props.comments || []}
-              errors={this.props.commentErrors}
-              slug={this.props.match.params.id}
-              currentUser={this.props.currentUser} />
           </div>
         </div>
       </div>
     );
   }
+
+  return (
+    <div className="article-page">
+      <div className="banner">
+        <div className="container">
+          <h1>{article.title}</h1>
+          <ArticleMeta />
+        </div>
+      </div>
+
+      <div className="container page">
+        <div className="row article-content">
+          <div className="col-xs-12">
+            <article dangerouslySetInnerHTML={renderMarkdown()} />
+
+            <TagsList tags={article.tagList} />
+          </div>
+        </div>
+
+        <hr />
+
+        <Suspense fallback={<p>Loading comments</p>}>
+          <CommentSection />
+        </Suspense>
+      </div>
+    </div>
+  );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Article);
+export default memo(Article);
