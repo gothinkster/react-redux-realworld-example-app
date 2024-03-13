@@ -50,12 +50,16 @@ function AuthScreen({ isRegisterScreen }) {
       isRegisterScreen
         ? register({ username, email, password })
         : login({ email, password })
-    );
-    if (isRegisterScreen) {
-      navigate('/login');
-    } else {
-      navigate('/');
-    }
+    ).then((action) => {
+      if (action.meta.requestStatus === 'rejected') {
+        return;
+      }
+      if (isRegisterScreen) {
+        navigate('/login');
+      } else {
+        navigate('/');
+      }
+    });
   };
 
   return (
